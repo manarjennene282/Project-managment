@@ -377,13 +377,13 @@ const handlePresenceButtonClick = (rowIndex, buttonIndex) => {
           </TableHead>
 
           <TableBody>
-            {data.map((row, rowIndex) => (
+            {data.map((row, rowIndex) =>(
               <TableRow key={rowIndex}>
                <TableCell>
       <Box display="flex" alignItems="center" gap={1}>
         <BookmarkIcon sx={{ color: "black" }} /> {/* Icône noire par défaut */}
-        <Typography sx={{ fontWeight: "bold" }}>{data[0].name}</Typography>
-      </Box>
+        <Typography sx={{ fontWeight: "bold" }}>{userData ? `${userData.prenom} ${userData.nom}` : "Loading..."}</Typography>
+       </Box>
     </TableCell>
 
                 <TableCell colSpan={2} sx={{ textAlign: "center" }}>
