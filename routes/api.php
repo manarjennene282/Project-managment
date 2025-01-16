@@ -36,9 +36,13 @@ Route::group(['middleware' => ['cors', 'api','token'], 'namespace' => 'API'], fu
 
 Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'presence'],function(){
 
-    Route::post('addpresence','PresenceController@store');
+    Route::post('addpresence','PresenceController@calculateAndSaveWorkHours');
     Route::get('getpresence','PresenceController@getPresences');
     Route::put('updatepresence','PresenceController@update');
+    Route::post('calculheures','PresenceController@calculateAndSaveWorkHours');
+    Route::post('calculabsence','PresenceController@calculateAbsenceHours');
+
+
 
 
  });

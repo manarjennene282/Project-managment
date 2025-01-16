@@ -164,6 +164,63 @@ class PresenceController extends Controller
             ], 500);
         }
     }
+
+    public function calculateAbsenceHours(Request $request)
+    {
+        try {
+            // Validation des données de la requête
+            $validator = Validator::make($request->all(), [
+                'dates' => 'required|array',
+                'dates.*' => 'date', // Chaque élément doit être une date valide
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+    
+            $userId = auth()->id(); // ID de l'utilisateur connecté
+            $selectedDates = $request->dates; // Dates sélectionnées
+    
+            // Récupérer les présences correspondant aux dates sélectionnées
+            $presences = Presence::where('user_id', $userId)
+                ->whereIn('date', $selectedDates)
+                ->get();
+    
+            // Calcul des heures d'absence
+            $totalHoursAbsent = 0;  // Initialiser le total des heures d'absence
+            $dailyHours = [];
+    
+            foreach ($presences as $presence) {
+                // Récupérer les heures travaillées déjà enregistrées
+                $dailyHoursForDay = $presence->heurestravaillees;
+    
+                // Calcul des heures d'absence (40 heures - heures travaillées)
+                $hoursAbsentForDay = 40 - $dailyHoursForDay;
+                $totalHoursAbsent += $hoursAbsentForDay;
+    
+                // Mettre à jour la base de données avec les heures d'absence
+                $presence->update(['heuresabsence' => $hoursAbsentForDay]);
+    
+                $dailyHours[] = [
+                    'date' => $presence->date,
+                    'hours_absent' => $hoursAbsentForDay,
+                ];
+            }
+    
+            return response()->json([
+                'message' => 'Heures d\'absence calculées et enregistrées avec succès',
+                'total_hours_absent' => $totalHoursAbsent,
+                'daily_hours' => $dailyHours,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors du calcul ou de l\'enregistrement des heures d\'absence',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+
     
     
 
