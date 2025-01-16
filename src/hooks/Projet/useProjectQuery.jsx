@@ -1,0 +1,28 @@
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+
+const baseUrl = "http://127.0.0.1:8000/api";
+
+// Get the token from localStorage
+const token = localStorage.getItem("token");
+
+// Create a config object for Axios headers
+const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+};
+
+// Fetch function to retrieve all projects
+const fetchAllProjects = async () => {
+    const { data } = await axios.get(`${baseUrl}/projet/getprojet`, config);
+    console.log("project", data);
+    return data;
+};
+
+// Export the hook as default
+const useProjectQuery = () => {
+    return useQuery(['allProjects'], fetchAllProjects);
+};
+
+export default useProjectQuery;
