@@ -13,10 +13,10 @@ class AddHeuresTravailleesAndHeuresAbsenceToPresencesTable extends Migration
      */
     public function up()
     {
-        Schema::table('presences', function (Blueprint $table) {
+       /*  Schema::table('presences', function (Blueprint $table) {
             $table->integer('heurestravaillees');
             $table->integer('heuresabsence');
-        });
+        }); */
     }
 
     /**

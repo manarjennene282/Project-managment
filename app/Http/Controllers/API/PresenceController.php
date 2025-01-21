@@ -104,8 +104,6 @@ class PresenceController extends Controller
     {
         //
     }
-
-
     public function calculateAndSaveWorkHours(Request $request)
     {
         try {
@@ -222,8 +220,6 @@ class PresenceController extends Controller
     
 
     
-    
-
 
     /**
      * Update the specified resource in storage.

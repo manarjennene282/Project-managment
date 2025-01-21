@@ -36,11 +36,12 @@ Route::group(['middleware' => ['cors', 'api','token'], 'namespace' => 'API'], fu
 
 Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'presence'],function(){
 
-    Route::post('addpresence','PresenceController@calculateAndSaveWorkHours');
+    Route::post('addpresence','PresenceController@store');
     Route::get('getpresence','PresenceController@getPresences');
     Route::put('updatepresence','PresenceController@update');
     Route::post('calculheures','PresenceController@calculateAndSaveWorkHours');
     Route::post('calculabsence','PresenceController@calculateAbsenceHours');
+     
 
 
 
@@ -65,4 +66,32 @@ Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefi
     Route::post('consume', 'TicketRestoController@consume');
 });
 
+Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'parametrage'],function(){
+    Route::get('showtypeprojet', 'TypeProjetController@index'); 
+    Route::post('addtypeprojet', 'TypeProjetController@store');
+    Route::put('updatetypeprojet/{typeprojet}', 'TypeProjetController@update');
+    Route::delete('deletetypeprojet/{typeprojet}', 'TypeProjetController@destroy');
+    
+    
+    Route::get('getsoumaya', 'SoumayaController@index'); 
+    Route::post('addsoumaya', 'SoumayaController@store'); 
+    Route::put('updatesoumaya/{sousou}', 'SoumayaController@update'); 
+    Route::delete('deletesoumaya/{id}', 'SoumayaController@destroy'); 
+
+
+
+    //Route Groupe bressource 
+
+    Route::apiResource('grouperessource', 'GroupeRessourceController');
+    Route::apiResource('priorite', 'PrioriteController');
+    Route::apiResource('statut', 'StatutController');
+    Route::apiResource('relprojet', 'RelationProjetController');
+    Route::apiResource('naturejob', 'NatureJobController');
+
+
+
+
+
+
+});
 

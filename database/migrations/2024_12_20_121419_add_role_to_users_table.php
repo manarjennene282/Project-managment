@@ -13,7 +13,7 @@ class AddRoleToUsersTable extends Migration
      */
      public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+       /*  Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nom');
             $table->string('prenom');
@@ -28,7 +28,7 @@ class AddRoleToUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-        });
+        }); */
     }
 
     /**
