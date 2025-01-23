@@ -19,6 +19,7 @@ import Calendar from "./scenes/calendar/calendar";
 import SignUp from "./scenes/authentification/signup";
 import Login from "./scenes/authentification/login";
 import Projet from "./scenes/projet/afficheprojet";
+import AfficheTypeProjet from "./scenes/Parampetrage/TypeProjet/AfficheTypeProjet";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -69,6 +70,8 @@ function App() {
                   <Route path="/geography" element={<Geography />} />
                   <Route path="/presence" element={<Presence />} />
                   <Route path="/projet" element={<Projet />} />
+                  <Route path="/typeprojet" element={<AfficheTypeProjet />} />
+
 
                 </>
               ) : (

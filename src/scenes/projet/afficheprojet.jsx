@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Box, IconButton, Typography, Button, useTheme } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Button,
+  TextField,
+  useTheme,
+  InputAdornment,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Projetservice from "../../services/Projetservice";
 import Header from "../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
 import AddProjectModal from "./addprojetmodale";
-import ModifeProjet from "./modifeprojet";
 import EditProjectModal from "./modifeprojet";
 
 const Projet = () => {
@@ -20,30 +28,33 @@ const Projet = () => {
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [currentProject, setCurrentProject] = useState(null); // Projet sélectionné pour modification
+  const [currentProject, setCurrentProject] = useState(null);
 
-  // Fonction pour supprimer un projet
+  const [searchQuery, setSearchQuery] = useState("");
+
   const handleDelete = async (id) => {
     try {
       await Projetservice.deleteProjet(id);
-      setProjets((prevProjets) => prevProjets.filter((projet) => projet.id !== id));
+      setProjets((prevProjets) =>
+        prevProjets.filter((projet) => projet.id !== id)
+      );
     } catch (err) {
       console.error("Erreur lors de la suppression du projet :", err);
     }
   };
 
-  // Fonction pour ouvrir le modal d'édition
   const handleEdit = (project) => {
-    setCurrentProject(project); // Sélectionne le projet à modifier
-    setOpenEditModal(true); // Ouvre le modal d'édition
+    setCurrentProject(project);
+    setOpenEditModal(true);
   };
 
-  // Fonction pour ajouter un projet
   const handleAddProject = (newProject) => {
-    setProjets((prevProjets) => [...prevProjets, { id: projets.length + 1, ...newProject }]);
+    setProjets((prevProjets) => [
+      ...prevProjets,
+      { id: projets.length + 1, ...newProject },
+    ]);
   };
 
-  // Fonction pour mettre à jour un projet existant
   const handleUpdateProject = (updatedProject) => {
     setProjets((prevProjets) =>
       prevProjets.map((projet) =>
@@ -52,33 +63,12 @@ const Projet = () => {
     );
   };
 
-  // Colonnes pour le DataGrid
   const columns = [
-    {
-      field: "nom",
-      headerName: "Nom du Projet",
-      flex: 1,
-    },
-    {
-      field: "datedebut",
-      headerName: "Date de Début",
-      flex: 1,
-    },
-    {
-      field: "departement",
-      headerName: "Département",
-      flex: 1,
-    },
-    {
-      field: "datefinestime",
-      headerName: "Date de Fin Estimée",
-      flex: 1,
-    },
-    {
-      field: "datefinreelle",
-      headerName: "Date de Fin Réelle",
-      flex: 1,
-    },
+    { field: "nom", headerName: "Nom du Projet", flex: 1 },
+    { field: "datedebut", headerName: "Date de Début", flex: 1 },
+    { field: "departement", headerName: "Département", flex: 1 },
+    { field: "datefinestime", headerName: "Date de Fin Estimée", flex: 1 },
+    { field: "datefinreelle", headerName: "Date de Fin Réelle", flex: 1 },
     {
       field: "action",
       headerName: "Action",
@@ -96,7 +86,6 @@ const Projet = () => {
     },
   ];
 
-  // Récupérer les projets depuis le serveur
   useEffect(() => {
     const fetchProjets = async () => {
       try {
@@ -113,30 +102,30 @@ const Projet = () => {
     fetchProjets();
   }, []);
 
+  const filteredProjets = projets.filter((projet) =>
+    projet.nom.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Box m="20px">
-      {/* Modal pour ajouter un projet */}
       <AddProjectModal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
         onAddProject={handleAddProject}
       />
 
-      {/* Modal pour modifier un projet */}
       {currentProject && (
-  <EditProjectModal
-    open={openEditModal}
-    onClose={() => setOpenEditModal(false)}
-    project={currentProject}
-    onUpdate={(updatedProject) => {
-      handleUpdateProject(updatedProject);
-      setOpenEditModal(false);
-    }}
-  />
-)}
+        <EditProjectModal
+          open={openEditModal}
+          onClose={() => setOpenEditModal(false)}
+          project={currentProject}
+          onUpdate={(updatedProject) => {
+            handleUpdateProject(updatedProject);
+            setOpenEditModal(false);
+          }}
+        />
+      )}
 
-
-      {/* Bouton Ajouter un projet */}
       <Box display="flex" justifyContent="flex-end" mb="20px">
         <Button
           variant="contained"
@@ -156,6 +145,44 @@ const Projet = () => {
 
       <Header title="Projets" subtitle="Liste des projets" />
 
+      <Box display="flex" justifyContent="flex-start" mb="20px">
+        <TextField
+          label="Rechercher un projet"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon  />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            width: "400px",
+            
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "25px",
+              "& fieldset": {
+                borderColor: colors.grey[700],
+              },
+              "&:hover fieldset": {
+                borderColor: colors.blueAccent[500],
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: colors.blueAccent[500],
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: colors.grey[300],
+            },
+            "& .MuiInputBase-input": {
+              color: colors.grey[100],
+            },
+          }}
+        />
+      </Box>
+
       {loading ? (
         <Typography>Chargement...</Typography>
       ) : error ? (
@@ -163,34 +190,63 @@ const Projet = () => {
       ) : (
         <Box
           m="40px 0 0 0"
-          height="75vh"
+          height="60vh"
           sx={{
             "& .MuiDataGrid-root": {
               border: "none",
             },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: colors.blueAccent[700],
-              borderBottom: "none",
+              color: colors.grey[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              borderBottom: `2px solid ${colors.blueAccent[500]}`,
             },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: colors.primary[400],
+            "& .MuiDataGrid-columnHeaderTitle": {
+              textTransform: "uppercase",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: `1px solid ${colors.grey[800]}`,
+              fontSize: "13px",
+              color: colors.grey[100],
+            },
+            "& .MuiDataGrid-row": {
+              backgroundColor: colors.primary[700],
+              "&:hover": {
+                backgroundColor: colors.blueAccent[800],
+              },
             },
             "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
               backgroundColor: colors.blueAccent[700],
+              borderTop: `2px solid ${colors.blueAccent[500]}`,
             },
-            "& .MuiCheckbox-root": {
-              color: `${colors.greenAccent[200]} !important`,
+            "& .MuiTablePagination-root": {
+              color: colors.grey[100],
+              "& .MuiIconButton-root": {
+                color: colors.grey[100],
+              },
+              "& .Mui-disabled": {
+                color: colors.grey[600],
+              },
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[800],
             },
           }}
         >
           <DataGrid
-            checkboxSelection
-            rows={Array.isArray(projets) ? projets : []}
+            rows={filteredProjets}
             columns={columns}
+            rowHeight={50}
+            pageSize={10}
+            rowsPerPageOptions={[5, 10, 20]}
+            checkboxSelection={false}
+            disableSelectionOnClick
+            sx={{
+              "& .MuiDataGrid-iconSeparator": {
+                display: "none",
+              },
+            }}
           />
         </Box>
       )}
