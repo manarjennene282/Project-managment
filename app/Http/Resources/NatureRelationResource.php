@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-class RelationProjetResource
+class NatureRelationResource
 {
     protected $nature_relation;
 
@@ -15,7 +15,7 @@ class RelationProjetResource
     {
         return array_map(function ($nature_relation) {
             return (new self($nature_relation))->toArray();
-        }, $nature_relations->toArray());
+        }, $nature_relation->toArray());
     }
 
     public function toArray()

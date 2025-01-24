@@ -20,10 +20,11 @@ class PrioriteController extends Controller
      */
     public function index()
     {
-        $priorites = Priorite::all(); // Récupère tous les rôles
-        $prioritesResource = PrioriteResource::collection($priorites); // Transforme les rôles en ressources
-    
-        return response()->json($prioritesResource, 200); // Retourne la réponse en JSON
+        $projects = Priorite::all();
+        return response()->json([
+            'success' => true,
+            'data' => $projects,
+        ],200);
     }
 
     /**
@@ -94,7 +95,21 @@ class PrioriteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+{
+    \Log::info("Deleting Priorite with ID: " . $id); // Log the ID
+
+    // Find the Priorite by ID
+    $priorite = Priorite::find($id);
+
+    // If the Priorite does not exist, return a 404 response
+    if (!$priorite) {
+        return response()->json(['message' => 'Priorite not found'], 404);
     }
+
+    // Delete the Priorite
+    $priorite->delete();
+
+    // Return a success response
+    return response()->json(['message' => 'Priorite deleted successfully'], 200);
+}
 }

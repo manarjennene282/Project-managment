@@ -71,15 +71,6 @@ Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefi
     Route::post('addtypeprojet', 'TypeProjetController@store');
     Route::put('updatetypeprojet/{typeprojet}', 'TypeProjetController@update');
     Route::delete('deletetypeprojet/{typeprojet}', 'TypeProjetController@destroy');
-    
-    
-    Route::get('getsoumaya', 'SoumayaController@index'); 
-    Route::post('addsoumaya', 'SoumayaController@store'); 
-    Route::put('updatesoumaya/{sousou}', 'SoumayaController@update'); 
-    Route::delete('deletesoumaya/{id}', 'SoumayaController@destroy'); 
-
-
-
     //Route Groupe bressource 
 
     Route::apiResource('grouperessource', 'GroupeRessourceController');
@@ -87,6 +78,10 @@ Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefi
     Route::apiResource('statut', 'StatutController');
     Route::apiResource('relprojet', 'RelationProjetController');
     Route::apiResource('naturejob', 'NatureJobController');
+    Route::apiResource('naturestruc', 'NatureStructureController');
+    Route::apiResource('naturerelation', 'NatureRelationController');
+
+
 
 
 

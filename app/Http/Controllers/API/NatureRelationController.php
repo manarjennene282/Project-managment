@@ -1,8 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Resources\NatureRelationResource;
+use App\Models\NatureRelation;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\NatureRelationRequest;
 
 class NatureRelationController extends Controller
 {
@@ -13,7 +17,10 @@ class NatureRelationController extends Controller
      */
     public function index()
     {
-        //
+        $naturerelation = NatureRelation::all(); 
+        $naturerelationressource = NatureRelationResource::collection($naturerelation); // Transforme les rôles en ressources
+    
+        return response()->json($naturerelationressource, 200); 
     }
 
     /**
@@ -32,9 +39,15 @@ class NatureRelationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NatureRelationRequest $request)
     {
-        //
+
+        $naturerelation = NatureRelation::create([
+            'id_natureRel' => $request->input('id_natureRel'),  // Ensure id_prio is provided
+            'libelle' => $request->input('libelle'),  // Ensure this is included in the request
+        ]);
+        
+        return response()->json(new NatureRelationResource($naturerelation), 201); // Retourne la ressource créée en JSON
     }
 
     /**
@@ -66,11 +79,16 @@ class NatureRelationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NatureRelationRequest $request, $id)
     {
-        //
+        $naturerelation = NatureRelation::findOrFail($id); 
+        $naturerelation->update([
+            'id_natureRel' => $request->input('id_natureRel'),
+            'libelle' => $request->input('libelle'),
+        ]);
+    
+        return response()->json(new NatureRelationResource($naturerelation), 200);
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -79,6 +97,8 @@ class NatureRelationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $naturerelation = NatureRelation::findOrFail($id); // Find the role by ID
+        $naturerelation->delete(); // Delete the role
+        return response()->json(['message' => 'naturerelation deleted successfully'], 200);
     }
 }
