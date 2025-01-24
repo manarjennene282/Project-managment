@@ -3,9 +3,8 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import ListAltIcon from "@mui/icons-material/ListAlt"; // Importez l'icône
-import PriorityHighIcon from "@mui/icons-material/PriorityHigh"; // Importez l'icône
-
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -44,11 +43,16 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-  const [user, setUser] = useState(null); // State pour l'utilisateur
+  const [user, setUser] = useState(null);
 
-  // Récupérer les informations de l'utilisateur depuis localStorage
+  const [dataOpen, setDataOpen] = useState(false); // State to toggle Data section
+  const [projetOpen, setProjetOpen] = useState(false); // State to toggle Projet section
+  const [ressourcesOpen, setRessourcesOpen] = useState(false); // State to toggle Ressources section
+  const [administrationOpen, setAdministrationOpen] = useState(false); // State to toggle Administration section
+  const [parametrageOpen, setParametrageOpen] = useState(false); // State to toggle Administration section
+
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user")); // L'utilisateur doit être enregistré dans localStorage après la connexion
+    const userData = JSON.parse(localStorage.getItem("user"));
     setUser(userData);
   }, []);
 
@@ -103,12 +107,10 @@ const Sidebar = () => {
           {!isCollapsed && user && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
-                {/* Avatar dynamique ou générique */}
                 <img
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  // Utiliser un avatar générique basé sur le nom de l'utilisateur ou une image par défaut
                   src={`https://ui-avatars.com/api/?name=${user.name}&background=random&color=fff`}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
@@ -123,7 +125,7 @@ const Sidebar = () => {
                   {user.name}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  {user.title || "Utilisateur"} {/* Affiche le titre ou "Utilisateur" */}
+                  {user.title || "Utilisateur"}
                 </Typography>
               </Box>
             </Box>
@@ -138,13 +140,20 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
+            {/* Data Section */}
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
               Data
-                  <Item
+              <IconButton onClick={() => setDataOpen(!dataOpen)}>
+                {dataOpen ? "-" : "+"}
+              </IconButton>
+            </Typography>
+            {dataOpen && (
+              <>
+                <Item
                   title="Manage Team"
                   to="/team"
                   icon={<PeopleOutlinedIcon />}
@@ -172,7 +181,6 @@ const Sidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
-
                 <Item
                   title="Gestion Projet"
                   to="/projet"
@@ -180,107 +188,107 @@ const Sidebar = () => {
                   selected={selected}
                   setSelected={setSelected}
                 />
+              </>
+            )}
 
-            </Typography>
-            
+            {/* Projet Section */}
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
               Projet
+              <IconButton onClick={() => setProjetOpen(!projetOpen)}>
+                {projetOpen ? "-" : "+"}
+              </IconButton>
             </Typography>
+            {projetOpen && (
+              <>
+                <Item
+                  title="Gestion Projet"
+                  to="/projet"
+                  icon={<ReceiptOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            )}
+
+            {/* Ressources Section */}
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
               Ressources
-
-                  <Item
+              <IconButton onClick={() => setRessourcesOpen(!ressourcesOpen)}>
+                {ressourcesOpen ? "-" : "+"}
+              </IconButton>
+            </Typography>
+            {ressourcesOpen && (
+              <>
+                <Item
                   title="Creation Ressource Materiel"
                   to="/CreationRessourceMateriel"
                   icon={<PersonOutlinedIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                  />
-                  <Item
+                />
+                <Item
                   title="Consultation Ressource Materiel"
                   to="/ConsultationRessourceMateriel"
                   icon={<PersonOutlinedIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                  />
+                />
+              </>
+            )}
 
+            {/* Administration Section */}
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Administration
+              <IconButton onClick={() => setAdministrationOpen(!administrationOpen)}>
+                {administrationOpen ? "-" : "+"}
+              </IconButton>
+            </Typography>
+            {administrationOpen && (
+              <>
+                <Item
+                  title="Gestion des droits d'accès"
+                  to="/Gestionacces"
+                  icon={<PersonOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            )}
 
-            </Typography>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Organigramme
-            </Typography>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Module Job
-                  <Item
-                        title="Creation Job"
-                        to="/CreationJob"
-                        icon={<PersonOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-                      <Item
-                          title="Consultation Job"
-                          to="/ConsultationJob"
-                          icon={<PersonOutlinedIcon />}
-                          selected={selected}
-                          setSelected={setSelected}
-                        />
-            </Typography>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Suivi projet
-            </Typography>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Planning
-            </Typography>
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Absences
-            </Typography>
-
+            {/* Paramétrages Section */}
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
               Paramétrages
+              <IconButton onClick={() => setParametrageOpen(!parametrageOpen)}>
+                {parametrageOpen ? "-" : "+"}
+              </IconButton>
             </Typography>
-
-            <Item
-              title="TypeProjet"
+            {parametrageOpen && (
+              <>
+                <Item
+              title="Type Projet"
               to="/typeprojet"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Naturejob"
+              title="Nature JOB"
               to="/naturejob"
               icon={<PersonOutlinedIcon />}
               selected={selected}
@@ -294,77 +302,8 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Profile Form"
-              to="/form"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Calendar"
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Ressource 
-            </Typography>
-
-            <Item
-              title="Creation Ressource Materiel"
-              to="/CreationRessourceMateriel"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Consultation Ressource Materiel"
-              to="/ConsultationRessourceMateriel"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              JOB
-                    
-            </Typography>
-
-            
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Administration
-
-              <Item
-              title="Gestion des droits d'accès"
-              to="/Gestionacces"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-               />
-
-            </Typography>
-
+              </>
+            )}
           </Box>
         </Menu>
       </ProSidebar>
