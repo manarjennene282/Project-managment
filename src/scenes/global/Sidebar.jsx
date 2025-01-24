@@ -88,7 +88,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
+                  GPM.Segula
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -170,6 +170,8 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+
             <Item
               title="Gestion Projet"
               to="/projet"
@@ -177,14 +179,21 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Pages
+              Parametrage
             </Typography>
+
+            <Item
+              title="TypeProjet"
+              to="/typeprojet"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Item
               title="Profile Form"
               to="/form"
