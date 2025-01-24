@@ -20,6 +20,7 @@ import ReactApexChart from "react-apexcharts";
 import PresenceService from "../../services/PresenceService";
 import CongeChart from "./Conge";
 import TicketRestoChart from "./Ticketresto";
+import Semaine from "./semaine";
 
 // Registering Chart.js components
 
@@ -101,23 +102,7 @@ const Presence = () => {
   }, []);
   
   // Lors de la déconnexion
-  const handleLogout = () => {
-    // Supprimer les informations de l'utilisateur du localStorage
-    localStorage.removeItem("user");
-    
-    // Réinitialiser les données
-    setUserData(null);
-    setData([
-      {
-        name: "Guest User",
-        presence: Array.from({ length: 7 }, () => [false, false]),
-        presenceButtons: [false, false],
-        leaveBalance: 0,
-        usedLeave: 0,
-      },
-    ]);
-  };
-  
+
   
 
   const generateWeeks = (year) => {
@@ -175,42 +160,8 @@ const Presence = () => {
     return Math.floor(diffInMs / oneWeekInMs) + 1;
   };
 
-  const scrollLeft = () => {
-    if (selectedWeek > 1) {
-      setSelectedWeek((prev) => prev - 1); // Passer à la semaine précédente
-    } else {
-      console.log("Vous êtes déjà à la première semaine disponible.");
-    }
-  };
+ 
 
-  const scrollRight = () => {
-    const totalWeeks = weeks.length;
-
-    if (selectedWeek === totalWeeks) {
-      setCurrentYear((prevYear) => prevYear + 1); // Passer à l'année suivante
-      setSelectedWeek(1); // Recommencer à la première semaine de l'année suivante
-    } else {
-      setSelectedWeek((prev) => prev + 1); // Avancer d'une semaine
-    }
-  };
-
-  const visibleWeeks = (() => {
-    const allWeeks = [];
-
-    // Générer les semaines pour une plage d'années
-    for (let i = 0; i < totalYears; i++) {
-      const year = currentYear + i;
-      allWeeks.push(...generateWeeks(year));
-    }
-
-    const totalWeeksInCurrentYear = weeks.length;
-    const selectedIndex =
-      selectedWeek + totalWeeksInCurrentYear * (currentYear - new Date().getFullYear());
-    return allWeeks.slice(
-      Math.max(0, selectedIndex - Math.floor(weeksPerView / 2)),
-      Math.max(0, selectedIndex - Math.floor(weeksPerView / 2)) + weeksPerView
-    );
-  })();
 
  // Helper function to get the start of the current week (Monday)
 const getStartOfWeek = (currentDate) => {
@@ -308,41 +259,8 @@ const handlePresenceButtonClick = (rowIndex, buttonIndex) => {
         Calendrier
       </Typography>
 
-      <Box display="flex" alignItems="center">
-        <IconButton onClick={scrollLeft}>
-          <ArrowBackIosIcon />
-        </IconButton>
-        <Box display="flex" justifyContent="center" gap={2}>
-  {visibleWeeks.map((week, index) => (
-    <Box
-      key={index}
-       sx={{
-      padding: "12px 24px", // Ajuste l'espace intérieur
-      backgroundColor: selectedWeek === week.weekNumber ? "#1976D2" : "#f0f0f0", // Couleur sélectionnée
-      color: selectedWeek === week.weekNumber ? "white" : "black",
-      borderRadius: "8px",
-      boxShadow: selectedWeek === week.weekNumber ? "0px 0px 8px rgba(0,0,0,0.2)" : "none",
-      textAlign: "center",
-      width: "250px", // Largeur fixe du rectangle
-      flexShrink: 0,  // Empêche le rectangle de se réduire
-      margin: "0 8px", // Ajoute un espacement horizontal entre les rectangles
-      cursor: "pointer", // Change le curseur pour indiquer la sélection possible
-    }}
-    >
-      <Typography variant="body1" fontWeight="bold">
-        Semaine {week.weekNumber}
-      </Typography>
-      <Typography variant="body2">
-        {week.startDate} - {week.endDate}
-      </Typography>
-    </Box>
-  ))}
-</Box>
+      <Semaine></Semaine>
 
-        <IconButton onClick={scrollRight}>
-          <ArrowForwardIosIcon />
-        </IconButton>
-      </Box>
 
       <Box mt={4}>
         <Table>
@@ -382,7 +300,7 @@ const handlePresenceButtonClick = (rowIndex, buttonIndex) => {
                <TableCell>
       <Box display="flex" alignItems="center" gap={1}>
         <BookmarkIcon sx={{ color: "black" }} /> {/* Icône noire par défaut */}
-        <Typography sx={{ fontWeight: "bold" }}>{userData ? `${userData.prenom} ${userData.nom}` : "Loading..."}</Typography>
+<Typography sx={{ fontWeight: "bold" }}>{userData ? `${userData.prenom} ${userData.nom}` : "Loading..."}</Typography>
        </Box>
     </TableCell>
 

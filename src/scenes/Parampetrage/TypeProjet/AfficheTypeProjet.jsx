@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  IconButton,
   Typography,
   Button,
   TextField,
@@ -9,20 +8,18 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
-import Projetservice from "../../services/Projetservice";
-import Header from "../../components/Header";
+import { tokens } from "../../../theme";
+import Parametrageservice from "../../../services/ParametrageService";
+import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import AddProjectModal from "./addprojetmodale";
-import EditProjectModal from "./modifeprojet";
 
-const Projet = () => {
+const AfficheTypeProjet = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [projets, setProjets] = useState([]);
+  const [typeProjets, setTypeProjets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -32,90 +29,135 @@ const Projet = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Fonction pour supprimer un type de projet
   const handleDelete = async (id) => {
     try {
-      await Projetservice.deleteProjet(id);
-      setProjets((prevProjets) =>
-        prevProjets.filter((projet) => projet.id !== id)
+      await Parametrageservice.deleteTypeProjet(id);
+      setTypeProjets((prevTypeProjets) =>
+        prevTypeProjets.filter((typeProjet) => typeProjet.id !== id)
       );
     } catch (err) {
-      console.error("Erreur lors de la suppression du projet :", err);
+      console.error("Erreur lors de la suppression du type projet :", err);
     }
   };
 
-  const handleEdit = (project) => {
-    setCurrentProject(project);
+  // Fonction pour ouvrir le modal d'édition
+  const handleEdit = (typeProjet) => {
+    setCurrentProject(typeProjet);
     setOpenEditModal(true);
   };
 
-  const handleAddProject = (newProject) => {
-    setProjets((prevProjets) => [
-      ...prevProjets,
-      { id: projets.length + 1, ...newProject },
+  // Fonction pour ajouter un type de projet
+  const handleAddProject = (newTypeProject) => {
+    setTypeProjets((prevTypeProjets) => [
+      ...prevTypeProjets,
+      { id: typeProjets.length + 1, ...newTypeProject },
     ]);
   };
 
+  // Fonction pour mettre à jour un type de projet
   const handleUpdateProject = (updatedProject) => {
-    setProjets((prevProjets) =>
-      prevProjets.map((projet) =>
-        projet.id === updatedProject.id ? updatedProject : projet
+    setTypeProjets((prevTypeProjets) =>
+      prevTypeProjets.map((typeProjet) =>
+        typeProjet.id === updatedProject.id ? updatedProject : typeProjet
       )
     );
   };
 
+  // Colonnes pour le DataGrid
   const columns = [
-    { field: "nom", headerName: "Nom du Projet", flex: 1 },
-    { field: "datedebut", headerName: "Date de Début", flex: 1 },
-    { field: "departement", headerName: "Département", flex: 1 },
-    { field: "datefinestime", headerName: "Date de Fin Estimée", flex: 1 },
-    { field: "datefinreelle", headerName: "Date de Fin Réelle", flex: 1 },
+    {
+      field: "libelle",
+      headerName: "Libelle",
+      flex: 1,
+      align: "center", // Centrer le texte dans les cellules
+      headerAlign: "center", // Centrer le texte dans l'en-tête
+    },
+    {
+      field: "description",
+      headerName: "Description",
+      flex: 1,
+      align: "center", // Centrer le texte dans les cellules
+      headerAlign: "center", // Centrer le texte dans l'en-tête
+    },
     {
       field: "action",
       headerName: "Action",
       flex: 1,
+      align: "center", // Centrer le texte dans les cellules
+      headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
-        <Box>
-          <IconButton onClick={() => handleEdit(params.row)}>
-            <EditIcon style={{ color: colors.blueAccent[400] }} />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon style={{ color: colors.redAccent[400] }} />
-          </IconButton>
+        <Box display="flex" gap="10px" justifyContent="center">
+          {/* Bouton Modifier */}
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={() => handleEdit(params.row)}
+            sx={{
+              backgroundColor: colors.blueAccent[500],
+              color: "white",
+              "&:hover": {
+                backgroundColor: colors.blueAccent[600],
+              },
+              textTransform: "none",
+            }}
+          >
+            Modifier
+          </Button>
+  
+          {/* Bouton Supprimer */}
+          <Button
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={() => handleDelete(params.row.id)}
+            sx={{
+              backgroundColor: colors.redAccent[500],
+              color: "white",
+              "&:hover": {
+                backgroundColor: colors.redAccent[600],
+              },
+              textTransform: "none",
+            }}
+          >
+            Supprimer
+          </Button>
         </Box>
       ),
     },
   ];
 
+  // Récupérer les types de projets depuis le serveur
   useEffect(() => {
-    const fetchProjets = async () => {
+    const fetchTypeProjets = async () => {
       try {
-        const data = await Projetservice.getProjets();
-        setProjets(data.data || []);
+        const data = await Parametrageservice.getTypeprojet();
+        setTypeProjets(data.data || []);
         setLoading(false);
       } catch (err) {
-        console.error("Erreur lors de la récupération des projets :", err);
-        setError("Erreur lors de la récupération des projets.");
+        console.error("Erreur lors de la récupération des types de projets :", err);
+        setError("Erreur lors de la récupération des types de projets.");
         setLoading(false);
       }
     };
 
-    fetchProjets();
+    fetchTypeProjets();
   }, []);
 
-  const filteredProjets = projets.filter((projet) =>
-    projet.nom.toLowerCase().includes(searchQuery.toLowerCase())
+  // Filtrer les types de projets selon la recherche
+  const filteredTypeProjets = typeProjets.filter((typeProjet) =>
+    typeProjet.libelle.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <Box m="20px">
-      <AddProjectModal
+      <addtypeprojetmodale
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
         onAddProject={handleAddProject}
       />
 
       {currentProject && (
-        <EditProjectModal
+        <modifetypeprojet
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
           project={currentProject}
@@ -139,28 +181,27 @@ const Projet = () => {
             },
           }}
         >
-          Ajouter un projet
+          Ajouter un type de projet
         </Button>
       </Box>
 
-      <Header title="Projets" subtitle="Liste des projets" />
+      <Header title="Types de projets" subtitle="Liste des types de projets" />
 
       <Box display="flex" justifyContent="flex-start" mb="20px">
         <TextField
-          label="Rechercher un projet"
+          label="Rechercher un type de projet"
           variant="outlined"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon  />
+                <SearchIcon />
               </InputAdornment>
             ),
           }}
           sx={{
             width: "400px",
-            
             "& .MuiOutlinedInput-root": {
               borderRadius: "25px",
               "& fieldset": {
@@ -235,7 +276,7 @@ const Projet = () => {
           }}
         >
           <DataGrid
-            rows={filteredProjets}
+            rows={filteredTypeProjets}
             columns={columns}
             rowHeight={50}
             pageSize={10}
@@ -254,4 +295,4 @@ const Projet = () => {
   );
 };
 
-export default Projet;
+export default AfficheTypeProjet;
