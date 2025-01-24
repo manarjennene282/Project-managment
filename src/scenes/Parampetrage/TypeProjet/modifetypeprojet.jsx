@@ -1,21 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e46fdfd9cbb660cbd8bd7a6265f8bc8deec97aca
-import React from 'react'
 
-function modifetypeprojet() {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default modifetypeprojet
-<<<<<<< HEAD
-=======
-=======
 import React, { useState } from "react";
 import { Modal, Box, TextField, Button, Typography } from "@mui/material";
 import Parametrageservice from "../../../services/ParametrageService"; // Importez le service
@@ -131,5 +114,3 @@ const ModifieTypeProjet = ({ open, onClose, project, onUpdate }) => {
 };
 
 export default ModifieTypeProjet;
->>>>>>> 73cb67044955b40dcd24677b22477b82f26b9a58
->>>>>>> e46fdfd9cbb660cbd8bd7a6265f8bc8deec97aca

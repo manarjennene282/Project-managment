@@ -26,6 +26,7 @@ import Consultationmateriel from "./scenes/ressourcemateriel/consultationmaterie
 import Creationjob from "./scenes/job/creationjob";
 import Consultationjob from "./scenes/job/consultationjob";
 import AccessManagement from "./scenes/Administration/Gestiondroits"
+import AffichePriorite from "./scenes/Parampetrage/Priorite/AffichePriorite";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -83,6 +84,8 @@ function App() {
                   <Route path="/CreationJob" element={<Creationjob />} />
                   <Route path="/ConsultationJob" element={<Consultationjob />} />
                   <Route path="/Gestionacces" element={<AccessManagement />} />
+                  <Route path="/priorite" element={<AffichePriorite />} />
+
 
                 </>
               ) : (

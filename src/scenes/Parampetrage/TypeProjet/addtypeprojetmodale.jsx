@@ -6,10 +6,11 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { tokens } from "../../theme"; // Assurez-vous que le chemin est correct
+import { tokens } from "../../../theme";
+import Parametrageservice from "../../../services/ParametrageService"; // Importez le service
 
 function AddTypeProjetModal({ open, onClose, onAddProject }) {
-  const colors = tokens((theme) => theme.palette.mode); // Utilisez votre thème
+  const colors = tokens((theme) => theme.palette.mode);
 
   // États pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ function AddTypeProjetModal({ open, onClose, onAddProject }) {
   };
 
   // Gestion de la soumission du formulaire
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -42,16 +43,25 @@ function AddTypeProjetModal({ open, onClose, onAddProject }) {
       return;
     }
 
-    // Appeler la fonction `onAddProject` pour ajouter le projet
-    onAddProject(formData);
+    try {
+      // Appeler la fonction `addTypeProjet` du service
+      const response = await Parametrageservice.addTypeProjet(formData);
 
-    // Réinitialiser le formulaire et fermer le modal
-    setFormData({
-      libelle: "",
-      description: "",
-    });
-    setLoading(false);
-    onClose();
+      // Si l'ajout est réussi, appeler la fonction `onAddProject` pour mettre à jour l'état parent
+      onAddProject(response.data);
+
+      // Réinitialiser le formulaire et fermer le modal
+      setFormData({
+        libelle: "",
+        description: "",
+      });
+      onClose();
+    } catch (err) {
+      console.error("Erreur lors de l'ajout du type de projet :", err);
+      setError("Une erreur s'est produite lors de l'ajout du type de projet.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

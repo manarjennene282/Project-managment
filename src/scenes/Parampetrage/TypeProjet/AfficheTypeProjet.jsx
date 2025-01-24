@@ -15,6 +15,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 
+import AddTypeProjetModal from "./addtypeprojetmodale"; // Adjust the path as necessary
+import ModifieTypeProjet from "./modifetypeprojet";
+
 const AfficheTypeProjet = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -150,14 +153,14 @@ const AfficheTypeProjet = () => {
 
   return (
     <Box m="20px">
-      <addtypeprojetmodale
+      <AddTypeProjetModal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
         onAddProject={handleAddProject}
       />
 
       {currentProject && (
-        <modifetypeprojet
+        <ModifieTypeProjet
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
           project={currentProject}
