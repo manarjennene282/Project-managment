@@ -20,6 +20,12 @@ import SignUp from "./scenes/authentification/signup";
 import Login from "./scenes/authentification/login";
 import Projet from "./scenes/projet/afficheprojet";
 import AfficheTypeProjet from "./scenes/Parampetrage/TypeProjet/AfficheTypeProjet";
+import NatureJob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
+import CreationMateriel from "./scenes/ressourcemateriel/creationmateriel";
+import Consultationmateriel from "./scenes/ressourcemateriel/consultationmateriel";
+import Creationjob from "./scenes/job/creationjob";
+import Consultationjob from "./scenes/job/consultationjob";
+import AccessManagement from "./scenes/Administration/Gestiondroits"
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -71,7 +77,12 @@ function App() {
                   <Route path="/presence" element={<Presence />} />
                   <Route path="/projet" element={<Projet />} />
                   <Route path="/typeprojet" element={<AfficheTypeProjet />} />
-
+                  <Route path="/naturejob" element={<NatureJob />} />
+                  <Route path="/CreationRessourceMateriel" element={<CreationMateriel />} />
+                  <Route path="/ConsultationRessourceMateriel" element={<Consultationmateriel />} />
+                  <Route path="/CreationJob" element={<Creationjob />} />
+                  <Route path="/ConsultationJob" element={<Consultationjob />} />
+                  <Route path="/Gestionacces" element={<AccessManagement />} />
 
                 </>
               ) : (

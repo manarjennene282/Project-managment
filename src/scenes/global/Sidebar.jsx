@@ -3,6 +3,9 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
+import ListAltIcon from "@mui/icons-material/ListAlt"; // Importez l'icône
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh"; // Importez l'icône
+
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -179,6 +182,11 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+            
+
+            
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -190,6 +198,13 @@ const Sidebar = () => {
             <Item
               title="TypeProjet"
               to="/typeprojet"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Naturejob"
+              to="/naturejob"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -212,6 +227,66 @@ const Sidebar = () => {
               title="FAQ Page"
               to="/faq"
               icon={<HelpOutlineOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+<Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Ressource 
+            </Typography>
+
+            <Item
+              title="Creation Ressource Materiel"
+              to="/CreationRessourceMateriel"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+<Item
+              title="Consultation Ressource Materiel"
+              to="/ConsultationRessourceMateriel"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Job
+            </Typography>
+
+            <Item
+              title="Creation  Job"
+              to="/CreationJob"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+<Item
+              title="Consultation job"
+              to="/ConsultationJob"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+<Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Administration
+            </Typography>
+
+            <Item
+              title="Gestion des droits d'accès"
+              to="/Gestionacces"
+              icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
