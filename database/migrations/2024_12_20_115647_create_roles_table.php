@@ -14,11 +14,11 @@ class CreateRolesTable extends Migration
      public function up()
     {
         // Vous devez spécifier la table 'roles' à créer et utiliser $table à l'intérieur de la fonction de callback
-/*         Schema::create('roles', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('role'); // Colonne pour stocker le nom du rôle (par exemple: admin, utilisateur, etc.)
             $table->timestamps(); // Crée les colonnes 'created_at' et 'updated_at'
-        }); */
+        }); 
     }
  
     /**

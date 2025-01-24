@@ -12,13 +12,13 @@ class CreateTypeProjetsTable extends Migration
      * @return void
      */
     public function up()
-    {/* 
+    {
         Schema::create('type_projets', function (Blueprint $table) {
             $table->increments('id');
             $table->string('libelle');
             $table->text('description')->nullable();
             $table->timestamps();
-        }); */
+        }); 
     }
 
     /**
