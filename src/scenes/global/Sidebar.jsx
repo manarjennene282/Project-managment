@@ -209,6 +209,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+<Item
+              title="Priorite"
+              to="/priorite"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Item
               title="Profile Form"
               to="/form"
