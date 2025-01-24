@@ -48,6 +48,7 @@ const Sidebar = () => {
   const [dataOpen, setDataOpen] = useState(false); // State to toggle Data section
   const [projetOpen, setProjetOpen] = useState(false); // State to toggle Projet section
   const [ressourcesOpen, setRessourcesOpen] = useState(false); // State to toggle Ressources section
+  const [ressourcesHumOpen, setRessourcesHumOpen] = useState(false); // State to toggle Ressources section
   const [administrationOpen, setAdministrationOpen] = useState(false); // State to toggle Administration section
   const [parametrageOpen, setParametrageOpen] = useState(false); // State to toggle Administration section
 
@@ -219,8 +220,8 @@ const Sidebar = () => {
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
-            >
-              Ressources
+              >
+              Ressources Materiel
               <IconButton onClick={() => setRessourcesOpen(!ressourcesOpen)}>
                 {ressourcesOpen ? "-" : "+"}
               </IconButton>
@@ -236,6 +237,36 @@ const Sidebar = () => {
                 />
                 <Item
                   title="Consultation Ressource Materiel"
+                  to="/ConsultationRessourceMateriel"
+                  icon={<PersonOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            )}
+
+            {/* Ressources Section */}
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+              >
+              Ressources Humaines
+              <IconButton onClick={() => setRessourcesHumOpen(!ressourcesHumOpen)}>
+                {ressourcesHumOpen ? "-" : "+"}
+              </IconButton>
+            </Typography>
+            {ressourcesHumOpen && (
+              <>
+                <Item
+                  title="Creation Ressources Humaines"
+                  to="/CreationRessourceMateriel"
+                  icon={<PersonOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Consultation Ressources Humaines"
                   to="/ConsultationRessourceMateriel"
                   icon={<PersonOutlinedIcon />}
                   selected={selected}
@@ -297,6 +328,41 @@ const Sidebar = () => {
 
           <Item
               title="Priorite"
+              to="/priorite"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Groupe de ressources"
+              to="/priorite"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+             <Item
+              title="Nature structure"
+              to="/priorite"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Nature relation"
+              to="/priorite"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Relation Projet"
+              to="/priorite"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Statut"
               to="/priorite"
               icon={<PersonOutlinedIcon />}
               selected={selected}
