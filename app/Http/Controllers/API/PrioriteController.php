@@ -83,10 +83,52 @@ class PrioriteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Priorite $priorite)
     {
-        //
-    }
+        $inputs = $request->all();
+    
+        try {
+            // Messages d'erreur personnalisés pour chaque champ
+            $messages = [
+                'id_prio.required' => 'Le liblle  est requis.',
+                'liblle.required' => 'La liblle est requise.',
+                
+            ];
+    
+            // Validation des champs d'entrée
+            $validator = Validator::make($inputs, [
+                'id_prio' => 'required|string',  // Validation pour 'nom'
+                'liblle' => 'required',      // Validation pour 'datedebut'
+                
+            ], $messages);
+    
+            // Si la validation échoue
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ], 200);
+            } else {
+                // Mettre à jour le projet avec les nouvelles données
+                $priorite->update([
+                    'id_prio' => $request->id_prio,
+                    'liblle' => $request->liblle,
+                    
+                ]);
+    
+                // Retourner une réponse JSON avec les données du projet mis à jour
+                return response()->json([
+                    'success' => true,
+                    'data' => $priorite,
+                ], 200);
+            }
+        } catch (Exception $e) {
+            // Gérer les exceptions
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }}
 
     /**
      * Remove the specified resource from storage.

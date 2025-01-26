@@ -17,10 +17,11 @@ class NatureRelationController extends Controller
      */
     public function index()
     {
-        $naturerelation = NatureRelation::all(); 
-        $naturerelationressource = NatureRelationResource::collection($naturerelation); // Transforme les rôles en ressources
-    
-        return response()->json($naturerelationressource, 200); 
+        $naturerela = NatureRelation::all();
+        return response()->json([
+            'success' => true,
+            'data' => $naturerela,
+        ],200);
     }
 
     /**
@@ -79,15 +80,69 @@ class NatureRelationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NatureRelationRequest $request, $id)
+    public function update(Request $request, NatureRelation $naturerelation)
     {
-        $naturerelation = NatureRelation::findOrFail($id); 
-        $naturerelation->update([
-            'id_natureRel' => $request->input('id_natureRel'),
-            'libelle' => $request->input('libelle'),
-        ]);
     
-        return response()->json(new NatureRelationResource($naturerelation), 200);
+        try {
+            // Vérification que l'objet existe
+            if (!$naturerelation) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'naturerelation introuvable'
+                ], 404);
+            }
+    
+           
+    
+            // Validation des données
+            $rules = [
+                'id_natureRel' => 'required|string',
+                'libelle' => 'required|string|max:255'
+            ];
+    
+            $messages = [
+                'required' => 'Le champ :attribute est obligatoire',
+                'string' => 'Le champ :attribute doit être une chaîne de caractères'
+            ];
+    
+            $validator = Validator::make($request->all(), $rules, $messages);
+    
+            if ($validator->fails()) {
+                Log::warning('Échec validation', [
+                    'errors' => $validator->errors(),
+                    'data' => $request->all()
+                ]);
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+    
+            // Mise à jour de l'entité
+            $naturerelation->update([
+                'id_natureRel' => $request->input('id_natureRel'),
+                'libelle' => $request->input('libelle')
+            ]);
+    
+            // Rafraîchir les données depuis la base
+            $naturerelation->refresh();    
+            return response()->json([
+                'success' => true,
+                'data' => $naturerelation,
+                'message' => 'Mise à jour effectuée avec succès'
+            ], 200);
+    
+        } catch (Exception $e) {
+            Log::error('Erreur critique', [
+                'message' => $e->getMessage(),
+                
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur interne du serveur'
+            ], 500);
+        }
     }
     /**
      * Remove the specified resource from storage.
@@ -97,8 +152,19 @@ class NatureRelationController extends Controller
      */
     public function destroy($id)
     {
-        $naturerelation = NatureRelation::findOrFail($id); // Find the role by ID
-        $naturerelation->delete(); // Delete the role
+    
+        // Find the Priorite by ID
+        $naturerelation = NatureRelation::find($id);
+    
+        // If the Priorite does not exist, return a 404 response
+        if (!$naturerelation) {
+            return response()->json(['message' => 'naturestruct not found'], 404);
+        }
+    
+        // Delete the Priorite
+        $naturerelation->delete();
+    
+        // Return a success response
         return response()->json(['message' => 'naturerelation deleted successfully'], 200);
     }
 }
