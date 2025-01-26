@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -7,16 +7,17 @@ import {
   Modal,
   Snackbar,
   Alert,
-} from "@mui/material";
-import { tokens } from "../../../theme";
-import Parametrageservice from "../../../services/ParametrageService";
+} from '@mui/material';
+import { tokens } from '../../../theme';
+import Parametrageservice from '../../../services/ParametrageService';
 
-function ModifePriorite({ open, onClose, priorite, onUpdate }) {
+function AddNatureRelation({ open, onClose, onAddNatureRelation }) {
   const colors = tokens((theme) => theme.palette.mode);
 
+  // État pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
-    id_prio: priorite?.id_prio || "",
-    liblle: priorite?.liblle || "",
+    id_natureRel: "", 
+    libelle: "", 
   });
 
   const [loading, setLoading] = useState(false);
@@ -25,18 +26,31 @@ function ModifePriorite({ open, onClose, priorite, onUpdate }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      await Parametrageservice.updatePriorite(priorite.id, formData);
-      onUpdate({ id: priorite.id, ...formData });
+      await Parametrageservice.addNatureRelation(formData);
+      onAddNatureRelation(formData);
+      setFormData({
+        id_natureRel: "",
+        libelle: "",
+      });
+      setOpenSnackbar(true);
       onClose();
     } catch (err) {
-      console.error("Erreur lors de la mise à jour du type de projet :", err);
+      console.error("Erreur lors de l'ajout de la relation :", err);
+      setError("Une erreur est survenue lors de l'ajout de la relation");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,32 +71,35 @@ function ModifePriorite({ open, onClose, priorite, onUpdate }) {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Modifier une Priorité
+            Ajouter une Nature de Relation
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="ID Priorité"
-              name="id_prio"
-              value={formData.id_prio}
+              label="ID Nature Relation"
+              name="id_natureRel"
+              value={formData.id_natureRel}
               onChange={handleChange}
               margin="normal"
               required
             />
+
             <TextField
               fullWidth
               label="Libellé"
-              name="liblle"
-              value={formData.liblle}
+              name="libelle"
+              value={formData.libelle}
               onChange={handleChange}
               margin="normal"
               required
             />
+
             {error && (
               <Typography color="error" mt={2}>
                 {error}
               </Typography>
             )}
+
             <Box mt={2} display="flex" justifyContent="space-between">
               <Button
                 onClick={onClose}
@@ -90,9 +107,7 @@ function ModifePriorite({ open, onClose, priorite, onUpdate }) {
                 sx={{
                   backgroundColor: colors.redAccent[500],
                   color: "white",
-                  "&:hover": {
-                    backgroundColor: colors.redAccent[600],
-                  },
+                  "&:hover": { backgroundColor: colors.redAccent[600] },
                 }}
                 disabled={loading}
               >
@@ -104,13 +119,11 @@ function ModifePriorite({ open, onClose, priorite, onUpdate }) {
                 sx={{
                   backgroundColor: colors.greenAccent[500],
                   color: "white",
-                  "&:hover": {
-                    backgroundColor: colors.greenAccent[600],
-                  },
+                  "&:hover": { backgroundColor: colors.greenAccent[600] },
                 }}
                 disabled={loading}
               >
-                {loading ? "Enregistrement..." : "Enregistrer"}
+                {loading ? "Ajout..." : "Ajouter"}
               </Button>
             </Box>
           </form>
@@ -133,11 +146,11 @@ function ModifePriorite({ open, onClose, priorite, onUpdate }) {
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          La priorité a été modifiée avec succès !
+          La nature de relation a été ajoutée avec succès !
         </Alert>
       </Snackbar>
     </>
   );
 }
 
-export default ModifePriorite;
+export default AddNatureRelation;
