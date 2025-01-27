@@ -3,21 +3,13 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import WarningIcon from "@mui/icons-material/Warning"; // Pour Priorite
 import CorporateFareIcon from "@mui/icons-material/CorporateFare"; // Pour NatureStructure
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
@@ -47,10 +39,10 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [user, setUser] = useState(null);
-
   const [dataOpen, setDataOpen] = useState(false); // State to toggle Data section
   const [projetOpen, setProjetOpen] = useState(false); // State to toggle Projet section
   const [ressourcesOpen, setRessourcesOpen] = useState(false); // State to toggle Ressources section
+  const [ressourcesHumOpen, setRessourcesHumOpen] = useState(false); // State to toggle Ressources section
   const [administrationOpen, setAdministrationOpen] = useState(false); // State to toggle Administration section
   const [parametrageOpen, setParametrageOpen] = useState(false); // State to toggle Administration section
 
@@ -222,8 +214,8 @@ const Sidebar = () => {
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
-            >
-              Ressources
+              >
+              Ressources Materiel
               <IconButton onClick={() => setRessourcesOpen(!ressourcesOpen)}>
                 {ressourcesOpen ? "-" : "+"}
               </IconButton>
@@ -239,6 +231,36 @@ const Sidebar = () => {
                 />
                 <Item
                   title="Consultation Ressource Materiel"
+                  to="/ConsultationRessourceMateriel"
+                  icon={<PersonOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </>
+            )}
+
+            {/* Ressources Section */}
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+              >
+              Ressources Humaines
+              <IconButton onClick={() => setRessourcesHumOpen(!ressourcesHumOpen)}>
+                {ressourcesHumOpen ? "-" : "+"}
+              </IconButton>
+            </Typography>
+            {ressourcesHumOpen && (
+              <>
+                <Item
+                  title="Creation Ressources Humaines"
+                  to="/CreationRessourceMateriel"
+                  icon={<PersonOutlinedIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Consultation Ressources Humaines"
                   to="/ConsultationRessourceMateriel"
                   icon={<PersonOutlinedIcon />}
                   selected={selected}
