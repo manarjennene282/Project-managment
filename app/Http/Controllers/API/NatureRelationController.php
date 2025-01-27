@@ -7,6 +7,7 @@ use App\Models\NatureRelation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\NatureRelationRequest;
+use Illuminate\Support\Facades\Validator;
 
 class NatureRelationController extends Controller
 {
@@ -80,70 +81,48 @@ class NatureRelationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NatureRelation $naturerelation)
-    {
+    public function update(Request $request, $id)
+{
+    $naturerelation = NatureRelation::find($id);
     
-        try {
-            // Vérification que l'objet existe
-            if (!$naturerelation) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'naturerelation introuvable'
-                ], 404);
-            }
-    
-           
-    
-            // Validation des données
-            $rules = [
-                'id_natureRel' => 'required|string',
-                'libelle' => 'required|string|max:255'
-            ];
-    
-            $messages = [
-                'required' => 'Le champ :attribute est obligatoire',
-                'string' => 'Le champ :attribute doit être une chaîne de caractères'
-            ];
-    
-            $validator = Validator::make($request->all(), $rules, $messages);
-    
-            if ($validator->fails()) {
-                Log::warning('Échec validation', [
-                    'errors' => $validator->errors(),
-                    'data' => $request->all()
-                ]);
-                return response()->json([
-                    'success' => false,
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-    
-            // Mise à jour de l'entité
-            $naturerelation->update([
-                'id_natureRel' => $request->input('id_natureRel'),
-                'libelle' => $request->input('libelle')
-            ]);
-    
-            // Rafraîchir les données depuis la base
-            $naturerelation->refresh();    
-            return response()->json([
-                'success' => true,
-                'data' => $naturerelation,
-                'message' => 'Mise à jour effectuée avec succès'
-            ], 200);
-    
-        } catch (Exception $e) {
-            Log::error('Erreur critique', [
-                'message' => $e->getMessage(),
-                
-            ]);
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur interne du serveur'
-            ], 500);
-        }
+    if (!$naturerelation) {
+        return response()->json([
+            'success' => false,
+            'message' => 'NatureRelation introuvable'
+        ], 404);
     }
+
+    $validator = Validator::make($request->all(), [
+        'id_natureRel' => 'required|string|unique:nature_relations,id_natureRel,'.$id.',id_natureRel',
+        'libelle' => 'required|string|max:255'
+    ], [
+        'required' => 'Le champ :attribute est obligatoire',
+        'unique' => 'Cette valeur existe déjà'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    try {
+        $naturerelation->update($request->all());
+        
+        return response()->json([
+            'success' => true,
+            'data' => $naturerelation,
+            'message' => 'Mise à jour effectuée avec succès'
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Erreur de mise à jour'
+        ], 500);
+    }
+}
     /**
      * Remove the specified resource from storage.
      *
