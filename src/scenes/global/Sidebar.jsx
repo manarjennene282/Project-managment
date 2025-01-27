@@ -18,6 +18,9 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import WarningIcon from "@mui/icons-material/Warning"; // Pour Priorite
+import CorporateFareIcon from "@mui/icons-material/CorporateFare"; // Pour NatureStructure
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -326,48 +329,37 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-          <Item
-              title="Priorite"
-              to="/priorite"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Groupe de ressources"
-              to="/priorite"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-             <Item
-              title="Nature structure"
-              to="/priorite"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Nature relation"
-              to="/priorite"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Relation Projet"
-              to="/priorite"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Statut"
-              to="/priorite"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+<Item
+        title="Priorite"
+        to="/priorite"
+        icon={<WarningIcon />} // Icône pour Priorite
+        selected={selected}
+        setSelected={setSelected}
+      />
+      <Item
+        title="NatureStructure"
+        to="/naturestruct"
+        icon={<CorporateFareIcon />} // Icône pour NatureStructure
+        selected={selected}
+        setSelected={setSelected}
+      />
+<Item
+        title="NatureRelation"
+        to="/naturerelation"
+        icon={<AccountTreeIcon />} // Icône pour hiérarchie
+        selected={selected}
+        setSelected={setSelected}
+      />
+
+<Item
+        title="Statut"
+        to="/statut"
+        icon={<AccountTreeIcon />} // Icône pour hiérarchie
+        selected={selected}
+        setSelected={setSelected}
+      />
+
+
               </>
             )}
           </Box>

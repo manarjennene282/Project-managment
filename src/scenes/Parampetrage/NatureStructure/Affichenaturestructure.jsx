@@ -21,81 +21,86 @@ import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import ModifePriorite from "./ModifePriorite";
-import AddPriorite from "./AddPriorite";
+import AddNatureStruuctureModal from "./AddNatureStruuctureModal";
+import ModifeNatureStruuctureModal from "./ModifeNatureStruuctureModal";
 
-const AffichePriorite = () => {
+const AfficheNatureStruct = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [priorites, setPriorites] = useState([]);
+  const [naturestructs, setNatureStructs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [currentPriorite, setCurrentPriorite] = useState(null);
+  const [currentNatureStruct, setCurrentNatureStruct] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [selectedPrioriteId, setSelectedPrioriteId] = useState(null);
+  const [selectedNatureStructId, setSelectedNatureStructId] = useState(null);
 
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
-  const handleDeleteClick = (id_prio) => {
-    setSelectedPrioriteId(id_prio); // Use id_prio
+  const handleDeleteClick = (id_natureStruct) => {
+    setSelectedNatureStructId(id_natureStruct);
     setOpenDeleteDialog(true);
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      console.log("Deleting Priorite with ID:", selectedPrioriteId); // Debugging
-      await Parametrageservice.deletePriorite(selectedPrioriteId);
-      setPriorites((prevPriorites) =>
-        prevPriorites.filter((priorite) => priorite.id !== selectedPrioriteId) // Use id_prio
+      console.log("Deleting NatureStruct with ID:", selectedNatureStructId);
+      await Parametrageservice.deletenatutrstruc(selectedNatureStructId);
+      setNatureStructs((prevNatureStructs) =>
+        prevNatureStructs.filter(
+          (naturestruct) => naturestruct.id_natureStruct !== selectedNatureStructId
+        )
       );
       setOpenDeleteDialog(false);
       setOpenSuccessSnackbar(true);
     } catch (err) {
-      console.error("Erreur lors de la suppression de la priorité :", err);
+      console.error("Erreur lors de la suppression de la nature de structure :", err);
       setOpenDeleteDialog(false);
       setOpenErrorSnackbar(true);
     }
   };
 
   // Fonction pour ouvrir le modal d'édition
-  const handleEdit = (priorite) => {
-    setCurrentPriorite(priorite);
+  const handleEdit = (naturestruct) => {
+    setCurrentNatureStruct(naturestruct);
     setOpenEditModal(true);
   };
 
-  const handleAddPriorite = (newPriorite) => {
-    setPriorites((prevPriorites) => [
-      ...prevPriorites,
-      { id_prio: newPriorite.id_prio, liblle: newPriorite.liblle },
+  const handleAddNatureStruct = (newNatureStruct) => {
+    setNatureStructs((prevNatureStructs) => [
+      ...prevNatureStructs,
+      { id_natureStruct: newNatureStruct.id_natureStruct, libelle: newNatureStruct.libelle },
     ]);
   };
 
-  const handleUpdatePriorite = (updatedPriorite) => {
-    setPriorites((prevPriorites) =>
-      prevPriorites.map((priorite) =>
-        priorite.id_prio === updatedPriorite.id_prio ? updatedPriorite : priorite
-      )
-    );
-  };
+  // Mettre à jour handleUpdateNatureStruct pour utiliser l'id statique
+const handleUpdateNatureStruct = (updatedNatureStruct) => {
+  setNatureStructs((prevNatureStructs) =>
+    prevNatureStructs.map((naturestruct) =>
+      naturestruct.id === updatedNatureStruct.id // Comparer par ID statique
+        ? { ...naturestruct, ...updatedNatureStruct }
+        : naturestruct
+    )
+  );
+};
 
   const columns = [
     {
-      field: "id_prio",
-      headerName: "ID_priorite",
+      field: "id_natureStruct",
+      headerName: "ID Nature Structure",
       flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "liblle",
+      field: "libelle",
       headerName: "Libellé",
       flex: 1,
       align: "center",
@@ -127,7 +132,7 @@ const AffichePriorite = () => {
           <Button
             variant="contained"
             startIcon={<DeleteIcon />}
-            onClick={() => handleDeleteClick(params.row.id)} // Use id_prio
+            onClick={() => handleDeleteClick(params.row.id)}
             sx={{
               backgroundColor: colors.redAccent[500],
               color: "white",
@@ -145,42 +150,42 @@ const AffichePriorite = () => {
   ];
 
   useEffect(() => {
-    const fetchPriorites = async () => {
+    const fetchNatureStructs = async () => {
       try {
-        const data = await Parametrageservice.getPriorites();
-        setPriorites(data.data || []);
+        const data = await Parametrageservice.getNaturestruct();
+        setNatureStructs(data.data || []);
         setLoading(false);
       } catch (err) {
-        console.error("Erreur lors de la récupération des priorités :", err);
-        setError("Erreur lors de la récupération des priorités.");
+        console.error("Erreur lors de la récupération des natures de structure :", err);
+        setError("Erreur lors de la récupération des natures de structure.");
         setLoading(false);
       }
     };
 
-    fetchPriorites();
+    fetchNatureStructs();
   }, []);
 
-  const filteredPriorites = priorites.filter((priorite) =>
-    Object.values(priorite).some((value) =>
+  const filteredNatureStructs = naturestructs.filter((naturestruct) =>
+    Object.values(naturestruct).some((value) =>
       String(value).toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
   return (
     <Box m="20px">
-      <AddPriorite
+      <AddNatureStruuctureModal
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        onAddPriorite={handleAddPriorite}
+        onAddNatureStruct={handleAddNatureStruct}
       />
 
-      {currentPriorite && (
-        <ModifePriorite
+      {currentNatureStruct && (
+        <ModifeNatureStruuctureModal
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
-          priorite={currentPriorite}
-          onUpdate={(updatedPriorite) => {
-            handleUpdatePriorite(updatedPriorite);
+          naturestruct={currentNatureStruct}
+          onUpdate={(updatedNatureStruct) => {
+            handleUpdateNatureStruct(updatedNatureStruct);
             setOpenEditModal(false);
           }}
         />
@@ -195,7 +200,7 @@ const AffichePriorite = () => {
         <DialogTitle id="alert-dialog-title">Confirmer la suppression</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Êtes-vous sûr de vouloir supprimer cette priorité ?
+            Êtes-vous sûr de vouloir supprimer cette nature de structure ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -224,7 +229,7 @@ const AffichePriorite = () => {
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          La priorité a été supprimée avec succès !
+          La nature de structure a été supprimée avec succès !
         </Alert>
       </Snackbar>
 
@@ -244,7 +249,7 @@ const AffichePriorite = () => {
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          Une erreur est survenue lors de la suppression de la priorité.
+          Une erreur est survenue lors de la suppression de la nature de structure.
         </Alert>
       </Snackbar>
 
@@ -261,15 +266,15 @@ const AffichePriorite = () => {
             },
           }}
         >
-          Ajouter une priorité
+          Ajouter une nature de structure
         </Button>
       </Box>
 
-      <Header title="Priorités" subtitle="Liste des priorités" />
+      <Header title="Natures de Structure" subtitle="Liste des natures de structure" />
 
       <Box display="flex" justifyContent="flex-start" mb="20px">
         <TextField
-          label="Rechercher une priorité"
+          label="Rechercher une nature de structure"
           variant="outlined"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -341,9 +346,9 @@ const AffichePriorite = () => {
           }}
         >
           <DataGrid
-            rows={filteredPriorites}
+            rows={filteredNatureStructs}
             columns={columns}
-            getRowId={(row) => row.id_prio} // Use id_prio as the unique identifier
+  getRowId={(row) => row.id} // Utilisez l'ID statique de la base de données
             rowHeight={50}
             pageSize={10}
             rowsPerPageOptions={[5, 10, 20]}
@@ -356,4 +361,4 @@ const AffichePriorite = () => {
   );
 };
 
-export default AffichePriorite;
+export default AfficheNatureStruct;
