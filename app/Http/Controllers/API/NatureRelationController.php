@@ -7,6 +7,7 @@ use App\Models\NatureRelation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\NatureRelationRequest;
+use Illuminate\Support\Facades\Validator;
 
 class NatureRelationController extends Controller
 {
@@ -17,10 +18,11 @@ class NatureRelationController extends Controller
      */
     public function index()
     {
-        $naturerelation = NatureRelation::all(); 
-        $naturerelationressource = NatureRelationResource::collection($naturerelation); // Transforme les rôles en ressources
-    
-        return response()->json($naturerelationressource, 200); 
+        $naturerela = NatureRelation::all();
+        return response()->json([
+            'success' => true,
+            'data' => $naturerela,
+        ],200);
     }
 
     /**
@@ -79,16 +81,48 @@ class NatureRelationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NatureRelationRequest $request, $id)
-    {
-        $naturerelation = NatureRelation::findOrFail($id); 
-        $naturerelation->update([
-            'id_natureRel' => $request->input('id_natureRel'),
-            'libelle' => $request->input('libelle'),
-        ]);
+    public function update(Request $request, $id)
+{
+    $naturerelation = NatureRelation::find($id);
     
-        return response()->json(new NatureRelationResource($naturerelation), 200);
+    if (!$naturerelation) {
+        return response()->json([
+            'success' => false,
+            'message' => 'NatureRelation introuvable'
+        ], 404);
     }
+
+    $validator = Validator::make($request->all(), [
+        'id_natureRel' => 'required|string|unique:nature_relations,id_natureRel,'.$id.',id_natureRel',
+        'libelle' => 'required|string|max:255'
+    ], [
+        'required' => 'Le champ :attribute est obligatoire',
+        'unique' => 'Cette valeur existe déjà'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    try {
+        $naturerelation->update($request->all());
+        
+        return response()->json([
+            'success' => true,
+            'data' => $naturerelation,
+            'message' => 'Mise à jour effectuée avec succès'
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Erreur de mise à jour'
+        ], 500);
+    }
+}
     /**
      * Remove the specified resource from storage.
      *
@@ -97,9 +131,20 @@ class NatureRelationController extends Controller
      */
     public function destroy($id)
     {
-        $naturerelation = NatureRelation::findOrFail($id); // Find the role by ID
-        $naturerelation->delete(); // Delete the role
+    
+        // Find the Priorite by ID
+        $naturerelation = NatureRelation::find($id);
+    
+        // If the Priorite does not exist, return a 404 response
+        if (!$naturerelation) {
+            return response()->json(['message' => 'naturestruct not found'], 404);
+        }
+    
+        // Delete the Priorite
+        $naturerelation->delete();
+    
+        // Return a success response
         return response()->json(['message' => 'naturerelation deleted successfully'], 200);
     }
-    
+
 }
