@@ -320,6 +320,14 @@ const Sidebar = () => {
         setSelected={setSelected}
       />
 
+<Item
+        title="Statut"
+        to="/statut"
+        icon={<AccountTreeIcon />} // Icône pour hiérarchie
+        selected={selected}
+        setSelected={setSelected}
+      />
+
 
               </>
             )}

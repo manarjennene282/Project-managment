@@ -1,3 +1,6 @@
+
+
+
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -21,20 +24,20 @@ import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import AddNatureRelation from "./AddNatureRelation";
-import ModifeNatureRelation from "./ModifeNatureRelation";
+import Addstatut from "./Addstatut";
 
-const AfficheNatureRelation = () => {
+
+const Affichestatut = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [naturerelations, setNatureRelations] = useState([]);
+  const [statuts, setStatuts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [currentNatureRelation, setCurrentNatureRelation] = useState(null);
+  const [currentStatut, setCurrentStatut] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -45,12 +48,12 @@ const AfficheNatureRelation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Parametrageservice.getNatureRelation();
+        const response = await Parametrageservice.getStatuts();
         const dataWithIds = response.data.map((item, index) => ({
           ...item,
           internalId: index,
         }));
-        setNatureRelations(dataWithIds);
+        setStatuts(dataWithIds);
         setLoading(false);
       } catch (err) {
         console.error("Erreur de chargement :", err);
@@ -68,20 +71,20 @@ const AfficheNatureRelation = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const relationToDelete = naturerelations.find(
-        (r) => r.internalId === selectedId
+      const statutToDelete = statuts.find(
+        (s) => s.internalId === selectedId
       );
   
-      if (!relationToDelete || !relationToDelete.id_natureRel) {
+      if (!statutToDelete || !statutToDelete.id_statut) {
         console.error("ID invalide pour la suppression !");
         setOpenErrorSnackbar(true);
         return;
       }
 
-      await Parametrageservice.deleteNatureRelation(relationToDelete.id);
+      await Parametrageservice.deleteStatut(statutToDelete.id_statut);
   
-      setNatureRelations((prev) =>
-        prev.filter((relation) => relation.internalId !== selectedId)
+      setStatuts((prev) =>
+        prev.filter((statut) => statut.internalId !== selectedId)
       );
   
       setOpenDeleteDialog(false);
@@ -94,36 +97,36 @@ const AfficheNatureRelation = () => {
     }
   };
 
-  const handleEdit = (relation) => {
-    setCurrentNatureRelation(relation);
+  const handleEdit = (statut) => {
+    setCurrentStatut(statut);
     setOpenEditModal(true);
   };
 
-  const handleAddNatureRelation = (newRelation) => {
-    const newInternalId = naturerelations.length > 0 
-      ? Math.max(...naturerelations.map(r => r.internalId)) + 1
+  const handleAddStatut = (newStatut) => {
+    const newInternalId = statuts.length > 0 
+      ? Math.max(...statuts.map(s => s.internalId)) + 1
       : 0;
 
-    setNatureRelations((prev) => [
+    setStatuts((prev) => [
       ...prev,
-      { ...newRelation, internalId: newInternalId },
+      { ...newStatut, internalId: newInternalId },
     ]);
   };
 
-  const handleUpdateNatureRelation = (updatedRelation) => {
-    setNatureRelations((prev) =>
-      prev.map((relation) =>
-        relation.internalId === updatedRelation.internalId
-          ? updatedRelation
-          : relation
+  const handleUpdateStatut = (updatedStatut) => {
+    setStatuts((prev) =>
+      prev.map((statut) =>
+        statut.internalId === updatedStatut.internalId
+          ? updatedStatut
+          : statut
       )
     );
   };
 
   const columns = [
     {
-      field: "id_natureRel",
-      headerName: "Code Relation",
+      field: "id_statut",
+      headerName: "Code Statut",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -171,26 +174,26 @@ const AfficheNatureRelation = () => {
     },
   ];
 
-  const filteredRelations = naturerelations.filter((relation) =>
-    Object.values(relation).some((value) =>
+  const filteredStatuts = statuts.filter((statut) =>
+    Object.values(statut).some((value) =>
       String(value).toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
   return (
     <Box m="20px">
-      <AddNatureRelation
+      <Addstatut
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        onAddNatureRelation={handleAddNatureRelation}
+        onAddStatut={handleAddStatut}
       />
 
-      {currentNatureRelation && (
-        <ModifeNatureRelation
+      {currentStatut && (
+        <modifeStatut
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
-          relation={currentNatureRelation}
-          onUpdate={handleUpdateNatureRelation}
+          statut={currentStatut}
+          onUpdate={handleUpdateStatut}
         />
       )}
 
@@ -213,14 +216,14 @@ const AfficheNatureRelation = () => {
         >
           <DialogTitle sx={{ p: 0 }}>
             <Typography variant="h3" fontWeight="600">
-              Supprimer une Relation
+              Supprimer un Statut
             </Typography>
           </DialogTitle>
         </Box>
 
         <DialogContent sx={{ p: 3 }}>
           <DialogContentText sx={{ color: colors.grey[100] }}>
-            Êtes-vous sûr de vouloir supprimer définitivement cette nature de relation ?
+            Êtes-vous sûr de vouloir supprimer définitivement ce statut ?
           </DialogContentText>
         </DialogContent>
 
@@ -250,7 +253,6 @@ const AfficheNatureRelation = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Notifications en haut à droite */}
       <Snackbar
         open={openSuccessSnackbar}
         autoHideDuration={3000}
@@ -266,7 +268,7 @@ const AfficheNatureRelation = () => {
             color: "white",
           }}
         >
-          Suppression effectuée avec succès !
+          Statut supprimé avec succès !
         </Alert>
       </Snackbar>
 
@@ -299,18 +301,18 @@ const AfficheNatureRelation = () => {
             "&:hover": { backgroundColor: colors.greenAccent[600] },
           }}
         >
-          Ajouter une Relation
+          Ajouter un Statut
         </Button>
       </Box>
 
       <Header
-        title="Gestion des Relations"
-        subtitle="Liste des types de relations"
+        title="Gestion des Statuts"
+        subtitle="Liste des statuts disponibles"
       />
 
       <Box mb="20px">
         <TextField
-          label="Rechercher une relation"
+          label="Rechercher un statut"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
@@ -340,7 +342,7 @@ const AfficheNatureRelation = () => {
           }}
         >
           <DataGrid
-            rows={filteredRelations}
+            rows={filteredStatuts}
             columns={columns}
             getRowId={(row) => row.internalId}
             pageSize={10}
@@ -353,4 +355,4 @@ const AfficheNatureRelation = () => {
   );
 };
 
-export default AfficheNatureRelation;
+export default Affichestatut;

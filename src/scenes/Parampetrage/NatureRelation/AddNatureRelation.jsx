@@ -39,21 +39,20 @@ function AddNatureRelation({ open, onClose, onAddNatureRelation }) {
 
     try {
       await Parametrageservice.addNatureRelation(formData);
-      onAddNatureRelation(formData);
+      onAddNatureRelation(formData); // Ajouter la nature de structure à la liste
       setFormData({
         id_natureRel: "",
         libelle: "",
       });
-      setOpenSnackbar(true);
-      onClose();
+      setOpenSnackbar(true); // Afficher la popup de confirmation
+      onClose(); // Fermer le modal
     } catch (err) {
-      console.error("Erreur lors de l'ajout de la relation :", err);
-      setError("Une erreur est survenue lors de l'ajout de la relation");
+      console.error("Erreur lors de l'ajout de la nature de structure :", err);
+      setError("Une erreur est survenue lors de l'ajout de la nature de structure.");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <>
       <Modal open={open} onClose={onClose}>

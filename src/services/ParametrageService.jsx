@@ -288,13 +288,13 @@ getNatureRelation: async () => {
 
 /**
  * Ajouter une priorité.
- * @param {Object} priorite - Données de la priorité à ajouter.
+ * @param {Object} naturerel - Données de la priorité à ajouter.
  * @returns {Promise} - Promesse contenant la réponse de l'API.
  */
-addNatureRelation: async (natutrstruc) => {
+addNatureRelation: async (naturerel) => {
   try {
     const token = localStorage.getItem("token"); 
-    const response = await axios.post(`${API_URL}/parametrage/naturerelation`, natutrstruc, {
+    const response = await axios.post(`${API_URL}/parametrage/naturerelation`, naturerel, {
       headers: {
         Authorization: `Bearer ${token}`, 
       },
@@ -309,15 +309,15 @@ addNatureRelation: async (natutrstruc) => {
 /**
  * Mettre à jour une priorité.
  * @param {number} id - ID de la priorité à mettre à jour.
- * @param {Object} priorite - Données de la priorité mises à jour.
+ * @param {Object} naturerel - Données de la priorité mises à jour.
  * @returns {Promise} - Promesse contenant la réponse de l'API.
  */
-updateNatureRelation: async (id, natutrstruc) => {
+updateNatureRelation: async (id, naturerel) => {
   try {
     const token = localStorage.getItem("token");
-    console.log("Données envoyées :", natutrstruc); // Debugging
+    console.log("Données envoyées :", naturerel); // Debugging
 
-    const response = await axios.put(`${API_URL}/parametrage/naturerelation/${id}`, natutrstruc, {
+    const response = await axios.put(`${API_URL}/parametrage/naturerelation/${id}`, naturerel, {
       headers: {
         Authorization: `Bearer ${token}`, 
       },
@@ -338,10 +338,10 @@ deleteNatureRelation: async (id) => {
   try {
     const token = localStorage.getItem("token"); 
     const response = await axios.delete(`${API_URL}/parametrage/naturerelation/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`, 
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
+    
+    
     return response.data;
   } catch (error) {
     console.error("Erreur lors de la suppression de la naturerelation :", error);
@@ -350,6 +350,92 @@ deleteNatureRelation: async (id) => {
 },
 
 
+//statut 
+
+
+// parametre Narture Relation 
+
+getstatut: async () => {
+  const token = localStorage.getItem("token"); 
+  if (!token) {
+    throw new Error("Token Vide Ou Invalide");
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/parametrage/statut`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des statut :", error);
+    throw error;
+  }
+},
+
+/**
+ * Ajouter une priorité.
+ * @param {Object} naturerel - Données de la priorité à ajouter.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+addstatut: async (statut) => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.post(`${API_URL}/parametrage/statut`, statut, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la statut :", error);
+    throw error;
+  }
+},
+
+/**
+ * Mettre à jour une priorité.
+ * @param {number} id - ID de la priorité à mettre à jour.
+ * @param {Object} statut - Données de la priorité mises à jour.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+updatestatut: async (id, statut) => {
+  try {
+    const token = localStorage.getItem("token");
+    console.log("Données envoyées :", statut); // Debugging
+
+    const response = await axios.put(`${API_URL}/parametrage/statut/${id}`, statut, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de la statut :", error);
+    throw error;
+  }
+},
+
+/**
+ * Supprimer une priorité.
+ * @param {number} id - ID de la priorité à supprimer.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+deleteStattut: async (id) => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.delete(`${API_URL}/parametrage/statut/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    
+    
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la statut :", error);
+    throw error;
+  }
+},
 
 
 
