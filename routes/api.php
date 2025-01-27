@@ -66,7 +66,7 @@ Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefi
     Route::post('consume', 'TicketRestoController@consume');
 });
 
-Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'parametrage'],function(){
+Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'parametrage'],function(){
     Route::get('showtypeprojet', 'TypeProjetController@index'); 
     Route::post('addtypeprojet', 'TypeProjetController@store');
     Route::put('updatetypeprojet/{typeprojet}', 'TypeProjetController@update');

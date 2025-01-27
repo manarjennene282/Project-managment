@@ -7,6 +7,7 @@ use App\Models\RelationProjet;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\RelationProjetRequest;
+use Illuminate\Support\Facades\Validator;
 
 
 class RelationProjetController extends Controller
@@ -18,10 +19,11 @@ class RelationProjetController extends Controller
      */
     public function index()
     {
-        $relationprojets = RelationProjet::all(); // Récupère tous les rôles
-        $relationprojetresource = RelationProjetResource::collection($relationprojets); // Transforme les rôles en ressources
-    
-        return response()->json($relationprojetresource, 200); // Retourne la réponse en JSON
+        $relprojet = RelationProjet::all();
+        return response()->json([
+            'success' => true,
+            'data' => $relprojet,
+        ],200);
     }
 
     /**
@@ -80,18 +82,49 @@ class RelationProjetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RelationProjetRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $relationprojet = RelationProjet::findOrFail($id); // Find the record by ID
-        $relationprojet->update([
-            'id_RelProjet' => $request->input('id_RelProjet'),
-            'libelle' => $request->input('libelle'),
+        $relprojet = RelationProjet::find($id);
+        
+        if (!$relprojet) {
+            return response()->json([
+                'success' => false,
+                'message' => 'RelationProjet introuvable'
+            ], 404);
+        }
+    
+        // Correct the table name and column name in the validation rule
+        $validator = Validator::make($request->all(), [
+            'id_RelProjet' => 'required|string|unique:relation_projets,id_RelProjet,'.$id.',id',
+            'libelle' => 'required|string|max:255'
+        ], [
+            'required' => 'Le champ :attribute est obligatoire',
+            'unique' => 'Cette valeur existe déjà'
         ]);
     
-        // Wrap the resource in a JSON response
-        return response()->json(new RelationProjetResource($relationprojet), 200);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    
+        try {
+            $relprojet->update($request->all());
+            
+            return response()->json([
+                'success' => true,
+                'data' => $relprojet,
+                'message' => 'Mise à jour effectuée avec succès'
+            ], 200);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de mise à jour: ' . $e->getMessage() // Include the error message for debugging
+            ], 500);
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      *

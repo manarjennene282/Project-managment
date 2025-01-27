@@ -23,7 +23,7 @@ class AddRoleToUsersTable extends Migration
             $table->string('contrat');
             $table->date('datenaissance');
             $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
+            $table->foreign('role_id');
             $table->string('scr')->nullable(); // Permet des valeurs nulles
             $table->string('password');
             $table->rememberToken();

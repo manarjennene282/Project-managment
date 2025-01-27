@@ -7,6 +7,7 @@ use App\Models\NatureJob;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\NatureJobRequest;
+use Illuminate\Support\Facades\Validator;
 
 class NatureJobController extends Controller
 {
@@ -17,10 +18,11 @@ class NatureJobController extends Controller
      */
     public function index()
     {
-        $naturerelation = NatureJob::all(); // Récupère tous les rôles
-        $naturejobressource = NatureJobResource::collection($naturejobs); // Transforme les rôles en ressources
-    
-        return response()->json($naturejobressource, 200); // Retourne la réponse en JSON
+        $naturejob = NatureJob::all();
+        return response()->json([
+            'success' => true,
+            'data' => $naturejob,
+        ],200);
     }
 
     /**
@@ -79,16 +81,47 @@ class NatureJobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NatureJobRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $naturejob = NatureJob::findOrFail($id); // Find the record by ID
-        $naturejob->update([
-            'id_natureJob' => $request->input('id_natureJob'),
-            'libelle' => $request->input('libelle'),
+        $naturejob = NatureJob::find($id);
+        
+        if (!$naturejob) {
+            return response()->json([
+                'success' => false,
+                'message' => 'NatureJob introuvable'
+            ], 404);
+        }
+    
+        $validator = Validator::make($request->all(), [
+            'id_natureJob' => 'required|string|unique:nature_jobs,id_natureJob,'.$id.',id',
+            'libelle' => 'required|string|max:255'
+        ], [
+            'required' => 'Le champ :attribute est obligatoire',
+            'unique' => 'Cette valeur existe déjà'
         ]);
     
-        // Wrap the resource in a JSON response
-        return response()->json(new NatureJobResource($naturejob), 200);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    
+        try {
+            $naturejob->update($request->all());
+            
+            return response()->json([
+                'success' => true,
+                'data' => $naturejob,
+                'message' => 'Mise à jour effectuée avec succès'
+            ], 200);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de mise à jour: ' . $e->getMessage() // Include the error message for debugging
+            ], 500);
+        }
     }
     
 
