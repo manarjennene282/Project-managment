@@ -146,4 +146,5 @@ class NatureRelationController extends Controller
         // Return a success response
         return response()->json(['message' => 'naturerelation deleted successfully'], 200);
     }
+
 }

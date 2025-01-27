@@ -84,9 +84,5 @@ Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'p
 
 
 
-
-
-
-
 });
 
