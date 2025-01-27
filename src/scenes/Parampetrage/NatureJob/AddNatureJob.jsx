@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -7,17 +7,17 @@ import {
   Modal,
   Snackbar,
   Alert,
-} from "@mui/material";
-import { tokens } from "../../../theme";
-import Parametrageservice from "../../../services/ParametrageService";
+} from '@mui/material';
+import { tokens } from '../../../theme';
+import Parametrageservice from '../../../services/ParametrageService';
 
-const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
+function AddNatureJob({ open, onClose, onAddNatureJob }) {
   const colors = tokens((theme) => theme.palette.mode);
 
   // État pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
-    id_statut: statut?.id_statut || "",
-    libelle: statut?.libelle || "",
+    id_natureJob: "", // ID de la nature de job
+    libelle: "", // Libellé de la nature de job
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,22 +26,29 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError(null);
 
     try {
-      await Parametrageservice.updatestatut(statut.id, formData);
-      onUpdate({ ...statut, ...formData });
-      setOpenSnackbar(true);
-      onClose();
+      await Parametrageservice.addnaturejob(formData); // Appel du service pour ajouter une nature de job
+      onAddNatureJob(formData); // Ajouter la nature de job à la liste
+      setFormData({
+        id_natureJob: "",
+        libelle: "",
+      });
+      setOpenSnackbar(true); // Afficher la popup de confirmation
+      onClose(); // Fermer le modal
     } catch (err) {
-      console.error("Erreur lors de la modification :", err);
-      setError("Échec de la modification. Veuillez réessayer.");
+      console.error("Erreur lors de l'ajout de la nature de job :", err);
+      setError("Une erreur est survenue lors de l'ajout de la nature de job.");
     } finally {
       setLoading(false);
     }
@@ -64,17 +71,17 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Modifier la Nature de Relation
+            Ajouter une Nature de Job
           </Typography>
-          
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="Code Relation"
-              name="id_statut"
-              value={formData.id_statut}
+              label="ID Nature Job"
+              name="id_natureJob"
+              value={formData.id_natureJob}
               onChange={handleChange}
               margin="normal"
+              required
             />
 
             <TextField
@@ -93,33 +100,30 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
               </Typography>
             )}
 
-            <Box mt={2} display="flex" justifyContent="space-between" gap={2}>
+            <Box mt={2} display="flex" justifyContent="space-between">
               <Button
                 onClick={onClose}
                 variant="contained"
                 sx={{
-                  flex: 1,
                   backgroundColor: colors.redAccent[500],
                   color: "white",
-                  "&:hover": { backgroundColor: colors.redAccent[600] }
+                  "&:hover": { backgroundColor: colors.redAccent[600] },
                 }}
                 disabled={loading}
               >
                 Annuler
               </Button>
-              
               <Button
                 type="submit"
                 variant="contained"
                 sx={{
-                  flex: 1,
                   backgroundColor: colors.greenAccent[500],
                   color: "white",
-                  "&:hover": { backgroundColor: colors.greenAccent[600] }
+                  "&:hover": { backgroundColor: colors.greenAccent[600] },
                 }}
                 disabled={loading}
               >
-                {loading ? "En cours..." : "Enregistrer"}
+                {loading ? "Ajout..." : "Ajouter"}
               </Button>
             </Box>
           </form>
@@ -133,19 +137,20 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert
+          onClose={() => setOpenSnackbar(false)}
           severity="success"
           sx={{
             width: "100%",
-            backgroundColor: colors.greenAccent[600],
+            backgroundColor: colors.greenAccent[500],
             color: "white",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          Modification effectuée avec succès !
+          La nature de job a été ajoutée avec succès !
         </Alert>
       </Snackbar>
     </>
   );
-};
+}
 
-export default ModifeStatut;
+export default AddNatureJob;

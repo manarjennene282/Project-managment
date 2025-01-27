@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -25,7 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import Addstatut from "./Addstatut";
-
+import ModifeStatut from "./modifeStatut";
 
 const Affichestatut = () => {
   const theme = useTheme();
@@ -48,7 +45,7 @@ const Affichestatut = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Parametrageservice.getStatuts();
+        const response = await Parametrageservice.getstatut();
         const dataWithIds = response.data.map((item, index) => ({
           ...item,
           internalId: index,
@@ -81,7 +78,7 @@ const Affichestatut = () => {
         return;
       }
 
-      await Parametrageservice.deleteStatut(statutToDelete.id_statut);
+      await Parametrageservice.deleteStattut(statutToDelete.id);
   
       setStatuts((prev) =>
         prev.filter((statut) => statut.internalId !== selectedId)
@@ -126,7 +123,7 @@ const Affichestatut = () => {
   const columns = [
     {
       field: "id_statut",
-      headerName: "Code Statut",
+      headerName: "Id_Statut",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -189,7 +186,7 @@ const Affichestatut = () => {
       />
 
       {currentStatut && (
-        <modifeStatut
+        <ModifeStatut
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
           statut={currentStatut}
