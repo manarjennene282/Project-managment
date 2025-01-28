@@ -523,8 +523,88 @@ deletenaturejob: async (id) => {
   }
 },
 
+//Relation Projet 
 
+getrelprojet: async () => {
+  const token = localStorage.getItem("token"); 
+  if (!token) {
+    throw new Error("Token Vide Ou Invalide");
+  }
 
+  try {
+    const response = await axios.get(`${API_URL}/parametrage/relprojet`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des relprojet :", error);
+    throw error;
+  }
+},
+
+/**
+ * Ajouter une priorité.
+ * @param {Object} relprojet - Données de la priorité à ajouter.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+addrelprojet: async (relprojet) => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.post(`${API_URL}/parametrage/relprojet`, relprojet, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la relprojet :", error);
+    throw error;
+  }
+},
+
+/**
+ * Mettre à jour une priorité.
+ * @param {number} id - ID de la priorité à mettre à jour.
+ * @param {Object} statut - Données de la priorité mises à jour.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+updaterelprojet: async (id, relprojet) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.put(`${API_URL}/parametrage/relprojet/${id}`, relprojet, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de la relprojet :", error);
+    throw error;
+  }
+},
+
+/**
+ * Supprimer une priorité.
+ * @param {number} id - ID de la priorité à supprimer.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+deleterelprojet: async (id) => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.delete(`${API_URL}/parametrage/relprojet/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    
+    
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la relprojet :", error);
+    throw error;
+  }
+},
 
 
 
