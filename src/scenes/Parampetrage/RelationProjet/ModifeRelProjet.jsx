@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -11,18 +11,28 @@ import {
 import { tokens } from "../../../theme";
 import Parametrageservice from "../../../services/ParametrageService";
 
-const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
+const ModifeRelProjet = ({ open, onClose, projet, onUpdate }) => {
   const colors = tokens((theme) => theme.palette.mode);
 
   // État pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
-    id_statut: statut?.id_statut || "",
-    libelle: statut?.libelle || "",
+    id_RelProjet: projet?.id_RelProjet || "",
+    libelle: projet?.libelle || "",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  // Mettre à jour le formulaire lorsque le projet change
+  useEffect(() => {
+    if (projet) {
+      setFormData({
+        id_RelProjet: projet.id_RelProjet,
+        libelle: projet.libelle,
+      });
+    }
+  }, [projet]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,10 +45,10 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
     setError("");
 
     try {
-      await Parametrageservice.updatestatut(statut.id, formData);
-      onUpdate({ ...statut, ...formData });
-      setOpenSnackbar(true);
-      onClose();
+      await Parametrageservice.updaterelprojet(projet.id, formData); // Appel du service pour mettre à jour le relation projet
+      onUpdate({ ...projet, ...formData }); // Mettre à jour la liste des projets
+      setOpenSnackbar(true); // Afficher la notification de succès
+      onClose(); // Fermer le modal
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
       setError("Échec de la modification. Veuillez réessayer.");
@@ -64,17 +74,18 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Modifier la Nature de Relation
+            Modifier le Relation Projet
           </Typography>
-          
+
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="Code Relation"
-              name="id_statut"
-              value={formData.id_statut}
+              label="ID Relation Projet"
+              name="id_RelProjet"
+              value={formData.id_RelProjet}
               onChange={handleChange}
               margin="normal"
+              required
             />
 
             <TextField
@@ -101,13 +112,13 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
                   flex: 1,
                   backgroundColor: colors.redAccent[500],
                   color: "white",
-                  "&:hover": { backgroundColor: colors.redAccent[600] }
+                  "&:hover": { backgroundColor: colors.redAccent[600] },
                 }}
                 disabled={loading}
               >
                 Annuler
               </Button>
-              
+
               <Button
                 type="submit"
                 variant="contained"
@@ -115,7 +126,7 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
                   flex: 1,
                   backgroundColor: colors.greenAccent[500],
                   color: "white",
-                  "&:hover": { backgroundColor: colors.greenAccent[600] }
+                  "&:hover": { backgroundColor: colors.greenAccent[600] },
                 }}
                 disabled={loading}
               >
@@ -138,7 +149,7 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
             width: "100%",
             backgroundColor: colors.greenAccent[600],
             color: "white",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
           Modification effectuée avec succès !
@@ -148,4 +159,4 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
   );
 };
 
-export default ModifeStatut;
+export default ModifeRelProjet;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Box, IconButton, Typography, useTheme, Collapse } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
@@ -10,9 +10,11 @@ import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import WarningIcon from "@mui/icons-material/Warning"; // Pour Priorite
-import CorporateFareIcon from "@mui/icons-material/CorporateFare"; // Pour NatureStructure
+import WarningIcon from "@mui/icons-material/Warning";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -33,18 +35,41 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
+const SidebarSection = ({ title, open, setOpen, children }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  return (
+    <>
+      <Typography
+        variant="h6"
+        color={colors.grey[300]}
+        sx={{ m: "15px 0 5px 20px", display: "flex", alignItems: "center" }}
+      >
+        {title}
+        <IconButton onClick={() => setOpen(!open)} size="small">
+          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        </IconButton>
+      </Typography>
+      <Collapse in={open}>
+        {children}
+      </Collapse>
+    </>
+  );
+};
+
 const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const [user, setUser] = useState(null);
-  const [dataOpen, setDataOpen] = useState(false); // State to toggle Data section
-  const [projetOpen, setProjetOpen] = useState(false); // State to toggle Projet section
-  const [ressourcesOpen, setRessourcesOpen] = useState(false); // State to toggle Ressources section
-  const [ressourcesHumOpen, setRessourcesHumOpen] = useState(false); // State to toggle Ressources section
-  const [administrationOpen, setAdministrationOpen] = useState(false); // State to toggle Administration section
-  const [parametrageOpen, setParametrageOpen] = useState(false); // State to toggle Administration section
+  const [dataOpen, setDataOpen] = useState(false);
+  const [projetOpen, setProjetOpen] = useState(false);
+  const [ressourcesOpen, setRessourcesOpen] = useState(false);
+  const [ressourcesHumOpen, setRessourcesHumOpen] = useState(false);
+  const [administrationOpen, setAdministrationOpen] = useState(false);
+  const [parametrageOpen, setParametrageOpen] = useState(false);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));
@@ -136,229 +161,154 @@ const Sidebar = () => {
             />
 
             {/* Data Section */}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Data
-              <IconButton onClick={() => setDataOpen(!dataOpen)}>
-                {dataOpen ? "-" : "+"}
-              </IconButton>
-            </Typography>
-            {dataOpen && (
-              <>
-                <Item
-                  title="Manage Team"
-                  to="/team"
-                  icon={<PeopleOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Contacts Information"
-                  to="/contacts"
-                  icon={<ContactsOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Presence"
-                  to="/presence"
-                  icon={<ReceiptOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Invoices Balances"
-                  to="/invoices"
-                  icon={<ReceiptOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Gestion Projet"
-                  to="/projet"
-                  icon={<ReceiptOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </>
-            )}
+            <SidebarSection title="Data" open={dataOpen} setOpen={setDataOpen}>
+              <Item
+                title="Manage Team"
+                to="/team"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Contacts Information"
+                to="/contacts"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Presence"
+                to="/presence"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Invoices Balances"
+                to="/invoices"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Gestion Projet"
+                to="/projet"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
 
             {/* Projet Section */}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Projet
-              <IconButton onClick={() => setProjetOpen(!projetOpen)}>
-                {projetOpen ? "-" : "+"}
-              </IconButton>
-            </Typography>
-            {projetOpen && (
-              <>
-                <Item
-                  title="Gestion Projet"
-                  to="/projet"
-                  icon={<ReceiptOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </>
-            )}
+            <SidebarSection title="Projet" open={projetOpen} setOpen={setProjetOpen}>
+              <Item
+                title="Gestion Projet"
+                to="/projet"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
 
             {/* Ressources Section */}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-              >
-              Ressources Materiel
-              <IconButton onClick={() => setRessourcesOpen(!ressourcesOpen)}>
-                {ressourcesOpen ? "-" : "+"}
-              </IconButton>
-            </Typography>
-            {ressourcesOpen && (
-              <>
-                <Item
-                  title="Creation Ressource Materiel"
-                  to="/CreationRessourceMateriel"
-                  icon={<PersonOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Consultation Ressource Materiel"
-                  to="/ConsultationRessourceMateriel"
-                  icon={<PersonOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </>
-            )}
+            <SidebarSection title="Ressources Materiel" open={ressourcesOpen} setOpen={setRessourcesOpen}>
+              <Item
+                title="Creation Ressource Materiel"
+                to="/CreationRessourceMateriel"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Consultation Ressource Materiel"
+                to="/ConsultationRessourceMateriel"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
 
-            {/* Ressources Section */}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-              >
-              Ressources Humaines
-              <IconButton onClick={() => setRessourcesHumOpen(!ressourcesHumOpen)}>
-                {ressourcesHumOpen ? "-" : "+"}
-              </IconButton>
-            </Typography>
-            {ressourcesHumOpen && (
-              <>
-                <Item
-                  title="Creation Ressources Humaines"
-                  to="/CreationRessourceMateriel"
-                  icon={<PersonOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Consultation Ressources Humaines"
-                  to="/ConsultationRessourceMateriel"
-                  icon={<PersonOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </>
-            )}
+            {/* Ressources Humaines Section */}
+            <SidebarSection title="Ressources Humaines" open={ressourcesHumOpen} setOpen={setRessourcesHumOpen}>
+              <Item
+                title="Creation Ressources Humaines"
+                to="/CreationRessourceMateriel"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Consultation Ressources Humaines"
+                to="/ConsultationRessourceMateriel"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
 
             {/* Administration Section */}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Administration
-              <IconButton onClick={() => setAdministrationOpen(!administrationOpen)}>
-                {administrationOpen ? "-" : "+"}
-              </IconButton>
-            </Typography>
-            {administrationOpen && (
-              <>
-                <Item
-                  title="Gestion des droits d'accès"
-                  to="/Gestionacces"
-                  icon={<PersonOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </>
-            )}
+            <SidebarSection title="Administration" open={administrationOpen} setOpen={setAdministrationOpen}>
+              <Item
+                title="Gestion des droits d'accès"
+                to="/Gestionacces"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
 
             {/* Paramétrages Section */}
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 0 5px 20px" }}
-            >
-              Paramétrages
-              <IconButton onClick={() => setParametrageOpen(!parametrageOpen)}>
-                {parametrageOpen ? "-" : "+"}
-              </IconButton>
-            </Typography>
-            {parametrageOpen && (
-              <>
-                <Item
-              title="Type Projet"
-              to="/typeprojet"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Nature JOB"
-              to="/naturejob"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-                <Item
-                        title="Priorite"
-                        to="/priorite"
-                        icon={<WarningIcon />} // Icône pour Priorite
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-                      <Item
-                        title="NatureStructure"
-                        to="/naturestruct"
-                        icon={<CorporateFareIcon />} // Icône pour NatureStructure
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-                <Item
-                        title="NatureRelation"
-                        to="/naturerelation"
-                        icon={<AccountTreeIcon />} // Icône pour hiérarchie
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-
-                <Item
-                        title="Statut"
-                        to="/statut"
-                        icon={<AccountTreeIcon />} // Icône pour hiérarchie
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-                <Item
-                        title="Groupe ressource"
-                        to="/grouperessource"
-                        icon={<AccountTreeIcon />} // Icône pour hiérarchie
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-
-              </>
-            )}
+            <SidebarSection title="Paramétrages" open={parametrageOpen} setOpen={setParametrageOpen}>
+              <Item
+                title="Type Projet"
+                to="/typeprojet"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Nature JOB"
+                to="/naturejob"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Priorite"
+                to="/priorite"
+                icon={<WarningIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="NatureStructure"
+                to="/naturestruct"
+                icon={<CorporateFareIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="NatureRelation"
+                to="/naturerelation"
+                icon={<AccountTreeIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Statut"
+                to="/statut"
+                icon={<AccountTreeIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Relation Projet"
+                to="/relprojet"
+                icon={<AccountTreeIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
           </Box>
         </Menu>
       </ProSidebar>

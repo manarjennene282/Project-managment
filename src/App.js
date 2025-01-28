@@ -20,7 +20,6 @@ import SignUp from "./scenes/authentification/signup";
 import Login from "./scenes/authentification/login";
 import Projet from "./scenes/projet/afficheprojet";
 import AfficheTypeProjet from "./scenes/Parampetrage/TypeProjet/AfficheTypeProjet";
-import NatureJob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 import CreationMateriel from "./scenes/ressourcemateriel/creationmateriel";
 import Consultationmateriel from "./scenes/ressourcemateriel/consultationmateriel";
 import Creationjob from "./scenes/job/creationjob";
@@ -30,7 +29,9 @@ import AffichePriorite from "./scenes/Parampetrage/Priorite/AffichePriorite";
 import Affichenaturestructure from "./scenes/Parampetrage/NatureStructure/Affichenaturestructure";
 import AfficheNatureRelation from "./scenes/Parampetrage/NatureRelation/AfficheNatureRelation";
 import Affichestatut from "./scenes/Parampetrage/statut/Affichestatut";
-import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
+import Affichenaturejob from "./scenes/Parampetrage/NatureJob/Affichenaturejob";
+import AfficheRelProjet from "./scenes/Parampetrage/RelationProjet/AfficheRelProjet";
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -82,7 +83,6 @@ function App() {
                   <Route path="/presence" element={<Presence />} />
                   <Route path="/projet" element={<Projet />} />
                   <Route path="/typeprojet" element={<AfficheTypeProjet />} />
-                  <Route path="/naturejob" element={<NatureJob />} />
                   <Route path="/CreationRessourceMateriel" element={<CreationMateriel />} />
                   <Route path="/ConsultationRessourceMateriel" element={<Consultationmateriel />} />
                   <Route path="/CreationJob" element={<Creationjob />} />
@@ -93,6 +93,11 @@ function App() {
                   <Route path="/naturestruct" element={<Affichenaturestructure />} />
                   <Route path="/naturerelation" element={<AfficheNatureRelation />} />
                   <Route path="/statut" element={<Affichestatut />} />
+                  <Route path="/naturejob" element={<Affichenaturejob />} />
+                  <Route path="/relprojet" element={<AfficheRelProjet />} />
+
+
+
 
 
 
@@ -100,7 +105,7 @@ function App() {
 
                 </>
               ) : (
-                <Route path="*" element={<Navigate to="/login" />} />
+                <Route path="*" element={<Navigate to="/dashboard" />} />
               )}
 
               {/* Routes publiques */}

@@ -11,13 +11,13 @@ import {
 import { tokens } from "../../../theme";
 import Parametrageservice from "../../../services/ParametrageService";
 
-const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
+const ModifeNatureJob = ({ open, onClose, job, onUpdate }) => {
   const colors = tokens((theme) => theme.palette.mode);
 
   // État pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
-    id_statut: statut?.id_statut || "",
-    libelle: statut?.libelle || "",
+    id_natureJob: job?.id_natureJob || "",
+    libelle: job?.libelle || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -35,10 +35,10 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
     setError("");
 
     try {
-      await Parametrageservice.updatestatut(statut.id, formData);
-      onUpdate({ ...statut, ...formData });
-      setOpenSnackbar(true);
-      onClose();
+      await Parametrageservice.updatenaturejob(job.id, formData); // Appel du service pour mettre à jour la nature de job
+      onUpdate({ ...job, ...formData }); // Mettre à jour la liste des jobs
+      setOpenSnackbar(true); // Afficher la notification de succès
+      onClose(); // Fermer le modal
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
       setError("Échec de la modification. Veuillez réessayer.");
@@ -64,15 +64,15 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Modifier la Nature de Relation
+            Modifier la Nature de Job
           </Typography>
           
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="Code Relation"
-              name="id_statut"
-              value={formData.id_statut}
+              label="Code Nature Job"
+              name="id_natureJob"
+              value={formData.id_natureJob}
               onChange={handleChange}
               margin="normal"
             />
@@ -148,4 +148,4 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
   );
 };
 
-export default ModifeStatut;
+export default ModifeNatureJob;

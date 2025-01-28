@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -7,17 +7,17 @@ import {
   Modal,
   Snackbar,
   Alert,
-} from "@mui/material";
-import { tokens } from "../../../theme";
-import Parametrageservice from "../../../services/ParametrageService";
+} from '@mui/material';
+import { tokens } from '../../../theme';
+import Parametrageservice from '../../../services/ParametrageService';
 
-const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
+function AddRelProjet({ open, onClose, onAddRelProjet }) {
   const colors = tokens((theme) => theme.palette.mode);
 
   // État pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
-    id_statut: statut?.id_statut || "",
-    libelle: statut?.libelle || "",
+    id_RelProjet: "", // ID du relation projet
+    libelle: "", // Libellé du relation projet
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,22 +26,29 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError(null);
 
     try {
-      await Parametrageservice.updatestatut(statut.id, formData);
-      onUpdate({ ...statut, ...formData });
-      setOpenSnackbar(true);
-      onClose();
+      await Parametrageservice.addrelprojet(formData); // Appel du service pour ajouter un relation projet
+      onAddRelProjet(formData); // Ajouter le relation projet à la liste
+      setFormData({
+        id_RelProjet: "",
+        libelle: "",
+      });
+      setOpenSnackbar(true); // Afficher la popup de confirmation
+      onClose(); // Fermer le modal
     } catch (err) {
-      console.error("Erreur lors de la modification :", err);
-      setError("Échec de la modification. Veuillez réessayer.");
+      console.error("Erreur lors de l'ajout du relation projet :", err);
+      setError("Une erreur est survenue lors de l'ajout du relation projet.");
     } finally {
       setLoading(false);
     }
@@ -64,17 +71,17 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Modifier la Nature de Relation
+            Ajouter un Relation Projet
           </Typography>
-          
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="Code Relation"
-              name="id_statut"
-              value={formData.id_statut}
+              label="ID Relation Projet"
+              name="id_RelProjet"
+              value={formData.id_RelProjet}
               onChange={handleChange}
               margin="normal"
+              required
             />
 
             <TextField
@@ -93,33 +100,30 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
               </Typography>
             )}
 
-            <Box mt={2} display="flex" justifyContent="space-between" gap={2}>
+            <Box mt={2} display="flex" justifyContent="space-between">
               <Button
                 onClick={onClose}
                 variant="contained"
                 sx={{
-                  flex: 1,
                   backgroundColor: colors.redAccent[500],
                   color: "white",
-                  "&:hover": { backgroundColor: colors.redAccent[600] }
+                  "&:hover": { backgroundColor: colors.redAccent[600] },
                 }}
                 disabled={loading}
               >
                 Annuler
               </Button>
-              
               <Button
                 type="submit"
                 variant="contained"
                 sx={{
-                  flex: 1,
                   backgroundColor: colors.greenAccent[500],
                   color: "white",
-                  "&:hover": { backgroundColor: colors.greenAccent[600] }
+                  "&:hover": { backgroundColor: colors.greenAccent[600] },
                 }}
                 disabled={loading}
               >
-                {loading ? "En cours..." : "Enregistrer"}
+                {loading ? "Ajout..." : "Ajouter"}
               </Button>
             </Box>
           </form>
@@ -133,19 +137,20 @@ const ModifeStatut = ({ open, onClose, statut, onUpdate }) => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert
+          onClose={() => setOpenSnackbar(false)}
           severity="success"
           sx={{
             width: "100%",
-            backgroundColor: colors.greenAccent[600],
+            backgroundColor: colors.greenAccent[500],
             color: "white",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          Modification effectuée avec succès !
+          Le relation projet a été ajouté avec succès !
         </Alert>
       </Snackbar>
     </>
   );
-};
+}
 
-export default ModifeStatut;
+export default AddRelProjet;

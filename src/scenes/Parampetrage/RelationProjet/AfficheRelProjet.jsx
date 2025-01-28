@@ -21,20 +21,20 @@ import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import AddNatureJob from "./AddNatureJob";
-import ModifeNatureJob from "./ModifeNatureJob";
+import AddRelProjet from "./AddRelProjet";
+import ModifeRelProjet from "./ModifeRelProjet";
 
-const Affichenaturejob = () => {
+const AfficheRelProjet = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const [naturejobs, setNatureJobs] = useState([]);
+  const [relprojets, setRelProjets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [currentNatureJob, setCurrentNatureJob] = useState(null);
+  const [currentRelProjet, setCurrentRelProjet] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -45,12 +45,12 @@ const Affichenaturejob = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Parametrageservice.getNatureJob();
+        const response = await Parametrageservice.getrelprojet();
         const dataWithIds = response.data.map((item, index) => ({
           ...item,
           internalId: index,
         }));
-        setNatureJobs(dataWithIds);
+        setRelProjets(dataWithIds);
         setLoading(false);
       } catch (err) {
         console.error("Erreur de chargement :", err);
@@ -68,22 +68,22 @@ const Affichenaturejob = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const jobToDelete = naturejobs.find(
+      const projetToDelete = relprojets.find(
         (j) => j.internalId === selectedId
       );
-  
-      if (!jobToDelete || !jobToDelete.id_natureJob) {
+
+      if (!projetToDelete || !projetToDelete.id_RelProjet) {
         console.error("ID invalide pour la suppression !");
         setOpenErrorSnackbar(true);
         return;
       }
 
-      await Parametrageservice.deletenaturejob(jobToDelete.id);
-  
-      setNatureJobs((prev) =>
-        prev.filter((job) => job.internalId !== selectedId)
+      await Parametrageservice.deleterelprojet(projetToDelete.id);
+
+      setRelProjets((prev) =>
+        prev.filter((projet) => projet.internalId !== selectedId)
       );
-  
+
       setOpenDeleteDialog(false);
       setOpenSuccessSnackbar(true);
     } catch (err) {
@@ -94,36 +94,36 @@ const Affichenaturejob = () => {
     }
   };
 
-  const handleEdit = (job) => {
-    setCurrentNatureJob(job);
+  const handleEdit = (projet) => {
+    setCurrentRelProjet(projet);
     setOpenEditModal(true);
   };
 
-  const handleAddNatureJob = (newJob) => {
-    const newInternalId = naturejobs.length > 0 
-      ? Math.max(...naturejobs.map(j => j.internalId)) + 1
+  const handleAddRelProjet = (newProjet) => {
+    const newInternalId = relprojets.length > 0
+      ? Math.max(...relprojets.map(j => j.internalId)) + 1
       : 0;
 
-    setNatureJobs((prev) => [
+    setRelProjets((prev) => [
       ...prev,
-      { ...newJob, internalId: newInternalId },
+      { ...newProjet, internalId: newInternalId },
     ]);
   };
 
-  const handleUpdateNatureJob = (updatedJob) => {
-    setNatureJobs((prev) =>
-      prev.map((job) =>
-        job.internalId === updatedJob.internalId
-          ? updatedJob
-          : job
+  const handleUpdateRelProjet = (updatedProjet) => {
+    setRelProjets((prev) =>
+      prev.map((projet) =>
+        projet.internalId === updatedProjet.internalId
+          ? updatedProjet
+          : projet
       )
     );
   };
 
   const columns = [
     {
-      field: "id_natureJob",
-      headerName: "ID_Nature_Job",
+      field: "id_RelProjet",
+      headerName: "ID_RelProjet",
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -171,26 +171,26 @@ const Affichenaturejob = () => {
     },
   ];
 
-  const filteredJobs = naturejobs.filter((job) =>
-    Object.values(job).some((value) =>
+  const filteredProjets = relprojets.filter((projet) =>
+    Object.values(projet).some((value) =>
       String(value).toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
 
   return (
     <Box m="20px">
-      <AddNatureJob
+      <AddRelProjet
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
-        onAddNatureJob={handleAddNatureJob}
+        onAddRelProjet={handleAddRelProjet}
       />
 
-      {currentNatureJob && (
-        <ModifeNatureJob
+      {currentRelProjet && (
+        <ModifeRelProjet
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
-          job={currentNatureJob}
-          onUpdate={handleUpdateNatureJob}
+          projet={currentRelProjet}
+          onUpdate={handleUpdateRelProjet}
         />
       )}
 
@@ -213,14 +213,14 @@ const Affichenaturejob = () => {
         >
           <DialogTitle sx={{ p: 0 }}>
             <Typography variant="h3" fontWeight="600">
-              Supprimer une Nature Job
+              Supprimer un Relation Projet
             </Typography>
           </DialogTitle>
         </Box>
 
         <DialogContent sx={{ p: 3 }}>
           <DialogContentText sx={{ color: colors.grey[100] }}>
-            Êtes-vous sûr de vouloir supprimer définitivement cette nature de job ?
+            Êtes-vous sûr de vouloir supprimer définitivement ce relation projet ?
           </DialogContentText>
         </DialogContent>
 
@@ -250,7 +250,6 @@ const Affichenaturejob = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Notifications en haut à droite */}
       <Snackbar
         open={openSuccessSnackbar}
         autoHideDuration={3000}
@@ -299,18 +298,18 @@ const Affichenaturejob = () => {
             "&:hover": { backgroundColor: colors.greenAccent[600] },
           }}
         >
-          Ajouter une Nature Job
+          Ajouter un Relation Projet
         </Button>
       </Box>
 
       <Header
-        title=" Nature Jobs"
-        subtitle="Liste des types de jobs"
+        title="Relation Projets"
+        subtitle="Liste des relations projets"
       />
 
       <Box mb="20px">
         <TextField
-          label="Rechercher une nature job"
+          label="Rechercher un relation projet"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
@@ -340,7 +339,7 @@ const Affichenaturejob = () => {
           }}
         >
           <DataGrid
-            rows={filteredJobs}
+            rows={filteredProjets}
             columns={columns}
             getRowId={(row) => row.internalId}
             pageSize={10}
@@ -353,4 +352,4 @@ const Affichenaturejob = () => {
   );
 };
 
-export default Affichenaturejob;
+export default AfficheRelProjet;
