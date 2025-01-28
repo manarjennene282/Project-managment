@@ -30,6 +30,7 @@ import AffichePriorite from "./scenes/Parampetrage/Priorite/AffichePriorite";
 import Affichenaturestructure from "./scenes/Parampetrage/NatureStructure/Affichenaturestructure";
 import AfficheNatureRelation from "./scenes/Parampetrage/NatureRelation/AfficheNatureRelation";
 import Affichestatut from "./scenes/Parampetrage/statut/Affichestatut";
+import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -88,6 +89,7 @@ function App() {
                   <Route path="/ConsultationJob" element={<Consultationjob />} />
                   <Route path="/Gestionacces" element={<AccessManagement />} />
                   <Route path="/priorite" element={<AffichePriorite />} />
+                  <Route path="/grouperessource" element={<Affichegroupe />} />
                   <Route path="/naturestruct" element={<Affichenaturestructure />} />
                   <Route path="/naturerelation" element={<AfficheNatureRelation />} />
                   <Route path="/statut" element={<Affichestatut />} />

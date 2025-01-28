@@ -16,7 +16,7 @@ function AddGroupe({ open, onClose, onAddGroup }) {
 
   // State to manage form values
   const [formData, setFormData] = useState({
-    id_prio: "",
+    id_grp: "",
     liblle: "",
   });
 
@@ -40,17 +40,17 @@ function AddGroupe({ open, onClose, onAddGroup }) {
     setError(null);
 
     try {
-      // Call the service to add a priority
+      // Call the service to add a groupe de ressource
       await Parametrageservice.AddGroupe(formData);
-      onAddPriorite(formData); // Add the priority to the list
+      onAddGroup(formData); // Add the group of society to the list
       setFormData({
-        id_prio: "",
+        id_grp: "",
         liblle: "",
       });
       setOpenSnackbar(true); // Show confirmation popup
       onClose(); // Close the modal
     } catch (err) {
-      console.error("Erreur lors de l'ajout de la groupe ressource :", err);
+      console.error("Erreur lors de l'ajout du groupe ressource :", err);
       setError("Une erreur est survenue lors de l'ajout de la groupe ressource.");
     } finally {
       setLoading(false);
@@ -75,7 +75,7 @@ function AddGroupe({ open, onClose, onAddGroup }) {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Ajouter une Priorité
+            Ajouter un groupe
           </Typography>
           <form onSubmit={handleSubmit}>
             {/* ID groupe ressource Field */}
@@ -159,7 +159,7 @@ function AddGroupe({ open, onClose, onAddGroup }) {
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Shadow for better visibility
           }}
         >
-          La priorité a été ajoutée avec succès !
+          Le groupe ressource a été ajoutée avec succès !
         </Alert>
       </Snackbar>
     </>

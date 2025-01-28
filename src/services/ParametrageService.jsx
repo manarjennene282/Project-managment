@@ -1,4 +1,5 @@
 import axios from "axios";
+import AddGroupe from "../scenes/Parampetrage/groupRessource/addgroupressource";
 
 const API_URL = 'http://localhost:8000/api'; 
 
@@ -203,11 +204,11 @@ getNaturestruct: async () => {
 },
 
 /**
- * Ajouter une priorité.
- * @param {Object} priorite - Données de la priorité à ajouter.
+ * Ajouter une Nature structure.
+ * @param {Object} natutrstruc - Données de la Nature structure à ajouter.
  * @returns {Promise} - Promesse contenant la réponse de l'API.
  */
-addNatuireStruct: async (natutrstruc) => {
+addNatureStruct: async (natutrstruc) => {
   try {
     const token = localStorage.getItem("token"); 
     const response = await axios.post(`${API_URL}/parametrage/naturestruc`, natutrstruc, {
@@ -217,15 +218,15 @@ addNatuireStruct: async (natutrstruc) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de l'ajout de la natutrstruc :", error);
+    console.error("Erreur lors de l'ajout de la Nature structure :", error);
     throw error;
   }
 },
 
 /**
- * Mettre à jour une priorité.
- * @param {number} id - ID de la priorité à mettre à jour.
- * @param {Object} priorite - Données de la priorité mises à jour.
+ * Mettre à jour une Nature structure.
+ * @param {number} id - ID de la Nature structure à mettre à jour.
+ * @param {Object} natutrstruc - Données de la Nature structure mises à jour.
  * @returns {Promise} - Promesse contenant la réponse de l'API.
  */
 updateNatureStruct: async (id, natutrstruc) => {
@@ -240,14 +241,14 @@ updateNatureStruct: async (id, natutrstruc) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de la mise à jour de la natutrstruc :", error);
+    console.error("Erreur lors de la mise à jour de la Nature structure :", error);
     throw error;
   }
 },
 
 /**
- * Supprimer une priorité.
- * @param {number} id - ID de la priorité à supprimer.
+ * Supprimer une nature structure.
+ * @param {number} id - ID de la nature structure à supprimer.
  * @returns {Promise} - Promesse contenant la réponse de l'API.
  */
 deletenatutrstruc: async (id) => {
@@ -260,7 +261,7 @@ deletenatutrstruc: async (id) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Erreur lors de la suppression de la natutrstruc :", error);
+    console.error("Erreur lors de la suppression de la Nature structure :", error);
     throw error;
   }
 },
@@ -437,8 +438,89 @@ deleteStattut: async (id) => {
   }
 },
 
+/**
+ * Ajouter une groupe ressource.
+ * @param {Object} grouperessource - Données de groupe ressource à ajouter.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+AddGroupe: async (grouperessource) => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.post(`${API_URL}/parametrage/grouperessource`, grouperessource, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de groupe ressource :", error);
+    throw error;
+  }
+},
 
+/**
+ * Mettre à jour une groupe ressource
+ * @param {number} id - ID de groupe ressource à mettre à jour.
+ * @param {Object} priorite - Données de groupe ressource mises à jour.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+updateGroupeRessource: async (id, grouperessource) => {
+  try {
+    const token = localStorage.getItem("token");
+    console.log("Token :", token); // Debugging
+    console.log("Données envoyées :", grouperessource); // Debugging
 
+    const response = await axios.put(`${API_URL}/parametrage/priorite/${id}`, grouperessource, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    console.log("Réponse du backend :", response.data); // Debugging
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de groupe ressource :", error);
+    throw error;
+  }
+},
+
+/**
+ * Supprimer une priorité.
+ * @param {number} id - ID de la priorité à supprimer.
+ * @returns {Promise} - Promesse contenant la réponse de l'API.
+ */
+deleteGroupeRessource: async (id) => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const response = await axios.delete(`${API_URL}/parametrage/grouperessource/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la suppression de groupe ressource :", error);
+    throw error;
+  }
+},
+
+getGroupeRessource: async () => {
+  const token = localStorage.getItem("token"); 
+  if (!token) {
+    throw new Error("Token Vide Ou Invalide");
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/parametrage/grouperessource`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des groupes ressources :", error);
+    throw error;
+  }
+},
 
 
 

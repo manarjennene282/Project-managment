@@ -320,36 +320,42 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-<Item
-        title="Priorite"
-        to="/priorite"
-        icon={<WarningIcon />} // Icône pour Priorite
-        selected={selected}
-        setSelected={setSelected}
-      />
-      <Item
-        title="NatureStructure"
-        to="/naturestruct"
-        icon={<CorporateFareIcon />} // Icône pour NatureStructure
-        selected={selected}
-        setSelected={setSelected}
-      />
-<Item
-        title="NatureRelation"
-        to="/naturerelation"
-        icon={<AccountTreeIcon />} // Icône pour hiérarchie
-        selected={selected}
-        setSelected={setSelected}
-      />
+                <Item
+                        title="Priorite"
+                        to="/priorite"
+                        icon={<WarningIcon />} // Icône pour Priorite
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      <Item
+                        title="NatureStructure"
+                        to="/naturestruct"
+                        icon={<CorporateFareIcon />} // Icône pour NatureStructure
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                <Item
+                        title="NatureRelation"
+                        to="/naturerelation"
+                        icon={<AccountTreeIcon />} // Icône pour hiérarchie
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
 
-<Item
-        title="Statut"
-        to="/statut"
-        icon={<AccountTreeIcon />} // Icône pour hiérarchie
-        selected={selected}
-        setSelected={setSelected}
-      />
-
+                <Item
+                        title="Statut"
+                        to="/statut"
+                        icon={<AccountTreeIcon />} // Icône pour hiérarchie
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                <Item
+                        title="Groupe ressource"
+                        to="/grouperessource"
+                        icon={<AccountTreeIcon />} // Icône pour hiérarchie
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
 
               </>
             )}
