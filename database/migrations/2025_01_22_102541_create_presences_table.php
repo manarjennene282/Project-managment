@@ -8,7 +8,7 @@ class CreatePresencesTable extends Migration
 {
     public function up()
     {
-         Schema::create('presences', function (Blueprint $table) {
+         /* Schema::create('presences', function (Blueprint $table) {
             $table->engine = 'InnoDB';  // Force l'utilisation d'InnoDB
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
@@ -16,15 +16,15 @@ class CreatePresencesTable extends Migration
             $table->date('date');
             $table->boolean('presence_matin')->default(false);
             $table->boolean('presence_apresmidi')->default(false);
-$table->integer('heurestravaillees');
+            $table->integer('heurestravaillees');
             $table->integer('heuresabsence');
             $table->timestamps();
-        }); 
+        });  */
         
     }
 
     public function down()
     {
-        Schema::dropIfExists('presences');
+      //  Schema::dropIfExists('presences');
     }
 }

@@ -13,7 +13,7 @@ class CreateProjetsTable extends Migration
      */
     public function up()
     {
-         Schema::create('projets', function (Blueprint $table) {
+        /*  Schema::create('projets', function (Blueprint $table) {
             $table->engine = 'InnoDB';  // Force l'utilisation d'InnoDB
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
@@ -23,10 +23,10 @@ class CreateProjetsTable extends Migration
             $table->string('departement');  // Département associé au projet
             $table->date('datefinestime');  // Date de fin estimée du projet
             $table->date('datefinreelle')->nullable();  // Date de fin réelle, nullable pour quand elle n'est pas encore définie
-            $table->timestamps();  // Colonnes de timestamp created_at et updated_at
+            $table->timestamps();  // Colonnes de timestamp created_at et updated_at 
 
             
-        }); 
+        }); */
     }
 
     /**
@@ -36,6 +36,6 @@ class CreateProjetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projets');
+        //Schema::dropIfExists('projets');
     }
 }

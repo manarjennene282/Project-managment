@@ -13,7 +13,7 @@ class CreateTicketRestosTable extends Migration
      */
     public function up()
     {
-        Schema::create('ticket_resto', function (Blueprint $table) {
+        /* Schema::create('ticket_resto', function (Blueprint $table) {
             $table->increments('id');
             // Utilisation de unsignedBigInteger pour la clé étrangère et ajout manuel de la contrainte
             $table->unsignedBigInteger('user_id');
@@ -21,7 +21,7 @@ class CreateTicketRestosTable extends Migration
             $table->integer('ticket_utilise');
             $table->date('date');
             $table->timestamps();
-        }); 
+        });  */
     }
 
     /**
@@ -31,6 +31,6 @@ class CreateTicketRestosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ticket_resto');
+        //Schema::dropIfExists('ticket_resto');
     }
 }

@@ -17,12 +17,12 @@ class GroupeRessourceController extends Controller
      */
     public function index()
     {
-        $grouperessource = GroupeRessource::all(); // Récupère tous les rôles
-        $grouperessources = GroupeRessourceResource::collection($grouperessources); // Transforme les rôles en ressources
-    
-        return response()->json($grouperessources, 200); // Retourne la réponse en JSON
+        $grouperessource = GroupeRessource::all();
+        return response()->json([
+            'success' => true,
+            'data' => $grouperessource,
+        ],200);
     }
-
     /**
      * Show the form for creating a new resource.
      *

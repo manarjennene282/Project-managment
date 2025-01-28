@@ -13,7 +13,7 @@ class CreateCongesTable extends Migration
      */
     public function up()
     {
-         Schema::create('conges', function (Blueprint $table) {
+         /* Schema::create('conges', function (Blueprint $table) {
             $table->engine = 'InnoDB'; // Ajoutez cette ligne pour spécifier InnoDB
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
@@ -23,7 +23,7 @@ class CreateCongesTable extends Migration
             $table->integer('conge_utilise');
             $table->timestamps();
         }); 
-        
+         */
     }
     
 
@@ -34,6 +34,6 @@ class CreateCongesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conges');
+       // Schema::dropIfExists('conges');
     }
 }
