@@ -12,7 +12,7 @@ export const tokens = (mode) => ({
           400: "#858585",
           500: "#666666",
           600: "#525252",
-          700: "#3d3d3d",
+          700: "#1F2A40",
           800: "#292929",
           900: "#141414",
         },
@@ -32,7 +32,7 @@ export const tokens = (mode) => ({
           200: "#b7ebde",
           300: "#94e2cd",
           400: "#70d8bd",
-          500: "#4cceac",
+          500: "#fff",
           600: "#3da58a",
           700: "#2e7c67",
           800: "#1e5245",
@@ -56,16 +56,16 @@ export const tokens = (mode) => ({
           400: "#868dfb",
           500: "#6870fa",
           600: "#535ac8",
-          700: "#3e4396",
+          700: "#8086f7",
           800: "#2a2d64",
           900: "#151632",
         },
       }
     : {
         grey: {
-          100: "#141414",
+          100: "#fff",
           200: "#292929",
-          300: "#3d3d3d",
+          300: "#fff",
           400: "#525252",
           500: "#666666",
           600: "#858585",
@@ -77,10 +77,10 @@ export const tokens = (mode) => ({
           100: "#040509",
           200: "#080b12",
           300: "#0c101b",
-          400: "#bdbdbd", // side bar 
+          400: "#032b49", // side bar 
           500: "#141b2d",
           600: "#1F2A40",
-          700: "#ffffff",//couleur background de tableau 
+          700: "#fff",//couleur background de tableau 
           800: "#ffffff",//couleur background taht tableau 
           900: "#d0d1d5",
         },
@@ -88,8 +88,8 @@ export const tokens = (mode) => ({
           100: "#0f2922",
           200: "#1e5245",
           300: "#2e7c67",
-          400: "#3da58a",
-          500: "#4cceac",
+          400: "#114af1",
+          500: "#70d8bd",
           600: "#70d8bd",
           700: "#94e2cd",
           800: "#b7ebde",
@@ -107,13 +107,13 @@ export const tokens = (mode) => ({
           900: "#f8dcdb",
         },
         blueAccent: {
-          100: "#151632",
+          100: "#390202",
           200: "#2a2d64",
           300: "#3e4396",
           400: "#535ac8",
           500: "#6870fa",//ligne entre les tableau mauve 
           600: "#868dfb",
-          700: "#F5F5F5", // Nouvelle couleur grise pour l'en-tête du tableau
+          700: "#032b49", // Nouvelle couleur grise pour l'en-tête du tableau
           800: "#c3c6fd",
           900: "#ffffff",
         },

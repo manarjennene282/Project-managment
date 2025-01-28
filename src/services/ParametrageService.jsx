@@ -1,5 +1,5 @@
 import axios from "axios";
-import AddGroupe from "../scenes/Parampetrage/groupRessource/addgroupressource";
+
 
 const API_URL = 'http://localhost:8000/api'; 
 
@@ -690,18 +690,6 @@ deleterelprojet: async (id) => {
 
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

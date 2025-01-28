@@ -218,10 +218,10 @@ const AfficheTypeProjet = () => {
               },
             },
             "& .MuiInputLabel-root": {
-              color: colors.grey[300],
+              color: colors.grey[700],
             },
             "& .MuiInputBase-input": {
-              color: colors.grey[100],
+              color: colors.blueAccent[500],
             },
           }}
         />
@@ -237,13 +237,15 @@ const AfficheTypeProjet = () => {
           height="60vh"
           sx={{
             "& .MuiDataGrid-root": {
-              border: "none",
+              borderLeft: `none`
+              
             },
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: colors.blueAccent[700],
               color: colors.grey[100],
               fontSize: "14px",
               fontWeight: "bold",
+              font: "Arial",
               borderBottom: `2px solid ${colors.blueAccent[500]}`,
             },
             "& .MuiDataGrid-columnHeaderTitle": {
@@ -252,7 +254,9 @@ const AfficheTypeProjet = () => {
             "& .MuiDataGrid-cell": {
               borderBottom: `1px solid ${colors.grey[800]}`,
               fontSize: "13px",
-              color: colors.grey[100],
+              borderLeft: `2px solid ${colors.grey[200]}`,
+              color: colors.grey[200],
+
             },
             "& .MuiDataGrid-row": {
               backgroundColor: colors.primary[700],

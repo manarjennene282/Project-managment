@@ -81,7 +81,8 @@ export default function SignIn() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
+        //backgroundColor: '#f5f5f5',
+        //backgroundImage: URL('digital-segula.jpg'),
       }}
     >
       <CssBaseline />

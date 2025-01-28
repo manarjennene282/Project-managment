@@ -92,7 +92,7 @@ const Sidebar = () => {
           color: "#868dfb !important",
         },
         "& .pro-menu-item.active": {
-          color: "#6870fa !important",
+          color: "#fff !important",
         },
       }}
     >
@@ -304,6 +304,13 @@ const Sidebar = () => {
               <Item
                 title="Relation Projet"
                 to="/relprojet"
+                icon={<AccountTreeIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Ressource Groupe"
+                to="/grouperessource"
                 icon={<AccountTreeIcon />}
                 selected={selected}
                 setSelected={setSelected}

@@ -29,9 +29,9 @@ import AffichePriorite from "./scenes/Parampetrage/Priorite/AffichePriorite";
 import Affichenaturestructure from "./scenes/Parampetrage/NatureStructure/Affichenaturestructure";
 import AfficheNatureRelation from "./scenes/Parampetrage/NatureRelation/AfficheNatureRelation";
 import Affichestatut from "./scenes/Parampetrage/statut/Affichestatut";
-import Affichenaturejob from "./scenes/Parampetrage/NatureJob/Affichenaturejob";
 import AfficheRelProjet from "./scenes/Parampetrage/RelationProjet/AfficheRelProjet";
-
+import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
+import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -96,12 +96,6 @@ function App() {
                   <Route path="/naturejob" element={<Affichenaturejob />} />
                   <Route path="/relprojet" element={<AfficheRelProjet />} />
 
-
-
-
-
-
-                  
 
                 </>
               ) : (
