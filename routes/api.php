@@ -34,20 +34,16 @@ Route::group(['middleware' => ['cors', 'api','token'], 'namespace' => 'API'], fu
     Route::apiResource('role', 'RoleController');
 });
 
-Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'presence'],function(){
+Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'presence'],function(){
 
     Route::post('addpresence','PresenceController@store');
     Route::get('getpresence','PresenceController@getPresences');
     Route::put('updatepresence','PresenceController@update');
     Route::post('calculheures','PresenceController@calculateAndSaveWorkHours');
     Route::post('calculabsence','PresenceController@calculateAbsenceHours');
-     
-
-
-
-
+    
  });
- Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'projet'],function(){
+ Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'projet'],function(){
 
     Route::get('getprojet','ProjetController@index');
     Route::post('addprojet','ProjetController@store');
@@ -72,7 +68,6 @@ Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'p
     Route::put('updatetypeprojet/{typeprojet}', 'TypeProjetController@update');
     Route::delete('deletetypeprojet/{typeprojet}', 'TypeProjetController@destroy');
     //Route Groupe bressource 
-
     Route::apiResource('grouperessource', 'GroupeRessourceController');
     Route::apiResource('priorite', 'PrioriteController');
     Route::apiResource('statut', 'StatutController');
@@ -80,9 +75,18 @@ Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'p
     Route::apiResource('naturejob', 'NatureJobController');
     Route::apiResource('naturestruc', 'NatureStructureController');
     Route::apiResource('naturerelation', 'NatureRelationController');
-
-
-
-
 });
+
+//Ressource Humaine 
+Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'ressourcehumaine'],function(){
+
+    Route::get('getrh','RessourceHumaineController@index');
+    Route::post('addrh','RessourceHumaineController@store');
+    Route::put('updaterh/{id}','RessourceHumaineController@update');
+    Route::delete('deleterh/{id}','RessourceHumaineController@destroy');
+
+
+   
+    
+ });
 

@@ -10,4 +10,12 @@ class GroupeRessource extends Model
         'id_grp',
         'libelle',
     ];
+
+    public function ressourcesHumaines()
+    {
+        return $this->hasMany(GroupeRessource::class, 'id_grp');
+    }
+
+   
+
 }
