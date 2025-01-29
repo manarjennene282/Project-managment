@@ -43,11 +43,11 @@ const SidebarSection = ({ title, open, setOpen, children }) => {
     <>
       <Typography
         variant="h6"
-        color={colors.grey[300]}
+        color={colors.grey[100]}
         sx={{ m: "15px 0 5px 20px", display: "flex", alignItems: "center" }}
       >
-        {title}
-        <IconButton onClick={() => setOpen(!open)} size="small">
+        {title} 
+        <IconButton onClick={() => setOpen(!open)} size="small" sx={{ color: 'white' }}>
           {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </IconButton>
       </Typography>
@@ -118,7 +118,7 @@ const Sidebar = () => {
                 <Typography variant="h3" color={colors.grey[100]}>
                   GPM.Segula
                 </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)} sx={{ color: 'white' }}>
                   <MenuOutlinedIcon />
                 </IconButton>
               </Box>

@@ -31,7 +31,7 @@ import AfficheNatureRelation from "./scenes/Parampetrage/NatureRelation/AfficheN
 import Affichestatut from "./scenes/Parampetrage/statut/Affichestatut";
 import AfficheRelProjet from "./scenes/Parampetrage/RelationProjet/AfficheRelProjet";
 import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
-import Affichenaturejob from "./scenes/Parampetrage/NatureJob/Affichenaturejob";
+import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 import AfficheRessourceHumaine from "./scenes/RessourceHumaine/AfficheRessourceHumaine";
 
 
