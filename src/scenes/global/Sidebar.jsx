@@ -69,6 +69,7 @@ const Sidebar = () => {
   const [ressourcesOpen, setRessourcesOpen] = useState(false);
   const [ressourcesHumOpen, setRessourcesHumOpen] = useState(false);
   const [administrationOpen, setAdministrationOpen] = useState(false);
+  const [comptableOpen, setComptableOpen] = useState(false);
   const [parametrageOpen, setParametrageOpen] = useState(false);
 
   useEffect(() => {
@@ -256,7 +257,23 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
             </SidebarSection>
-
+            {/* Interface comptable  */}
+            <SidebarSection title="Comptable" open={comptableOpen} setOpen={setComptableOpen}>
+              <Item
+                title="Upload Comptable R"
+                to="/Gestionacces"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Consultation Comptable R"
+                to="/Gestionacces"
+                icon={<PersonOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </SidebarSection>
             {/* Paramétrages Section */}
             <SidebarSection title="Paramétrages" open={parametrageOpen} setOpen={setParametrageOpen}>
               <Item
