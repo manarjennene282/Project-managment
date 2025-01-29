@@ -205,25 +205,8 @@ const ModifeRessourceHumaine = ({ open, onClose, ressource, onUpdate }) => {
           </Box>
         </form>
 
-        {/* Snackbar de succès */}
-        <Snackbar
-          open={openSuccessSnackbar}
-          autoHideDuration={3000}
-          onClose={() => setOpenSuccessSnackbar(false)}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          sx={{ mt: 6 }}
-        >
-          <Alert
-            severity="success"
-            sx={{
-              width: "100%",
-              backgroundColor: colors.greenAccent[600],
-              color: "white",
-            }}
-          >
-            Modifié avec succès !
-          </Alert>
-        </Snackbar>
+     
+
       </Box>
     </Modal>
   );

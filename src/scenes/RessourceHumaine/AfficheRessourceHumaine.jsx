@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
-    Box,
-    Typography,
-    Button,
-    TextField,
-    useTheme,
-    InputAdornment,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Snackbar,
-    Alert,
-  } from "@mui/material";
+  Box,
+  Typography,
+  Button,
+  TextField,
+  useTheme,
+  InputAdornment,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -39,12 +39,25 @@ const AfficheRessourceHumaine = () => {
   const [currentRessource, setCurrentRessource] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-
   const [searchQuery, setSearchQuery] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [ressourceToDelete, setRessourceToDelete] = useState(null);
 
-  // Fonction pour supprimer une ressource humaine
+  const [actionMessage, setActionMessage] = useState("");
+
+  // Function to handle updating a resource
+  const handleUpdateRessource = (updatedRessource) => {
+    setRessourcesHumaines((prevRessources) =>
+      prevRessources.map((ressource) =>
+        ressource.id_ressh === updatedRessource.id_ressh ? updatedRessource : ressource
+      )
+    );
+    setOpenEditModal(false); // Close the modal after update
+    setActionMessage("Modification réussie !"); // Set success message for modification
+    setOpenSuccessSnackbar(true); // Trigger success snackbar
+  };
+
+  // Function to handle deletion of a resource
   const handleDelete = async () => {
     if (ressourceToDelete) {
       try {
@@ -53,56 +66,45 @@ const AfficheRessourceHumaine = () => {
           prevRessources.filter((ressource) => ressource.id_ressh !== ressourceToDelete.id_ressh)
         );
         setOpenDeleteDialog(false);
-        setOpenSuccessSnackbar(true); // Affiche le message de succès
+        setActionMessage("Suppression réussie !"); // Set success message for deletion
+        setOpenSuccessSnackbar(true); // Show success snackbar after deletion
       } catch (err) {
-        console.error("Erreur lors de la suppression de la ressource :", err);
-        setOpenErrorSnackbar(true); // Affiche le message d'erreur
+        console.error("Error while deleting resource:", err);
+        setOpenErrorSnackbar(true); // Show error snackbar if deletion fails
       }
     }
   };
 
-
-  // Fonction pour ouvrir le modal d'édition
+  // Function to open edit modal
   const handleEdit = (ressource) => {
     setCurrentRessource(ressource);
     setOpenEditModal(true);
   };
-
 
   const handleDeleteClick = (internalId) => {
     setSelectedId(internalId);
     setOpenDeleteDialog(true);
   };
 
-  // Fonction pour ajouter une ressource humaine
+  // Function to add a resource
   const handleAddRessource = async (newRessource) => {
     try {
       setRessourcesHumaines((prevRessources) => [...prevRessources, newRessource]);
-      setOpenAddModal(false);
+      setOpenAddModal(false); // Close modal after adding resource
     } catch (error) {
-      console.error("Erreur lors de l'ajout de la ressource :", error);
+      console.error("Error while adding resource:", error);
     }
   };
 
-  // Fonction pour mettre à jour une ressource humaine
-  const handleUpdateRessource = (updatedRessource) => {
-    setRessourcesHumaines((prevRessources) =>
-      prevRessources.map((ressource) =>
-        ressource.id_ressh === updatedRessource.id_ressh ? updatedRessource : ressource
-      )
-    );
-  };
-
-  // Colonnes pour le DataGrid
+  // Columns for the DataGrid
   const columns = [
-
     {
-        field: "id_ressh",
-        headerName: "Id_ressource",
-        flex: 1,
-        align: "center",
-        headerAlign: "center",
-      },
+      field: "id_ressh",
+      headerName: "Id_ressource",
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+    },
     {
       field: "nom",
       headerName: "Nom",
@@ -167,38 +169,53 @@ const AfficheRessourceHumaine = () => {
       headerAlign: "center",
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-          <EditIcon
-            onClick={() => handleEdit(params.row)}
-            sx={{
-              cursor: "pointer",
-              color: colors.blueAccent[500],
-              "&:hover": {
-                color: colors.blueAccent[600],
-              },
-              fontSize: 24,
-            }}
-          />
-
-          <DeleteIcon
-            onClick={() => {
-              setRessourceToDelete(params.row);
-              setOpenDeleteDialog(true);
-            }}
-            sx={{
-              cursor: "pointer",
-              color: colors.redAccent[500],
-              "&:hover": {
-                color: colors.redAccent[600],
-              },
-              fontSize: 24,
-            }}
-          />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "40px", // Taille du cercle
+            height: "40px", // Taille du cercle
+            borderRadius: "50%", // Pour rendre le cercle
+            backgroundColor: colors.blueAccent[500], // Couleur du cercle
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: colors.blueAccent[600], // Couleur au survol
+            },
+          }}
+          onClick={() => handleEdit(params.row)}
+        >
+          <EditIcon sx={{ color: "#fff", fontSize: 24 }} />
         </Box>
+      
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "40px", // Taille du cercle
+            height: "40px", // Taille du cercle
+            borderRadius: "50%", // Pour rendre le cercle
+            backgroundColor: colors.redAccent[500], // Couleur du cercle
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: colors.redAccent[600], // Couleur au survol
+            },
+          }}
+          onClick={() => {
+            setRessourceToDelete(params.row);
+            setOpenDeleteDialog(true);
+          }}
+        >
+          <DeleteIcon sx={{ color: "#fff", fontSize: 24 }} />
+        </Box>
+      </Box>
+      
       ),
     },
   ];
 
-  // Récupérer les ressources humaines depuis le serveur
+  // Fetch the resources
   useEffect(() => {
     const fetchRessourcesHumaines = async () => {
       try {
@@ -206,8 +223,8 @@ const AfficheRessourceHumaine = () => {
         setRessourcesHumaines(data.data || []);
         setLoading(false);
       } catch (err) {
-        console.error("Erreur lors de la récupération des ressources humaines :", err);
-        setError("Erreur lors de la récupération des ressources humaines.");
+        console.error("Error while fetching resources:", err);
+        setError("Error while fetching resources.");
         setLoading(false);
       }
     };
@@ -215,7 +232,7 @@ const AfficheRessourceHumaine = () => {
     fetchRessourcesHumaines();
   }, []);
 
-  // Filtrer les ressources humaines selon la recherche
+  // Filter resources based on search query
   const filteredRessourcesHumaines = ressourcesHumaines.filter((ressource) =>
     ressource.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
     ressource.prenom.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -235,10 +252,7 @@ const AfficheRessourceHumaine = () => {
           open={openEditModal}
           onClose={() => setOpenEditModal(false)}
           ressource={currentRessource}
-          onUpdate={(updatedRessource) => {
-            handleUpdateRessource(updatedRessource);
-            setOpenEditModal(false);
-          }}
+          onUpdate={handleUpdateRessource}
         />
       )}
 
@@ -342,100 +356,82 @@ const AfficheRessourceHumaine = () => {
               "& .MuiIconButton-root": {
                 color: colors.grey[100],
               },
-              "& .Mui-disabled": {
-                color: colors.grey[600],
-              },
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: colors.primary[800],
             },
           }}
         >
           <DataGrid
-            rows={filteredRessourcesHumaines}
-            columns={columns}
-            rowHeight={50}
-            pageSize={10}
-            rowsPerPageOptions={[5, 10, 20]}
-            checkboxSelection={false}
-            disableSelectionOnClick
-            sx={{
-              "& .MuiDataGrid-iconSeparator": {
-                display: "none",
-              },
-            }}
-          />
+  rows={filteredRessourcesHumaines}
+  columns={columns}
+  pageSize={5}
+  rowsPerPageOptions={[5]}
+  disableSelectionOnClick
+/>
+
         </Box>
       )}
 
-      {/* Popup de confirmation de suppression */}
+<Snackbar
+  open={openSuccessSnackbar}
+  autoHideDuration={3000}
+  onClose={() => setOpenSuccessSnackbar(false)}
+  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+  sx={{
+    "& .MuiSnackbarContent-root": {
+      backgroundColor: "#4caf50", // Couleur verte de fond
+      color: "#fff", // Couleur du texte
+      borderRadius: "10px", // Coins arrondis
+      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Ombre légère
+      fontWeight: "bold", // Texte en gras
+    },
+  }}
+>
+  <Alert onClose={() => setOpenSuccessSnackbar(false)} severity="success" sx={{ padding: "10px 20px" }}>
+    {actionMessage}
+  </Alert>
+</Snackbar>
+
+<Snackbar
+  open={openErrorSnackbar}
+  autoHideDuration={3000}
+  onClose={() => setOpenErrorSnackbar(false)}
+  anchorOrigin={{ vertical: "top", horizontal: "right" }}
+  sx={{
+    "& .MuiSnackbarContent-root": {
+      backgroundColor: "#f44336", // Couleur rouge de fond
+      color: "#fff", // Couleur du texte
+      borderRadius: "10px", // Coins arrondis
+      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Ombre légère
+      fontWeight: "bold", // Texte en gras
+    },
+  }}
+>
+  <Alert onClose={() => setOpenErrorSnackbar(false)} severity="error" sx={{ padding: "10px 20px" }}>
+    Erreur lors de l'action !
+  </Alert>
+</Snackbar>
+
+
       <Dialog
         open={openDeleteDialog}
         onClose={() => setOpenDeleteDialog(false)}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
       >
-        <DialogTitle>Confirmation de suppression</DialogTitle>
+        <DialogTitle id="delete-dialog-title">{"Êtes-vous sûr de vouloir supprimer cette ressource ?"}</DialogTitle>
         <DialogContent>
-          <Typography>
-            Voulez-vous vraiment supprimer cette ressource humaine ?
-          </Typography>
+          <DialogContentText id="delete-dialog-description">
+            Cette action est irréversible. Voulez-vous continuer ?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => setOpenDeleteDialog(false)}
-            color="primary"
-          >
+          <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
             Annuler
           </Button>
-          <Button
-            onClick={handleDelete}
-            color="secondary"
-          >
+          <Button onClick={handleDelete} color="primary">
             Supprimer
           </Button>
         </DialogActions>
       </Dialog>
-
-
-
-         {/* Notifications en haut à droite */}
-         <Snackbar
-        open={openSuccessSnackbar}
-        autoHideDuration={3000}
-        onClose={() => setOpenSuccessSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        sx={{ mt: 6 }}
-      >
-        <Alert
-          severity="success"
-          sx={{
-            width: "100%",
-            backgroundColor: colors.greenAccent[600],
-            color: "white",
-          }}
-        >
-          Suppression effectuée avec succès !
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={openErrorSnackbar}
-        autoHideDuration={3000}
-        onClose={() => setOpenErrorSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        sx={{ mt: 6 }}
-      >
-        <Alert
-          severity="error"
-          sx={{
-            width: "100%",
-            backgroundColor: colors.redAccent[600],
-            color: "white",
-          }}
-        >
-          Erreur lors de la suppression !
-        </Alert>
-      </Snackbar>
-
     </Box>
   );
 };
