@@ -6,8 +6,10 @@ import {
   TextField,
   useTheme,
   InputAdornment,
-  Tooltip ,
-  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
@@ -34,6 +36,10 @@ const AfficheTypeProjet = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Dialog de confirmation de suppression
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
+
   // Fonction pour supprimer un type de projet
   const handleDelete = async (id) => {
     try {
@@ -41,6 +47,7 @@ const AfficheTypeProjet = () => {
       setTypeProjets((prevTypeProjets) =>
         prevTypeProjets.filter((typeProjet) => typeProjet.id !== id)
       );
+      setOpenDeleteDialog(false); // Fermer le dialog après la suppression
     } catch (err) {
       console.error("Erreur lors de la suppression du type projet :", err);
     }
@@ -93,43 +100,42 @@ const AfficheTypeProjet = () => {
       headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-          <IconButton
-          onClick={() => handleEdit(params.row)}
-          sx={{
-            backgroundColor: '#66bb6a',  // Vert professionnel
-            color: 'white',  // Icônes blanches
-            borderRadius: '50%',  // Forme circulaire
-            width: 40,
-            height: 40,
-            display: 'flex',  // Pour centrer l'icône
-            alignItems: 'center',
-            justifyContent: 'center',
-            "&:hover": {
-              backgroundColor: '#388e3c',  // Vert plus foncé au survol
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
+          {/* Bouton Modifier */}
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={() => handleEdit(params.row)}
+            sx={{
+              backgroundColor: colors.blueAccent[500],
+              color: "white",
+              "&:hover": {
+                backgroundColor: colors.blueAccent[600],
+              },
+              textTransform: "none",
+            }}
+          >
+            Modifier
+          </Button>
+
           {/* Bouton Supprimer */}
-        <IconButton
-          onClick={() => handleDelete(params.row.id)}
-          sx={{
-            backgroundColor: '#f44336',  // Rouge pour "Supprimer"
-            color: 'white',  // Icônes blanches
-            borderRadius: '50%',  // Forme circulaire
-            width: 40,
-            height: 40,
-            display: 'flex',  // Pour centrer l'icône
-            alignItems: 'center',
-            justifyContent: 'center',
-            "&:hover": {
-              backgroundColor: '#c62828',  // Rouge plus foncé au survol
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
+          <Button
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={() => {
+              setProjectToDelete(params.row); // Définir le projet à supprimer
+              setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+            }}
+            sx={{
+              backgroundColor: colors.redAccent[500],
+              color: "white",
+              "&:hover": {
+                backgroundColor: colors.redAccent[600],
+              },
+              textTransform: "none",
+            }}
+          >
+            Supprimer
+          </Button>
         </Box>
       ),
     },
@@ -244,7 +250,6 @@ const AfficheTypeProjet = () => {
           sx={{
             "& .MuiDataGrid-root": {
               borderLeft: `none`
-              
             },
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: colors.blueAccent[700],
@@ -262,7 +267,6 @@ const AfficheTypeProjet = () => {
               fontSize: "13px",
               borderLeft: `2px solid ${colors.grey[200]}`,
               color: colors.grey[200],
-
             },
             "& .MuiDataGrid-row": {
               backgroundColor: colors.primary[700],
@@ -303,9 +307,34 @@ const AfficheTypeProjet = () => {
             }}
           />
         </Box>
-      )},
-      
-      
+      )}
+
+      {/* Dialog de confirmation de suppression */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => setOpenDeleteDialog(false)}
+      >
+        <DialogTitle>Confirmation</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Voulez-vous vraiment supprimer ce type de projet ?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenDeleteDialog(false)}
+            color="primary"
+          >
+            Annuler
+          </Button>
+          <Button
+            onClick={() => handleDelete(projectToDelete.id)}
+            color="error"
+          >
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -232,8 +232,8 @@ const Sidebar = () => {
             {/* Ressources Humaines Section */}
             <SidebarSection title="Ressources Humaines" open={ressourcesHumOpen} setOpen={setRessourcesHumOpen}>
               <Item
-                title="Creation Ressources Humaines"
-                to="/CreationRessourceMateriel"
+                title="Gestion Ressources Humaines"
+                to="/gestionrh"
                 icon={<PersonOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
@@ -325,13 +325,16 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
-              <Item
-                title="Ressource Groupe"
+               <Item
+                title="Groupe Ressource"
                 to="/grouperessource"
                 icon={<AccountTreeIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
+
+
+
             </SidebarSection>
           </Box>
         </Menu>

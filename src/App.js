@@ -32,6 +32,8 @@ import Affichestatut from "./scenes/Parampetrage/statut/Affichestatut";
 import AfficheRelProjet from "./scenes/Parampetrage/RelationProjet/AfficheRelProjet";
 import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
 import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
+import AfficheRessourceHumaine from "./scenes/RessourceHumaine/AfficheRessourceHumaine";
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -89,12 +91,14 @@ function App() {
                   <Route path="/ConsultationJob" element={<Consultationjob />} />
                   <Route path="/Gestionacces" element={<AccessManagement />} />
                   <Route path="/priorite" element={<AffichePriorite />} />
-                  <Route path="/grouperessource" element={<Affichegroupe />} />
                   <Route path="/naturestruct" element={<Affichenaturestructure />} />
                   <Route path="/naturerelation" element={<AfficheNatureRelation />} />
                   <Route path="/statut" element={<Affichestatut />} />
                   <Route path="/naturejob" element={<Affichenaturejob />} />
                   <Route path="/relprojet" element={<AfficheRelProjet />} />
+
+                  <Route path="/grouperessource" element={<Affichegroupe />} />
+                  <Route path="/gestionrh" element={<AfficheRessourceHumaine />} />
 
 
                 </>
