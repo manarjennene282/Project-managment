@@ -13,6 +13,8 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
+  Tooltip ,
+  IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
@@ -105,41 +107,51 @@ const AffichePriorite = () => {
       field: "action",
       headerName: "Action",
       flex: 1,
-      align: "center",
-      headerAlign: "center",
+      align: "center", // Centrer le texte dans les cellules
+      headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-          <Button
-            variant="contained"
-            startIcon={<EditIcon />}
-            onClick={() => handleEdit(params.row)}
-            sx={{
-              backgroundColor: colors.blueAccent[500],
-              color: "white",
-              "&:hover": {
-                backgroundColor: colors.blueAccent[600],
-              },
-              textTransform: "none",
-            }}
-          >
-            Modifier
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<DeleteIcon />}
-            onClick={() => handleDeleteClick(params.row.id)} // Use id_prio
-            sx={{
-              backgroundColor: colors.redAccent[500],
-              color: "white",
-              "&:hover": {
-                backgroundColor: colors.redAccent[600],
-              },
-              textTransform: "none",
-            }}
-          >
-            Supprimer
-          </Button>
-        </Box>
+        <IconButton
+        onClick={() => handleEdit(params.row)}
+        sx={{
+          backgroundColor: '#66bb6a',  // Vert professionnel
+          color: 'white',  // Icônes blanches
+          borderRadius: '50%',  // Forme circulaire
+          width: 30,
+          height: 30,
+          display: 'flex',  // Pour centrer l'icône
+          alignItems: 'center',
+          justifyContent: 'center',
+          "&:hover": {
+            backgroundColor: '#388e3c',  // Vert plus foncé au survol
+          },
+        }}
+      >
+        <EditIcon />
+      </IconButton>
+        {/* Bouton Supprimer */}
+      <IconButton
+         onClick={() => {
+          handleDeleteClick(params.row.id); // Définir le projet à supprimer
+          setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+        }}
+        sx={{
+          backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+          color: 'white',  // Icônes blanches
+          borderRadius: '50%',  // Forme circulaire
+          width: 30,
+          height: 30,
+          display: 'flex',  // Pour centrer l'icône
+          alignItems: 'center',
+          justifyContent: 'center',
+          "&:hover": {
+            backgroundColor: '#c62828',  // Rouge plus foncé au survol
+          },
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+      </Box>
       ),
     },
   ];
@@ -295,10 +307,10 @@ const AffichePriorite = () => {
               },
             },
             "& .MuiInputLabel-root": {
-              color: colors.grey[300],
+              color: colors.grey[700],
             },
             "& .MuiInputBase-input": {
-              color: colors.grey[100],
+              color: colors.blueAccent[500],
             },
           }}
         />
@@ -314,19 +326,24 @@ const AffichePriorite = () => {
           height="60vh"
           sx={{
             "& .MuiDataGrid-root": {
-              border: "none",
+              borderLeft: `none`
             },
             "& .MuiDataGrid-columnHeaders": {
               backgroundColor: colors.blueAccent[700],
               color: colors.grey[100],
               fontSize: "14px",
               fontWeight: "bold",
+              font: "Arial",
               borderBottom: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              textTransform: "uppercase",
             },
             "& .MuiDataGrid-cell": {
               borderBottom: `1px solid ${colors.grey[800]}`,
               fontSize: "13px",
-              color: colors.grey[100],
+              borderLeft: `2px solid ${colors.grey[200]}`,
+              color: colors.grey[200],
             },
             "& .MuiDataGrid-row": {
               backgroundColor: colors.primary[700],
@@ -337,6 +354,18 @@ const AffichePriorite = () => {
             "& .MuiDataGrid-footerContainer": {
               backgroundColor: colors.blueAccent[700],
               borderTop: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiTablePagination-root": {
+              color: colors.grey[100],
+              "& .MuiIconButton-root": {
+                color: colors.grey[100],
+              },
+              "& .Mui-disabled": {
+                color: colors.grey[600],
+              },
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[800],
             },
           }}
         >

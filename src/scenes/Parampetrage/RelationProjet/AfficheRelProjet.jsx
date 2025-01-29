@@ -13,6 +13,8 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
+  Tooltip ,
+  IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
@@ -141,32 +143,48 @@ const AfficheRelProjet = () => {
       flex: 1,
       align: "center",
       renderCell: (params) => (
-        <Box display="flex" gap="10px">
-          <Button
-            variant="contained"
-            startIcon={<EditIcon />}
-            onClick={() => handleEdit(params.row)}
-            sx={{
-              backgroundColor: colors.blueAccent[500],
-              color: "white",
-              "&:hover": { backgroundColor: colors.blueAccent[600] },
-            }}
-          >
-            Modifier
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<DeleteIcon />}
-            onClick={() => handleDeleteClick(params.row.internalId)}
-            sx={{
-              backgroundColor: colors.redAccent[500],
-              color: "white",
-              "&:hover": { backgroundColor: colors.redAccent[600] },
-            }}
-          >
-            Supprimer
-          </Button>
-        </Box>
+        <Box display="flex" gap="10px" justifyContent="center">
+        <IconButton
+        onClick={() => handleEdit(params.row)}
+        sx={{
+          backgroundColor: '#66bb6a',  // Vert professionnel
+          color: 'white',  // Icônes blanches
+          borderRadius: '50%',  // Forme circulaire
+          width: 30,
+          height: 30,
+          display: 'flex',  // Pour centrer l'icône
+          alignItems: 'center',
+          justifyContent: 'center',
+          "&:hover": {
+            backgroundColor: '#388e3c',  // Vert plus foncé au survol
+          },
+        }}
+      >
+        <EditIcon />
+      </IconButton>
+        {/* Bouton Supprimer */}
+      <IconButton
+         onClick={() => {
+          handleDeleteClick(params.row.id); // Définir le projet à supprimer
+          setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+        }}
+        sx={{
+          backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+          color: 'white',  // Icônes blanches
+          borderRadius: '50%',  // Forme circulaire
+          width: 30,
+          height: 30,
+          display: 'flex',  // Pour centrer l'icône
+          alignItems: 'center',
+          justifyContent: 'center',
+          "&:hover": {
+            backgroundColor: '#c62828',  // Rouge plus foncé au survol
+          },
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+      </Box>
       ),
     },
   ];
@@ -319,7 +337,27 @@ const AfficheRelProjet = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ width: 400 }}
+          sx={{
+            width: "400px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "25px",
+              "& fieldset": {
+                borderColor: colors.grey[700],
+              },
+              "&:hover fieldset": {
+                borderColor: colors.blueAccent[500],
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: colors.blueAccent[500],
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: colors.grey[700],
+            },
+            "& .MuiInputBase-input": {
+              color: colors.blueAccent[500],
+            },
+          }}
         />
       </Box>
 
@@ -329,14 +367,52 @@ const AfficheRelProjet = () => {
         <Typography color="error">{error}</Typography>
       ) : (
         <Box
-          height="75vh"
-          sx={{
-            "& .MuiDataGrid-root": { border: "none" },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: colors.blueAccent[700],
-              borderBottom: `2px solid ${colors.blueAccent[500]}`,
+        m="40px 0 0 0"
+        height="60vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            borderLeft: `none`
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            color: colors.grey[100],
+            fontSize: "14px",
+            fontWeight: "bold",
+            font: "Arial",
+            borderBottom: `2px solid ${colors.blueAccent[500]}`,
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            textTransform: "uppercase",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: `1px solid ${colors.grey[800]}`,
+            fontSize: "13px",
+            borderLeft: `2px solid ${colors.grey[200]}`,
+            color: colors.grey[200],
+          },
+          "& .MuiDataGrid-row": {
+            backgroundColor: colors.primary[700],
+            "&:hover": {
+              backgroundColor: colors.blueAccent[800],
             },
-          }}
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: colors.blueAccent[700],
+            borderTop: `2px solid ${colors.blueAccent[500]}`,
+          },
+          "& .MuiTablePagination-root": {
+            color: colors.grey[100],
+            "& .MuiIconButton-root": {
+              color: colors.grey[100],
+            },
+            "& .Mui-disabled": {
+              color: colors.grey[600],
+            },
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[800],
+          },
+        }}
         >
           <DataGrid
             rows={filteredProjets}

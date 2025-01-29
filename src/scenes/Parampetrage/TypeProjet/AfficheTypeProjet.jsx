@@ -10,6 +10,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Tooltip ,
+  IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
@@ -99,45 +101,52 @@ const AfficheTypeProjet = () => {
       align: "center", // Centrer le texte dans les cellules
       headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
+        
         <Box display="flex" gap="10px" justifyContent="center">
-          {/* Bouton Modifier */}
-          <Button
-            variant="contained"
-            startIcon={<EditIcon />}
-            onClick={() => handleEdit(params.row)}
-            sx={{
-              backgroundColor: colors.blueAccent[500],
-              color: "white",
-              "&:hover": {
-                backgroundColor: colors.blueAccent[600],
-              },
-              textTransform: "none",
-            }}
-          >
-            Modifier
-          </Button>
-
-          {/* Bouton Supprimer */}
-          <Button
-            variant="contained"
-            startIcon={<DeleteIcon />}
-            onClick={() => {
-              setProjectToDelete(params.row); // Définir le projet à supprimer
-              setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
-            }}
-            sx={{
-              backgroundColor: colors.redAccent[500],
-              color: "white",
-              "&:hover": {
-                backgroundColor: colors.redAccent[600],
-              },
-              textTransform: "none",
-            }}
-          >
-            Supprimer
-          </Button>
-        </Box>
+        <IconButton
+        onClick={() => handleEdit(params.row)}
+        sx={{
+          backgroundColor: '#66bb6a',  // Vert professionnel
+          color: 'white',  // Icônes blanches
+          borderRadius: '50%',  // Forme circulaire
+          width: 30,
+          height: 30,
+          display: 'flex',  // Pour centrer l'icône
+          alignItems: 'center',
+          justifyContent: 'center',
+          "&:hover": {
+            backgroundColor: '#388e3c',  // Vert plus foncé au survol
+          },
+        }}
+      >
+        <EditIcon />
+      </IconButton>
+        {/* Bouton Supprimer */}
+      <IconButton
+         onClick={() => {
+          setProjectToDelete(params.row); // Définir le projet à supprimer
+          setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+        }}
+        sx={{
+          backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+          color: 'white',  // Icônes blanches
+          borderRadius: '50%',  // Forme circulaire
+          width: 30,
+          height: 30,
+          display: 'flex',  // Pour centrer l'icône
+          alignItems: 'center',
+          justifyContent: 'center',
+          "&:hover": {
+            backgroundColor: '#c62828',  // Rouge plus foncé au survol
+          },
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+      </Box>
+        
       ),
+
     },
   ];
 
