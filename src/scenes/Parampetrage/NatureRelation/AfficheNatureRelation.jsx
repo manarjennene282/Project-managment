@@ -13,11 +13,12 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Tooltip ,
+  Tooltip,
   IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
+import AddIcon from '@mui/icons-material/Add';
 import Parametrageservice from "../../../services/ParametrageService";
 import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
@@ -73,7 +74,7 @@ const AfficheNatureRelation = () => {
       const relationToDelete = naturerelations.find(
         (r) => r.internalId === selectedId
       );
-  
+
       if (!relationToDelete || !relationToDelete.id_natureRel) {
         console.error("ID invalide pour la suppression !");
         setOpenErrorSnackbar(true);
@@ -81,11 +82,11 @@ const AfficheNatureRelation = () => {
       }
 
       await Parametrageservice.deleteNatureRelation(relationToDelete.id);
-  
+
       setNatureRelations((prev) =>
         prev.filter((relation) => relation.internalId !== selectedId)
       );
-  
+
       setOpenDeleteDialog(false);
       setOpenSuccessSnackbar(true);
     } catch (err) {
@@ -102,7 +103,7 @@ const AfficheNatureRelation = () => {
   };
 
   const handleAddNatureRelation = (newRelation) => {
-    const newInternalId = naturerelations.length > 0 
+    const newInternalId = naturerelations.length > 0
       ? Math.max(...naturerelations.map(r => r.internalId)) + 1
       : 0;
 
@@ -145,47 +146,53 @@ const AfficheNatureRelation = () => {
       headerAlign: "center",
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-        <IconButton
-        onClick={() => handleEdit(params.row)}
-        sx={{
-          backgroundColor: '#66bb6a',  // Vert professionnel
-          color: 'white',  // Icônes blanches
-          borderRadius: '50%',  // Forme circulaire
-          width: 30,
-          height: 30,
-          display: 'flex',  // Pour centrer l'icône
-          alignItems: 'center',
-          justifyContent: 'center',
-          "&:hover": {
-            backgroundColor: '#388e3c',  // Vert plus foncé au survol
-          },
-        }}
-      >
-        <EditIcon />
-      </IconButton>
-        {/* Bouton Supprimer */}
-      <IconButton
-         onClick={() => {
-          handleDeleteClick(params.row.id); // Définir le projet à supprimer
-          setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
-        }}
-        sx={{
-          backgroundColor: '#f44336',  // Rouge pour "Supprimer"
-          color: 'white',  // Icônes blanches
-          borderRadius: '50%',  // Forme circulaire
-          width: 30,
-          height: 30,
-          display: 'flex',  // Pour centrer l'icône
-          alignItems: 'center',
-          justifyContent: 'center',
-          "&:hover": {
-            backgroundColor: '#c62828',  // Rouge plus foncé au survol
-          },
-        }}
-      >
-        <DeleteIcon />
-      </IconButton>
-      </Box>
+          <Tooltip title="Modifier une nature relation" arrow>
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              sx={{
+                backgroundColor: '#66bb6a',  // Vert professionnel
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#388e3c',  // Vert plus foncé au survol
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+
+          {/* Bouton Supprimer */}
+          <Tooltip title="Supprimer une nature relation" arrow>
+            <IconButton
+              onClick={() => {
+                handleDeleteClick(params.row.id); // Définir le projet à supprimer
+                setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+              }}
+              sx={{
+                backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#c62828',  // Rouge plus foncé au survol
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+
+        </Box>
       ),
     },
   ];
@@ -309,21 +316,35 @@ const AfficheNatureRelation = () => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": { backgroundColor: colors.greenAccent[600] },
-          }}
-        >
-          Ajouter une Relation
-        </Button>
+        <Tooltip title="Ajouter une nature relation" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter Nature relation
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
+
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Header
-        title="Gestion des Relations"
+        title="Gestion des Types de Relation"
         subtitle="Liste des types de relations"
       />
 

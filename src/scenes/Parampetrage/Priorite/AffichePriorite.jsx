@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
+import AddIcon from '@mui/icons-material/Add';
 import Parametrageservice from "../../../services/ParametrageService";
 import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
@@ -111,6 +112,7 @@ const AffichePriorite = () => {
       headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
+        <Tooltip title="Modifier une priorité" arrow>
         <IconButton
         onClick={() => handleEdit(params.row)}
         sx={{
@@ -129,8 +131,11 @@ const AffichePriorite = () => {
       >
         <EditIcon />
       </IconButton>
+        </Tooltip>
+        
         {/* Bouton Supprimer */}
-      <IconButton
+        <Tooltip title="Supprimer une priorité" arrow>
+        <IconButton
          onClick={() => {
           handleDeleteClick(params.row.id); // Définir le projet à supprimer
           setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
@@ -151,6 +156,8 @@ const AffichePriorite = () => {
       >
         <DeleteIcon />
       </IconButton>
+        </Tooltip>
+     
       </Box>
       ),
     },
@@ -261,20 +268,31 @@ const AffichePriorite = () => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": {
-              backgroundColor: colors.greenAccent[600],
-            },
-          }}
-        >
-          Ajouter une priorité
-        </Button>
+        <Tooltip title="Ajouter une priorité" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter priorité
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
+
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Header title="Priorités" subtitle="Liste des priorités" />

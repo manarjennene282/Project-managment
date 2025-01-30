@@ -13,11 +13,12 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Tooltip ,
+  Tooltip,
   IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
+import AddIcon from '@mui/icons-material/Add';
 import Parametrageservice from "../../../services/ParametrageService";
 import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
@@ -83,15 +84,15 @@ const AfficheNatureStruct = () => {
   };
 
   // Mettre à jour handleUpdateNatureStruct pour utiliser l'id statique
-const handleUpdateNatureStruct = (updatedNatureStruct) => {
-  setNatureStructs((prevNatureStructs) =>
-    prevNatureStructs.map((naturestruct) =>
-      naturestruct.id === updatedNatureStruct.id // Comparer par ID statique
-        ? { ...naturestruct, ...updatedNatureStruct }
-        : naturestruct
-    )
-  );
-};
+  const handleUpdateNatureStruct = (updatedNatureStruct) => {
+    setNatureStructs((prevNatureStructs) =>
+      prevNatureStructs.map((naturestruct) =>
+        naturestruct.id === updatedNatureStruct.id // Comparer par ID statique
+          ? { ...naturestruct, ...updatedNatureStruct }
+          : naturestruct
+      )
+    );
+  };
 
   const columns = [
     {
@@ -116,47 +117,54 @@ const handleUpdateNatureStruct = (updatedNatureStruct) => {
       headerAlign: "center",
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-        <IconButton
-        onClick={() => handleEdit(params.row)}
-        sx={{
-          backgroundColor: '#66bb6a',  // Vert professionnel
-          color: 'white',  // Icônes blanches
-          borderRadius: '50%',  // Forme circulaire
-          width: 30,
-          height: 30,
-          display: 'flex',  // Pour centrer l'icône
-          alignItems: 'center',
-          justifyContent: 'center',
-          "&:hover": {
-            backgroundColor: '#388e3c',  // Vert plus foncé au survol
-          },
-        }}
-      >
-        <EditIcon />
-      </IconButton>
-        {/* Bouton Supprimer */}
-      <IconButton
-         onClick={() => {
-          handleDeleteClick(params.row.id); // Définir le projet à supprimer
-          setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
-        }}
-        sx={{
-          backgroundColor: '#f44336',  // Rouge pour "Supprimer"
-          color: 'white',  // Icônes blanches
-          borderRadius: '50%',  // Forme circulaire
-          width: 30,
-          height: 30,
-          display: 'flex',  // Pour centrer l'icône
-          alignItems: 'center',
-          justifyContent: 'center',
-          "&:hover": {
-            backgroundColor: '#c62828',  // Rouge plus foncé au survol
-          },
-        }}
-      >
-        <DeleteIcon />
-      </IconButton>
-      </Box>
+          <Tooltip title="Modifier une nature structure" arrow>
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              sx={{
+                backgroundColor: '#66bb6a',  // Vert professionnel
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#388e3c',  // Vert plus foncé au survol
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+
+          {/* Bouton Supprimer */}
+          <Tooltip title="Supprimer une nature structure" arrow>
+            <IconButton
+              onClick={() => {
+                handleDeleteClick(params.row.id); // Définir le projet à supprimer
+                setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+              }}
+              sx={{
+                backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#c62828',  // Rouge plus foncé au survol
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+
+          </Tooltip>
+
+        </Box>
       ),
     },
   ];
@@ -266,22 +274,32 @@ const handleUpdateNatureStruct = (updatedNatureStruct) => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": {
-              backgroundColor: colors.greenAccent[600],
-            },
-          }}
-        >
-          Ajouter une nature de structure
-        </Button>
-      </Box>
+        <Tooltip title="Ajouter une nature structure" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter Nature structure
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
 
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Header title="Natures de Structure" subtitle="Liste des natures de structure" />
 
       <Box display="flex" justifyContent="flex-start" mb="20px">
@@ -377,7 +395,7 @@ const handleUpdateNatureStruct = (updatedNatureStruct) => {
           <DataGrid
             rows={filteredNatureStructs}
             columns={columns}
-  getRowId={(row) => row.id} // Utilisez l'ID statique de la base de données
+            getRowId={(row) => row.id} // Utilisez l'ID statique de la base de données
             rowHeight={50}
             pageSize={10}
             rowsPerPageOptions={[5, 10, 20]}

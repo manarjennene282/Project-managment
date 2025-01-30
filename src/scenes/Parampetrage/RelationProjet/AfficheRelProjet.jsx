@@ -13,11 +13,12 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Tooltip ,
+  Tooltip,
   IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
+import AddIcon from '@mui/icons-material/Add';
 import Parametrageservice from "../../../services/ParametrageService";
 import Header from "../../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
@@ -144,47 +145,53 @@ const AfficheRelProjet = () => {
       align: "center",
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-        <IconButton
-        onClick={() => handleEdit(params.row)}
-        sx={{
-          backgroundColor: '#66bb6a',  // Vert professionnel
-          color: 'white',  // Icônes blanches
-          borderRadius: '50%',  // Forme circulaire
-          width: 30,
-          height: 30,
-          display: 'flex',  // Pour centrer l'icône
-          alignItems: 'center',
-          justifyContent: 'center',
-          "&:hover": {
-            backgroundColor: '#388e3c',  // Vert plus foncé au survol
-          },
-        }}
-      >
-        <EditIcon />
-      </IconButton>
-        {/* Bouton Supprimer */}
-      <IconButton
-         onClick={() => {
-          handleDeleteClick(params.row.id); // Définir le projet à supprimer
-          setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
-        }}
-        sx={{
-          backgroundColor: '#f44336',  // Rouge pour "Supprimer"
-          color: 'white',  // Icônes blanches
-          borderRadius: '50%',  // Forme circulaire
-          width: 30,
-          height: 30,
-          display: 'flex',  // Pour centrer l'icône
-          alignItems: 'center',
-          justifyContent: 'center',
-          "&:hover": {
-            backgroundColor: '#c62828',  // Rouge plus foncé au survol
-          },
-        }}
-      >
-        <DeleteIcon />
-      </IconButton>
-      </Box>
+          <Tooltip title="Modifier une relation projet" arrow>
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              sx={{
+                backgroundColor: '#66bb6a',  // Vert professionnel
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#388e3c',  // Vert plus foncé au survol
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+
+          {/* Bouton Supprimer */}
+          <Tooltip title="Supprimer une relation projet" arrow>
+            <IconButton
+              onClick={() => {
+                handleDeleteClick(params.row.id); // Définir le projet à supprimer
+                setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+              }}
+              sx={{
+                backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#c62828',  // Rouge plus foncé au survol
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+
+        </Box>
       ),
     },
   ];
@@ -307,17 +314,31 @@ const AfficheRelProjet = () => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": { backgroundColor: colors.greenAccent[600] },
-          }}
-        >
-          Ajouter un Relation Projet
-        </Button>
+        <Tooltip title="Ajouter une relation projet" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter relation projet
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
+
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Header
@@ -367,52 +388,52 @@ const AfficheRelProjet = () => {
         <Typography color="error">{error}</Typography>
       ) : (
         <Box
-        m="40px 0 0 0"
-        height="60vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            borderLeft: `none`
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            color: colors.grey[100],
-            fontSize: "14px",
-            fontWeight: "bold",
-            font: "Arial",
-            borderBottom: `2px solid ${colors.blueAccent[500]}`,
-          },
-          "& .MuiDataGrid-columnHeaderTitle": {
-            textTransform: "uppercase",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: `1px solid ${colors.grey[800]}`,
-            fontSize: "13px",
-            borderLeft: `2px solid ${colors.grey[200]}`,
-            color: colors.grey[200],
-          },
-          "& .MuiDataGrid-row": {
-            backgroundColor: colors.primary[700],
-            "&:hover": {
-              backgroundColor: colors.blueAccent[800],
+          m="40px 0 0 0"
+          height="60vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              borderLeft: `none`
             },
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: colors.blueAccent[700],
-            borderTop: `2px solid ${colors.blueAccent[500]}`,
-          },
-          "& .MuiTablePagination-root": {
-            color: colors.grey[100],
-            "& .MuiIconButton-root": {
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
               color: colors.grey[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              font: "Arial",
+              borderBottom: `2px solid ${colors.blueAccent[500]}`,
             },
-            "& .Mui-disabled": {
-              color: colors.grey[600],
+            "& .MuiDataGrid-columnHeaderTitle": {
+              textTransform: "uppercase",
             },
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[800],
-          },
-        }}
+            "& .MuiDataGrid-cell": {
+              borderBottom: `1px solid ${colors.grey[800]}`,
+              fontSize: "13px",
+              borderLeft: `2px solid ${colors.grey[200]}`,
+              color: colors.grey[200],
+            },
+            "& .MuiDataGrid-row": {
+              backgroundColor: colors.primary[700],
+              "&:hover": {
+                backgroundColor: colors.blueAccent[800],
+              },
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: colors.blueAccent[700],
+              borderTop: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiTablePagination-root": {
+              color: colors.grey[100],
+              "& .MuiIconButton-root": {
+                color: colors.grey[100],
+              },
+              "& .Mui-disabled": {
+                color: colors.grey[600],
+              },
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[800],
+            },
+          }}
         >
           <DataGrid
             rows={filteredProjets}

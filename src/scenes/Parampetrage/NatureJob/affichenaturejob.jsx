@@ -146,7 +146,7 @@ const Affichenaturejob = () => {
       headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-        <Tooltip title="Modifier un type de projet" arrow>
+        <Tooltip title="Modifier un nature Job" arrow>
           <IconButton
             onClick={() => handleEdit(params.row)}
             sx={{
@@ -168,7 +168,7 @@ const Affichenaturejob = () => {
         </Tooltip>
 
         {/* Bouton Supprimer */}
-        <Tooltip title="Supprimer un type de projet" arrow>
+        <Tooltip title="Supprimer un nature Job" arrow>
           <IconButton
             onClick={() => {
               handleDeleteClick(params.row.internalId)

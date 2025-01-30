@@ -13,10 +13,11 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Tooltip ,
+  Tooltip,
   IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import AddIcon from '@mui/icons-material/Add';
 import { tokens } from "../../../theme";
 import Parametrageservice from "../../../services/ParametrageService";
 import Header from "../../../components/Header";
@@ -111,43 +112,49 @@ const Affichegroupe = () => {
       headerAlign: "center",
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-          <IconButton
-          onClick={() => handleEdit(params.row)}
-          sx={{
-            backgroundColor: '#66bb6a',  // Vert professionnel
-            color: 'white',  // Icônes blanches
-            borderRadius: '50%',  // Forme circulaire
-            width: 40,
-            height: 40,
-            display: 'flex',  // Pour centrer l'icône
-            alignItems: 'center',
-            justifyContent: 'center',
-            "&:hover": {
-              backgroundColor: '#388e3c',  // Vert plus foncé au survol
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
+          <Tooltip title="Modifier un groupe de ressource" arrow>
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              sx={{
+                backgroundColor: '#66bb6a',  // Vert professionnel
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 40,
+                height: 40,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#388e3c',  // Vert plus foncé au survol
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+
           {/* Bouton Supprimer */}
-        <IconButton
-          onClick={() => handleDeleteClick(params.row.id)} // Use id_grp
-          sx={{
-            backgroundColor: '#f44336',  // Rouge pour "Supprimer"
-            color: 'white',  // Icônes blanches
-            borderRadius: '50%',  // Forme circulaire
-            width: 40,
-            height: 40,
-            display: 'flex',  // Pour centrer l'icône
-            alignItems: 'center',
-            justifyContent: 'center',
-            "&:hover": {
-              backgroundColor: '#c62828',  // Rouge plus foncé au survol
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
+          <Tooltip title="Supprimer une relation projet" arrow>
+            <IconButton
+              onClick={() => handleDeleteClick(params.row.id)} // Use id_grp
+              sx={{
+                backgroundColor: '#f44336',  // Rouge pour "Supprimer"
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 40,
+                height: 40,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#c62828',  // Rouge plus foncé au survol
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+
         </Box>
       ),
     },
@@ -258,20 +265,31 @@ const Affichegroupe = () => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": {
-              backgroundColor: colors.greenAccent[600],
-            },
-          }}
-        >
-          Ajouter un groupe
-        </Button>
+        <Tooltip title="Ajouter un groupe de ressource" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter Groupe ressource
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
+
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Header title="Groupe de ressource" subtitle="Liste des Groupes de ressource" />
@@ -319,55 +337,55 @@ const Affichegroupe = () => {
         <Typography color="error">{error}</Typography>
       ) : (
         <Box
-                  m="40px 0 0 0"
-                  height="60vh"
-                  sx={{
-                    "& .MuiDataGrid-root": {
-                      borderLeft: `none`
-                      
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                      backgroundColor: colors.blueAccent[700],
-                      color: colors.grey[100],
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      font: "Arial",
-                      borderBottom: `2px solid ${colors.blueAccent[500]}`,
-                    },
-                    "& .MuiDataGrid-columnHeaderTitle": {
-                      textTransform: "uppercase",
-                    },
-                    "& .MuiDataGrid-cell": {
-                      borderBottom: `1px solid ${colors.grey[800]}`,
-                      fontSize: "13px",
-                      borderLeft: `2px solid ${colors.grey[200]}`,
-                      color: colors.grey[200],
-        
-                    },
-                    "& .MuiDataGrid-row": {
-                      backgroundColor: colors.primary[700],
-                      "&:hover": {
-                        backgroundColor: colors.blueAccent[800],
-                      },
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                      backgroundColor: colors.blueAccent[700],
-                      borderTop: `2px solid ${colors.blueAccent[500]}`,
-                    },
-                    "& .MuiTablePagination-root": {
-                      color: colors.grey[100],
-                      "& .MuiIconButton-root": {
-                        color: colors.grey[100],
-                      },
-                      "& .Mui-disabled": {
-                        color: colors.grey[600],
-                      },
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                      backgroundColor: colors.primary[800],
-                    },
-                  }}
-                >
+          m="40px 0 0 0"
+          height="60vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              borderLeft: `none`
+
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              color: colors.grey[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              font: "Arial",
+              borderBottom: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              textTransform: "uppercase",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: `1px solid ${colors.grey[800]}`,
+              fontSize: "13px",
+              borderLeft: `2px solid ${colors.grey[200]}`,
+              color: colors.grey[200],
+
+            },
+            "& .MuiDataGrid-row": {
+              backgroundColor: colors.primary[700],
+              "&:hover": {
+                backgroundColor: colors.blueAccent[800],
+              },
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: colors.blueAccent[700],
+              borderTop: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiTablePagination-root": {
+              color: colors.grey[100],
+              "& .MuiIconButton-root": {
+                color: colors.grey[100],
+              },
+              "& .Mui-disabled": {
+                color: colors.grey[600],
+              },
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[800],
+            },
+          }}
+        >
           <DataGrid
             rows={filteredGroupeRessource}
             columns={columns}
