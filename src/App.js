@@ -20,9 +20,9 @@ import SignUp from "./scenes/authentification/signup";
 import Login from "./scenes/authentification/login";
 import Projet from "./scenes/projet/afficheprojet";
 import AfficheTypeProjet from "./scenes/Parampetrage/TypeProjet/AfficheTypeProjet";
-import CreationMateriel from "./scenes/ressourcemateriel/creationmateriel";
+
 import Consultationmateriel from "./scenes/ressourcemateriel/consultationmateriel";
-import Creationjob from "./scenes/job/creationjob";
+
 import Consultationjob from "./scenes/job/consultationjob";
 import AccessManagement from "./scenes/Administration/Gestiondroits"
 import AffichePriorite from "./scenes/Parampetrage/Priorite/AffichePriorite";
@@ -33,7 +33,8 @@ import AfficheRelProjet from "./scenes/Parampetrage/RelationProjet/AfficheRelPro
 import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
 import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 import AfficheRessourceHumaine from "./scenes/RessourceHumaine/AfficheRessourceHumaine";
-
+import CreationMateriel from "./scenes/ressourcemateriel/creationmateriel";
+import Creationjob from "./scenes/job/creationjob";
 
 function App() {
   const [theme, colorMode] = useMode();

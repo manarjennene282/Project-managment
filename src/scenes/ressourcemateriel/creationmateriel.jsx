@@ -1,90 +1,122 @@
-import React, { useState } from "react";
-import { Box, Button, Typography, IconButton, useTheme } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Button, TextField, useTheme, InputAdornment, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { tokens } from "../../theme"; // Assuming you're using the same theme
+import Header from "../../components/Header";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
-import { tokens } from "../../theme";
-import Header from "../../components/Header";
+import SearchIcon from "@mui/icons-material/Search";
+
+import AddResourceModal from "./AddResourceModal";
+import EditResourceModal from "./EditResourceModal";
+import RessourceMService from "../../services/RessourceMService";  // Importez le service
 
 const CreationMateriel = () => {
-    const theme = useTheme();
+  const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [resources, setResources] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [formValues, setFormValues] = useState({
-    id_ressouM: "",
-    libelle: "",
-    id_machine: "",
-    type_equip: "",
-    date_acquisition: "",
-    date_mise_en_service: "",
-    etat: "",
-    notes: "",
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Gestion des champs du formulaire
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  };
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [currentResource, setCurrentResource] = useState(null);
+  const [ressourceMateriel, setressourceMateriel] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Gestion de l'ajout d'une nouvelle ressource matérielle
-  const handleAdd = () => {
-    if (formValues.id_ressouM && formValues.libelle) {
-      const newResource = { id: resources.length + 1, ...formValues };
-      setResources([...resources, newResource]);
-      setFormValues({
-        id_ressouM: "",
-        libelle: "",
-        id_machine: "",
-        type_equip: "",
-        date_acquisition: "",
-        date_mise_en_service: "",
-        etat: "",
-        notes: "",
-      });
-      setOpenModal(false);
+  // Function to delete a resource
+  const handleDelete = async (id) => {
+    try {
+      await RessourceMService.deleteRessourceMateriel(id);  // Appel à l'API pour supprimer
+      setResources((prev) => prev.filter((res) => res.id !== id));
+    } catch (err) {
+      console.error("Erreur lors de la suppression de la ressource :", err);
+      setError("Erreur lors de la suppression de la ressource.");
     }
   };
 
-  // Gestion de la suppression
-  const handleDelete = (id) => {
-    setResources(resources.filter((resource) => resource.id !== id));
+  // Function to edit a resource
+  const handleEdit = (resource) => {
+    setCurrentResource(resource);
+    setOpenEditModal(true);
   };
 
-  // Gestion de la recherche
-  const filteredResources = resources.filter(
-    (resource) =>
-      resource.id_ressouM.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      resource.libelle.toLowerCase().includes(searchTerm.toLowerCase())
+  // Function to add a new resource
+  const handleAddResource = async (newResource) => {
+    try {
+      const addedResource = await RessourceMService.addRessourceMateriel(newResource);  // Appel à l'API pour ajouter
+      setResources((prev) => [...prev, addedResource]);
+    } catch (err) {
+      console.error("Erreur lors de l'ajout de la ressource :", err);
+      setError("Erreur lors de l'ajout de la ressource.");
+    }
+  };
+
+  // Fetch resources from server (fetch API)
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const res = await RessourceMService.getRessourcesMateriel();  // Appel à l'API pour récupérer les ressources
+        setResources(res);
+        setLoading(false);
+      } catch (err) {
+        console.error("Erreur lors de la récupération des ressources :", err);
+        setError("Erreur lors de la récupération des ressources.");
+        setLoading(false);
+      }
+    };
+    
+    fetchResources();
+  }, []);
+
+  const filteredResources = ressourceMateriel.filter((ressourceMateriel) =>
+    Object.values(ressourceMateriel).some((value) =>
+      String(value).toLowerCase().includes(searchQuery.toLowerCase())
+    )
   );
 
-  // Colonnes pour le DataGrid
+  // Columns definition
   const columns = [
-    { field: "id_ressouM", headerName: "ID Ressource", flex: 1 },
-    { field: "libelle", headerName: "Libellé", flex: 1 },
-    { field: "id_machine", headerName: "ID Machine", flex: 1 },
-    { field: "type_equip", headerName: "Type Équipement", flex: 1 },
-    { field: "date_acquisition", headerName: "Date Acquisition", flex: 1 },
-    { field: "date_mise_en_service", headerName: "Date Mise en Service", flex: 1 },
-    { field: "etat", headerName: "État", flex: 1 },
-    { field: "notes", headerName: "Notes", flex: 2 },
+    { field: "id_ressouM", headerName: "ID Ressource", flex: 1, align: "center", headerAlign: "center" },
+    { field: "libelle", headerName: "Libellé", flex: 1, align: "center", headerAlign: "center" },
+    { field: "id_machine", headerName: "ID Machine", flex: 1, align: "center", headerAlign: "center" },
+    { field: "type_equip", headerName: "Type Équipement", flex: 1, align: "center", headerAlign: "center" },
+    { field: "date_acquisition", headerName: "Date Acquisition", flex: 1, align: "center", headerAlign: "center" },
+    { field: "etat", headerName: "État", flex: 1, align: "center", headerAlign: "center" },
     {
       field: "action",
       headerName: "Actions",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
-        <Box>
-          <IconButton onClick={() => console.log("Éditer :", params.row.id)}>
-            <EditIcon style={{ color: colors.blueAccent[400] }} />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon style={{ color: colors.redAccent[400] }} />
-          </IconButton>
+        <Box display="flex" gap="10px" justifyContent="center">
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={() => handleEdit(params.row)}
+            sx={{
+              backgroundColor: colors.blueAccent[500],
+              "&:hover": { backgroundColor: colors.blueAccent[600] },
+              textTransform: "none",
+            }}
+          >
+            Modifier
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={() => handleDelete(params.row.id)}
+            sx={{
+              backgroundColor: colors.redAccent[500],
+              "&:hover": { backgroundColor: colors.redAccent[600] },
+              textTransform: "none",
+            }}
+          >
+            Supprimer
+          </Button>
         </Box>
       ),
     },
@@ -92,160 +124,79 @@ const CreationMateriel = () => {
 
   return (
     <Box m="20px">
-      {/* Modal pour ajouter une Ressource Matérielle */}
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
-        <Box
-          sx={{
-            width: 600,
-            margin: "100px auto",
-            padding: 4,
-            backgroundColor: "white",
-            borderRadius: 2,
-            boxShadow: 24,
+      <AddResourceModal
+        open={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        onAdd={handleAddResource}
+      />
+      {currentResource && (
+        <EditResourceModal
+          open={openEditModal}
+          onClose={() => setOpenEditModal(false)}
+          resource={currentResource}
+          onEdit={(updatedResource) => {
+            setResources((prev) => prev.map((res) => (res.id === updatedResource.id ? updatedResource : res)));
+            setOpenEditModal(false);
           }}
-        >
-          <Typography variant="h6" mb={2}>
-            Ajouter une Ressource Matérielle
-          </Typography>
-          {["id_ressouM", "libelle", "id_machine", "type_equip"].map((field, index) => (
-            <TextField
-              key={index}
-              label={field.replace(/_/g, " ").toUpperCase()}
-              name={field}
-              value={formValues[field]}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            />
-          ))}
-          <TextField
-            label="Date Acquisition"
-            name="date_acquisition"
-            type="date"
-            value={formValues.date_acquisition}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="Date Mise en Service"
-            name="date_mise_en_service"
-            type="date"
-            value={formValues.date_mise_en_service}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-          />
-          <TextField
-            label="État"
-            name="etat"
-            value={formValues.etat}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Notes"
-            name="notes"
-            value={formValues.notes}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            multiline
-            rows={3}
-          />
-          <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAdd}
-              sx={{
-                backgroundColor: colors.greenAccent[500],
-                "&:hover": {
-                  backgroundColor: colors.greenAccent[600],
-                },
-              }}
-            >
-              Ajouter
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+        />
+      )}
 
-      {/* Bouton Ajouter */}
+      <Header title="Ressource Matérielle" subtitle="Liste des ressources matérielles" />
+
       <Box display="flex" justifyContent="flex-end" mb="20px">
         <Button
           variant="contained"
           color="primary"
-          onClick={() => setOpenModal(true)}
           startIcon={<AddCircleIcon />}
+          onClick={() => setOpenAddModal(true)}
           sx={{
             backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": {
-              backgroundColor: colors.greenAccent[600],
-            },
+            "&:hover": { backgroundColor: colors.greenAccent[600] },
           }}
         >
-          Ajouter une Ressource Matérielle
+          Ajouter une Ressource
         </Button>
       </Box>
 
-      {/* Header */}
-      <Header title="Ressource Matérielle" subtitle="Liste des Ressources Matérielles" />
-
-      {/* Recherche */}
-      <Box mb={2}>
+      <Box display="flex" justifyContent="flex-start" mb="20px">
         <TextField
-          label="Rechercher"
+          label="Rechercher une ressource"
           variant="outlined"
-          fullWidth
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
           sx={{
-            backgroundColor: "white",
-            borderRadius: 2,
+            width: "400px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "25px",
+              "&:hover fieldset": { borderColor: colors.blueAccent[500] },
+            },
           }}
         />
       </Box>
 
-      {/* Tableau DataGrid */}
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-        }}
-      >
-        <DataGrid
-          rows={filteredResources}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-        />
-      </Box>
+      {loading ? (
+        <Typography>Chargement...</Typography>
+      ) : error ? (
+        <Typography color="error">{error}</Typography>
+      ) : (
+        <Box height="60vh">
+          <DataGrid
+            rows={filteredResources}
+            columns={columns}
+            rowHeight={50}
+            pageSize={10}
+            rowsPerPageOptions={[5, 10, 20]}
+            disableSelectionOnClick
+          />
+        </Box>
+      )}
     </Box>
   );
 };

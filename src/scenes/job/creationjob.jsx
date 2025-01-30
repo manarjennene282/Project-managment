@@ -1,252 +1,223 @@
-import React, { useState } from "react";
-import { Box, Button, Typography, IconButton, useTheme } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  useTheme,
+  InputAdornment,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { tokens } from "../../theme";
+import JobService from "../../services/JobService" // Assurez-vous de créer ce service pour l'API
+import Header from "../../components/Header";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
-import { tokens } from "../../theme";
-import Header from "../../components/Header";
+import SearchIcon from "@mui/icons-material/Search";
+
+import AddJobModal from "./AddJobModal"; // Pour ajouter un job
+import EditJobModal from "./EditJobModal"; // Pour modifier un job
 
 const Creationjob = () => {
-    const theme = useTheme();
+  const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [jobs, setJobs] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [formValues, setFormValues] = useState({
-    id_job: "",
-    prt_idJob: "",
-    libelle_job: "",
-    description_job: "",
-    remarque_job: "",
-    Date_debut_prev: "",
-    Date_fin_prevu: "",
-    Date_debut: "",
-    Date_fin: "",
-    id_statut: "",
-    id_typJob: "",
-    id_natureJob: "",
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Gestion des champs du formulaire
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  };
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [currentJob, setCurrentJob] = useState(null);
 
-  // Gestion de l'ajout d'un nouveau job
-  const handleAdd = () => {
-    if (formValues.id_job && formValues.libelle_job) {
-      const newJob = { id: jobs.length + 1, ...formValues };
-      setJobs([...jobs, newJob]);
-      setFormValues({
-        id_job: "",
-        prt_idJob: "",
-        libelle_job: "",
-        description_job: "",
-        remarque_job: "",
-        Date_debut_prev: "",
-        Date_fin_prevu: "",
-        Date_debut: "",
-        Date_fin: "",
-        id_statut: "",
-        id_typJob: "",
-        id_natureJob: "",
-      });
-      setOpenModal(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Récupérer les jobs depuis le serveur
+  const fetchJobs = async () => {
+    try {
+      const response = await JobService.getJobs();
+      setJobs(response.data);  // Assurez-vous que la réponse de l'API est bien structurée.
+      setLoading(false);
+    } catch (err) {
+      setError("Erreur lors de la récupération des jobs.");
+      setLoading(false);
     }
   };
 
-  // Gestion de la suppression
-  const handleDelete = (id) => {
-    setJobs(jobs.filter((job) => job.id !== id));
+  // Supprimer un job
+  const handleDelete = async (id_job) => {
+    try {
+      await JobService.deleteJob(id_job);
+      // Rafraîchir la liste après la suppression
+      setJobs((prevJobs) => prevJobs.filter((job) => job.id_job !== id_job));
+    } catch (err) {
+      console.error("Erreur lors de la suppression du job :", err);
+      setError("Erreur lors de la suppression du job.");
+    }
   };
 
-  // Gestion de la recherche
-  const filteredJobs = jobs.filter(
-    (job) =>
-      job.id_job.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.libelle_job.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Ouvrir le modal d'édition
+  const handleEdit = (job) => {
+    setCurrentJob(job);
+    setOpenEditModal(true);
+  };
+
+  // Ajouter un job
+  const handleAddJob = async (newJob) => {
+    try {
+      const response = await JobService.addJob(newJob);  // Ajouter un job via le service API
+      setJobs((prevJobs) => [...prevJobs, response.data]);  // Ajouter le job à la liste après création
+    } catch (err) {
+      console.error("Erreur lors de l'ajout du job :", err);
+      setError("Erreur lors de l'ajout du job.");
+    }
+  };
+
+  // Mettre à jour un job
+  const handleUpdateJob = async (updatedJob) => {
+    try {
+      const response = await JobService.updateJob(updatedJob);  // Mettre à jour via le service API
+      setJobs((prevJobs) =>
+        prevJobs.map((job) => (job.id_job === updatedJob.id_job ? response.data : job))
+      );
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour du job :", err);
+      setError("Erreur lors de la mise à jour du job.");
+    }
+  };
 
   // Colonnes pour le DataGrid
   const columns = [
-    { field: "id_job", headerName: "ID Job", flex: 1 },
-    { field: "prt_idJob", headerName: "Parent Job ID", flex: 1 },
-    { field: "libelle_job", headerName: "Libellé", flex: 2 },
-    { field: "description_job", headerName: "Description", flex: 3 },
-    { field: "remarque_job", headerName: "Remarques", flex: 2 },
-    { field: "Date_debut_prev", headerName: "Début Prévu", flex: 1 },
-    { field: "Date_fin_prevu", headerName: "Fin Prévue", flex: 1 },
-    { field: "Date_debut", headerName: "Début Réel", flex: 1 },
-    { field: "Date_fin", headerName: "Fin Réelle", flex: 1 },
-    { field: "id_statut", headerName: "Statut", flex: 1 },
-    { field: "id_typJob", headerName: "Type de Job", flex: 1 },
-    { field: "id_natureJob", headerName: "Nature", flex: 1 },
+    { field: "id_job", headerName: "ID Job", flex: 1, align: "center", headerAlign: "center" },
+    { field: "prt_idJob", headerName: "Parent Job ID", flex: 1, align: "center", headerAlign: "center" },
+    { field: "libelle_job", headerName: "Libellé", flex: 1, align: "center", headerAlign: "center" },
+    { field: "description_job", headerName: "Description", flex: 1.5, align: "center", headerAlign: "center" },
+    { field: "Date_debut_prev", headerName: "Début Prévu", flex: 1, align: "center", headerAlign: "center" },
+    { field: "Date_fin_prevu", headerName: "Fin Prévue", flex: 1, align: "center", headerAlign: "center" },
     {
       field: "action",
-      headerName: "Actions",
+      headerName: "Action",
       flex: 1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
-        <Box>
-          <IconButton onClick={() => console.log("Éditer :", params.row.id)}>
-            <EditIcon style={{ color: colors.blueAccent[400] }} />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon style={{ color: colors.redAccent[400] }} />
-          </IconButton>
+        <Box display="flex" gap="10px" justifyContent="center">
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={() => handleEdit(params.row)}
+            sx={{
+              backgroundColor: colors.blueAccent[500],
+              "&:hover": { backgroundColor: colors.blueAccent[600] },
+              textTransform: "none",
+            }}
+          >
+            Modifier
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<DeleteIcon />}
+            onClick={() => handleDelete(params.row.id_job)}
+            sx={{
+              backgroundColor: colors.redAccent[500],
+              "&:hover": { backgroundColor: colors.redAccent[600] },
+              textTransform: "none",
+            }}
+          >
+            Supprimer
+          </Button>
         </Box>
       ),
     },
   ];
 
+  // Récupérer les jobs au chargement du composant
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  // Filtrer les jobs selon la recherche
+  const filteredJobs = jobs.filter((job) =>
+    job.libelle_job.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Box m="20px">
-      {/* Modal pour ajouter un Job */}
-      <Modal open={openModal} onClose={() => setOpenModal(false)}>
-        <Box
-          sx={{
-            width: 600,
-            margin: "100px auto",
-            padding: 4,
-            backgroundColor: "white",
-            borderRadius: 2,
-            boxShadow: 24,
-          }}
-        >
-          <Typography variant="h6" mb={2}>
-            Ajouter un Job
-          </Typography>
-          {[
-            "id_job",
-            "prt_idJob",
-            "libelle_job",
-            "description_job",
-            "remarque_job",
-            "id_statut",
-            "id_typJob",
-            "id_natureJob",
-          ].map((field, index) => (
-            <TextField
-              key={index}
-              label={field.replace(/_/g, " ").toUpperCase()}
-              name={field}
-              value={formValues[field]}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-            />
-          ))}
-          {["Date_debut_prev", "Date_fin_prevu", "Date_debut", "Date_fin"].map(
-            (field, index) => (
-              <TextField
-                key={index}
-                label={field.replace(/_/g, " ").toUpperCase()}
-                name={field}
-                type="date"
-                value={formValues[field]}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                InputLabelProps={{ shrink: true }}
-              />
-            )
-          )}
-          <Box display="flex" justifyContent="flex-end" mt={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAdd}
-              sx={{
-                backgroundColor: colors.greenAccent[500],
-                "&:hover": {
-                  backgroundColor: colors.greenAccent[600],
-                },
-              }}
-            >
-              Ajouter
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      <AddJobModal
+        open={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        onAddJob={handleAddJob}
+      />
 
-      {/* Bouton Ajouter */}
+      {currentJob && (
+        <EditJobModal
+          open={openEditModal}
+          onClose={() => setOpenEditModal(false)}
+          job={currentJob}
+          onUpdate={(updatedJob) => {
+            handleUpdateJob(updatedJob);
+            setOpenEditModal(false);
+          }}
+        />
+      )}
+
       <Box display="flex" justifyContent="flex-end" mb="20px">
         <Button
           variant="contained"
           color="primary"
-          onClick={() => setOpenModal(true)}
-          startIcon={<AddCircleIcon />}
+          onClick={() => setOpenAddModal(true)}
           sx={{
             backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": {
-              backgroundColor: colors.greenAccent[600],
-            },
+            "&:hover": { backgroundColor: colors.greenAccent[600] },
           }}
         >
           Ajouter un Job
         </Button>
       </Box>
 
-      {/* Header */}
-      <Header title="Jobs" subtitle="Liste des Jobs" />
+      <Header title="Liste des Jobs" subtitle="Gestion des jobs" />
 
-      {/* Recherche */}
-      <Box mb={2}>
+      <Box display="flex" justifyContent="flex-start" mb="20px">
         <TextField
-          label="Rechercher"
+          label="Rechercher un job"
           variant="outlined"
-          fullWidth
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
           sx={{
-            backgroundColor: "white",
-            borderRadius: 2,
+            width: "400px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "25px",
+              "&:hover fieldset": { borderColor: colors.blueAccent[500] },
+            },
           }}
         />
       </Box>
 
-      {/* Tableau DataGrid */}
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-        }}
-      >
-        <DataGrid
-          rows={filteredJobs}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-        />
-      </Box>
+      {loading ? (
+        <Typography>Chargement...</Typography>
+      ) : error ? (
+        <Typography color="error">{error}</Typography>
+      ) : (
+        <Box height="60vh">
+          <DataGrid
+            rows={filteredJobs}
+            columns={columns}
+            rowHeight={50}
+            pageSize={10}
+            rowsPerPageOptions={[5, 10, 20]}
+            disableSelectionOnClick
+          />
+        </Box>
+      )}
     </Box>
   );
 };
-
 
 export default Creationjob;
