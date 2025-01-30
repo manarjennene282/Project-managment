@@ -13,9 +13,12 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import AddRessourceHumaine from "./AddRessourceHumaine";
@@ -165,52 +168,58 @@ const AfficheRessourceHumaine = () => {
       field: "action",
       headerName: "Action",
       flex: 1,
-      align: "center",
-      headerAlign: "center",
+      align: "center", // Centrer le texte dans les cellules
+      headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
+
         <Box display="flex" gap="10px" justifyContent="center">
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "40px", // Taille du cercle
-            height: "40px", // Taille du cercle
-            borderRadius: "50%", // Pour rendre le cercle
-            backgroundColor: colors.blueAccent[500], // Couleur du cercle
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: colors.blueAccent[600], // Couleur au survol
-            },
-          }}
-          onClick={() => handleEdit(params.row)}
-        >
-          <EditIcon sx={{ color: "#fff", fontSize: 24 }} />
+          <Tooltip title="Modifier une ressource humaine" arrow>
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              sx={{
+                backgroundColor: '#9932CC',  // Vert professionnel
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#E0B0FF',  // Vert plus foncé au survol
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+
+          {/* Bouton Supprimer */}
+          <Tooltip title="Supprimer une ressource humaine" arrow>
+            <IconButton
+              onClick={() => {
+                setRessourceToDelete(params.row);
+                setOpenDeleteDialog(true);
+              }}
+              sx={{
+                backgroundColor: '#d32f2f',  // Rouge pour "Supprimer"
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#e57373',  // Rouge plus foncé au survol
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
-      
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "40px", // Taille du cercle
-            height: "40px", // Taille du cercle
-            borderRadius: "50%", // Pour rendre le cercle
-            backgroundColor: colors.redAccent[500], // Couleur du cercle
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: colors.redAccent[600], // Couleur au survol
-            },
-          }}
-          onClick={() => {
-            setRessourceToDelete(params.row);
-            setOpenDeleteDialog(true);
-          }}
-        >
-          <DeleteIcon sx={{ color: "#fff", fontSize: 24 }} />
-        </Box>
-      </Box>
-      
+
       ),
     },
   ];
@@ -257,20 +266,31 @@ const AfficheRessourceHumaine = () => {
       )}
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": {
-              backgroundColor: colors.greenAccent[600],
-            },
-          }}
-        >
-          Ajouter une ressource humaine
-        </Button>
+        <Tooltip title="Ajouter une Ressource humaine" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter Ressource humaine
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
+
+          </IconButton>
+        </Tooltip>
       </Box>
 
       <Header title="Ressources humaines" subtitle="Liste des ressources humaines" />
@@ -360,55 +380,55 @@ const AfficheRessourceHumaine = () => {
           }}
         >
           <DataGrid
-  rows={filteredRessourcesHumaines}
-  columns={columns}
-  pageSize={5}
-  rowsPerPageOptions={[5]}
-  disableSelectionOnClick
-/>
+            rows={filteredRessourcesHumaines}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            disableSelectionOnClick
+          />
 
         </Box>
       )}
 
-<Snackbar
-  open={openSuccessSnackbar}
-  autoHideDuration={3000}
-  onClose={() => setOpenSuccessSnackbar(false)}
-  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-  sx={{
-    "& .MuiSnackbarContent-root": {
-      backgroundColor: "#4caf50", // Couleur verte de fond
-      color: "#fff", // Couleur du texte
-      borderRadius: "10px", // Coins arrondis
-      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Ombre légère
-      fontWeight: "bold", // Texte en gras
-    },
-  }}
->
-  <Alert onClose={() => setOpenSuccessSnackbar(false)} severity="success" sx={{ padding: "10px 20px" }}>
-    {actionMessage}
-  </Alert>
-</Snackbar>
+      <Snackbar
+        open={openSuccessSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSuccessSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{
+          "& .MuiSnackbarContent-root": {
+            backgroundColor: "#4caf50", // Couleur verte de fond
+            color: "#fff", // Couleur du texte
+            borderRadius: "10px", // Coins arrondis
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Ombre légère
+            fontWeight: "bold", // Texte en gras
+          },
+        }}
+      >
+        <Alert onClose={() => setOpenSuccessSnackbar(false)} severity="success" sx={{ padding: "10px 20px" }}>
+          {actionMessage}
+        </Alert>
+      </Snackbar>
 
-<Snackbar
-  open={openErrorSnackbar}
-  autoHideDuration={3000}
-  onClose={() => setOpenErrorSnackbar(false)}
-  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-  sx={{
-    "& .MuiSnackbarContent-root": {
-      backgroundColor: "#f44336", // Couleur rouge de fond
-      color: "#fff", // Couleur du texte
-      borderRadius: "10px", // Coins arrondis
-      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Ombre légère
-      fontWeight: "bold", // Texte en gras
-    },
-  }}
->
-  <Alert onClose={() => setOpenErrorSnackbar(false)} severity="error" sx={{ padding: "10px 20px" }}>
-    Erreur lors de l'action !
-  </Alert>
-</Snackbar>
+      <Snackbar
+        open={openErrorSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenErrorSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{
+          "& .MuiSnackbarContent-root": {
+            backgroundColor: "#f44336", // Couleur rouge de fond
+            color: "#fff", // Couleur du texte
+            borderRadius: "10px", // Coins arrondis
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Ombre légère
+            fontWeight: "bold", // Texte en gras
+          },
+        }}
+      >
+        <Alert onClose={() => setOpenErrorSnackbar(false)} severity="error" sx={{ padding: "10px 20px" }}>
+          Erreur lors de l'action !
+        </Alert>
+      </Snackbar>
 
 
       <Dialog

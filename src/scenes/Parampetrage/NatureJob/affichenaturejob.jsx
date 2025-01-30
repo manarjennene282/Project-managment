@@ -74,7 +74,7 @@ const Affichenaturejob = () => {
       const jobToDelete = naturejobs.find(
         (j) => j.internalId === selectedId
       );
-  
+
       if (!jobToDelete || !jobToDelete.id_natureJob) {
         console.error("ID invalide pour la suppression !");
         setOpenErrorSnackbar(true);
@@ -82,11 +82,11 @@ const Affichenaturejob = () => {
       }
 
       await Parametrageservice.deletenaturejob(jobToDelete.id);
-  
+
       setNatureJobs((prev) =>
         prev.filter((job) => job.internalId !== selectedId)
       );
-  
+
       setOpenDeleteDialog(false);
       setOpenSuccessSnackbar(true);
     } catch (err) {
@@ -103,7 +103,7 @@ const Affichenaturejob = () => {
   };
 
   const handleAddNatureJob = (newJob) => {
-    const newInternalId = naturejobs.length > 0 
+    const newInternalId = naturejobs.length > 0
       ? Math.max(...naturejobs.map(j => j.internalId)) + 1
       : 0;
 
@@ -146,52 +146,52 @@ const Affichenaturejob = () => {
       headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
-        <Tooltip title="Modifier un nature Job" arrow>
-          <IconButton
-            onClick={() => handleEdit(params.row)}
-            sx={{
-              backgroundColor: '#9932CC',  // Vert professionnel
-              color: 'white',  // Icônes blanches
-              borderRadius: '50%',  // Forme circulaire
-              width: 30,
-              height: 30,
-              display: 'flex',  // Pour centrer l'icône
-              alignItems: 'center',
-              justifyContent: 'center',
-              "&:hover": {
-                backgroundColor: '#E0B0FF',  // Vert plus foncé au survol
-              },
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
+          <Tooltip title="Modifier un nature Job" arrow>
+            <IconButton
+              onClick={() => handleEdit(params.row)}
+              sx={{
+                backgroundColor: '#9932CC',  // Vert professionnel
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#E0B0FF',  // Vert plus foncé au survol
+                },
+              }}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
 
-        {/* Bouton Supprimer */}
-        <Tooltip title="Supprimer un nature Job" arrow>
-          <IconButton
-            onClick={() => {
-              handleDeleteClick(params.row.internalId)
-              setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
-            }}
-            sx={{
-              backgroundColor: '#d32f2f',  // Rouge pour "Supprimer"
-              color: 'white',  // Icônes blanches
-              borderRadius: '50%',  // Forme circulaire
-              width: 30,
-              height: 30,
-              display: 'flex',  // Pour centrer l'icône
-              alignItems: 'center',
-              justifyContent: 'center',
-              "&:hover": {
-                backgroundColor: '#e57373',  // Rouge plus foncé au survol
-              },
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
+          {/* Bouton Supprimer */}
+          <Tooltip title="Supprimer un nature Job" arrow>
+            <IconButton
+              onClick={() => {
+                handleDeleteClick(params.row.internalId)
+                setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+              }}
+              sx={{
+                backgroundColor: '#d32f2f',  // Rouge pour "Supprimer"
+                color: 'white',  // Icônes blanches
+                borderRadius: '50%',  // Forme circulaire
+                width: 30,
+                height: 30,
+                display: 'flex',  // Pour centrer l'icône
+                alignItems: 'center',
+                justifyContent: 'center',
+                "&:hover": {
+                  backgroundColor: '#e57373',  // Rouge plus foncé au survol
+                },
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       ),
     },
   ];
@@ -341,8 +341,8 @@ const Affichenaturejob = () => {
           </IconButton>
         </Tooltip>
       </Box>
-      
-      
+
+
 
       <Header
         title=" Nature Jobs"
@@ -391,55 +391,55 @@ const Affichenaturejob = () => {
         <Typography color="error">{error}</Typography>
       ) : (
         <Box
-                  m="40px 0 0 0"
-                  height="60vh"
-                  sx={{
-                    "& .MuiDataGrid-root": {
-                      borderLeft: `none`
-                      
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                      backgroundColor: colors.blueAccent[700],
-                      color: colors.grey[100],
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      font: "Arial",
-                      borderBottom: `2px solid ${colors.blueAccent[500]}`,
-                    },
-                    "& .MuiDataGrid-columnHeaderTitle": {
-                      textTransform: "uppercase",
-                    },
-                    "& .MuiDataGrid-cell": {
-                      borderBottom: `1px solid ${colors.grey[800]}`,
-                      fontSize: "13px",
-                      borderLeft: `2px solid ${colors.grey[200]}`,
-                      color: colors.grey[200],
-        
-                    },
-                    "& .MuiDataGrid-row": {
-                      backgroundColor: colors.primary[700],
-                      "&:hover": {
-                        backgroundColor: colors.blueAccent[800],
-                      },
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                      backgroundColor: colors.blueAccent[700],
-                      borderTop: `2px solid ${colors.blueAccent[500]}`,
-                    },
-                    "& .MuiTablePagination-root": {
-                      color: colors.grey[100],
-                      "& .MuiIconButton-root": {
-                        color: colors.grey[100],
-                      },
-                      "& .Mui-disabled": {
-                        color: colors.grey[600],
-                      },
-                    },
-                    "& .MuiDataGrid-virtualScroller": {
-                      backgroundColor: colors.primary[800],
-                    },
-                  }}
-                >
+          m="40px 0 0 0"
+          height="60vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              borderLeft: `none`
+
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              color: colors.grey[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              font: "Arial",
+              borderBottom: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              textTransform: "uppercase",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: `1px solid ${colors.grey[800]}`,
+              fontSize: "13px",
+              borderLeft: `2px solid ${colors.grey[200]}`,
+              color: colors.grey[200],
+
+            },
+            "& .MuiDataGrid-row": {
+              backgroundColor: colors.primary[700],
+              "&:hover": {
+                backgroundColor: colors.blueAccent[800],
+              },
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: colors.blueAccent[700],
+              borderTop: `2px solid ${colors.blueAccent[500]}`,
+            },
+            "& .MuiTablePagination-root": {
+              color: colors.grey[100],
+              "& .MuiIconButton-root": {
+                color: colors.grey[100],
+              },
+              "& .Mui-disabled": {
+                color: colors.grey[600],
+              },
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[800],
+            },
+          }}
+        >
           <DataGrid
             rows={filteredJobs}
             columns={columns}
