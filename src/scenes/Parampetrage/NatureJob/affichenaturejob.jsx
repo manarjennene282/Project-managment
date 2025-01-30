@@ -315,7 +315,7 @@ const Affichenaturejob = () => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Tooltip title="Ajouter un type de projet" arrow>
+        <Tooltip title="Ajouter un nature job" arrow>
           <IconButton
             variant="contained"
             color="primary"
