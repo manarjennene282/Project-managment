@@ -13,10 +13,11 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Tooltip ,
+  Tooltip,
   IconButton,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import AddIcon from '@mui/icons-material/Add';
 import { tokens } from "../../../theme";
 import Parametrageservice from "../../../services/ParametrageService";
 import Header from "../../../components/Header";
@@ -139,49 +140,58 @@ const Affichenaturejob = () => {
     },
     {
       field: "action",
-      headerName: "Actions",
+      headerName: "Action",
       flex: 1,
-      align: "center",
+      align: "center", // Centrer le texte dans les cellules
+      headerAlign: "center", // Centrer le texte dans l'en-tête
       renderCell: (params) => (
         <Box display="flex" gap="10px" justifyContent="center">
+        <Tooltip title="Modifier un type de projet" arrow>
           <IconButton
-          onClick={() => handleEdit(params.row)}
-          sx={{
-            backgroundColor: '#66bb6a',  // Vert professionnel
-            color: 'white',  // Icônes blanches
-            borderRadius: '50%',  // Forme circulaire
-            width: 40,
-            height: 40,
-            display: 'flex',  // Pour centrer l'icône
-            alignItems: 'center',
-            justifyContent: 'center',
-            "&:hover": {
-              backgroundColor: '#388e3c',  // Vert plus foncé au survol
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-          {/* Bouton Supprimer */}
-        <IconButton
-          onClick={() => handleDeleteClick(params.row.internalId)}
-          sx={{
-            backgroundColor: '#f44336',  // Rouge pour "Supprimer"
-            color: 'white',  // Icônes blanches
-            borderRadius: '50%',  // Forme circulaire
-            width: 40,
-            height: 40,
-            display: 'flex',  // Pour centrer l'icône
-            alignItems: 'center',
-            justifyContent: 'center',
-            "&:hover": {
-              backgroundColor: '#c62828',  // Rouge plus foncé au survol
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-        </Box>
+            onClick={() => handleEdit(params.row)}
+            sx={{
+              backgroundColor: '#9932CC',  // Vert professionnel
+              color: 'white',  // Icônes blanches
+              borderRadius: '50%',  // Forme circulaire
+              width: 30,
+              height: 30,
+              display: 'flex',  // Pour centrer l'icône
+              alignItems: 'center',
+              justifyContent: 'center',
+              "&:hover": {
+                backgroundColor: '#E0B0FF',  // Vert plus foncé au survol
+              },
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+
+        {/* Bouton Supprimer */}
+        <Tooltip title="Supprimer un type de projet" arrow>
+          <IconButton
+            onClick={() => {
+              handleDeleteClick(params.row.internalId)
+              setOpenDeleteDialog(true); // Ouvrir la boîte de dialogue
+            }}
+            sx={{
+              backgroundColor: '#d32f2f',  // Rouge pour "Supprimer"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50%',  // Forme circulaire
+              width: 30,
+              height: 30,
+              display: 'flex',  // Pour centrer l'icône
+              alignItems: 'center',
+              justifyContent: 'center',
+              "&:hover": {
+                backgroundColor: '#e57373',  // Rouge plus foncé au survol
+              },
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
       ),
     },
   ];
@@ -305,22 +315,38 @@ const Affichenaturejob = () => {
       </Snackbar>
 
       <Box display="flex" justifyContent="flex-end" mb="20px">
-        <Button
-          variant="contained"
-          onClick={() => setOpenAddModal(true)}
-          sx={{
-            backgroundColor: colors.greenAccent[500],
-            color: "white",
-            "&:hover": { backgroundColor: colors.greenAccent[600] },
-          }}
-        >
-          Ajouter une Nature Job
-        </Button>
+        <Tooltip title="Ajouter un type de projet" arrow>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenAddModal(true)}
+            sx={{
+              backgroundColor: '#388e3c',  // Vert pour "Ajouter"
+              color: 'white',  // Icônes blanches
+              borderRadius: '50px',  // Coins arrondis mais pas totalement circulaire
+              padding: '8px 16px',  // Ajuste la taille pour accueillir l'icône et le texte
+              display: 'flex',  // Alignement flexible pour contenu horizontal
+              alignItems: 'center',  // Centrer les éléments verticalement
+              justifyContent: 'center',  // Centrer les éléments horizontalement
+              "&:hover": {
+                backgroundColor: '#81c784',  // Vert plus clair au survol
+              },
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: '500' }}>
+              Ajouter Nature Job
+            </Typography>
+            <AddIcon sx={{ marginLeft: '8px' }} /> {/* Espace entre l'icône et le texte */}
+
+          </IconButton>
+        </Tooltip>
       </Box>
+      
+      
 
       <Header
         title=" Nature Jobs"
-        subtitle="Liste des types de jobs"
+        subtitle="Liste des Natures de jobs"
       />
 
       <Box mb="20px">
@@ -335,7 +361,27 @@ const Affichenaturejob = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ width: 400 }}
+          sx={{
+            width: "400px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "25px",
+              "& fieldset": {
+                borderColor: colors.grey[700],
+              },
+              "&:hover fieldset": {
+                borderColor: colors.blueAccent[500],
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: colors.blueAccent[500],
+              },
+            },
+            "& .MuiInputLabel-root": {
+              color: colors.grey[700],
+            },
+            "& .MuiInputBase-input": {
+              color: colors.blueAccent[500],
+            },
+          }}
         />
       </Box>
 
