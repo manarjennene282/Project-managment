@@ -17,7 +17,7 @@ import { tokens } from "../../theme";
 import RessourceMaterielService from "../../services/RessourceMaterielService";
 import Parametrageservice from "../../services/ParametrageService";
 
-const creationmateriel = ({ open, onClose, ressource, onUpdate }) => {
+const Creationmateriel = ({ open, onClose, ressource, onUpdate }) => {
   const colors = tokens((theme) => theme.palette.mode);
 
   const [formData, setFormData] = useState({
@@ -212,4 +212,4 @@ const creationmateriel = ({ open, onClose, ressource, onUpdate }) => {
   );
 };
 
-export default creationmateriel;
+export default Creationmateriel;

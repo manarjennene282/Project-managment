@@ -15,6 +15,10 @@ import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import WorkIcon from '@mui/icons-material/Work';
+import PageviewIcon from '@mui/icons-material/Pageview';
+import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
+import DevicesIcon from '@mui/icons-material/Devices';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -211,23 +215,35 @@ const Sidebar = () => {
               />
             </SidebarSection>
 
-            {/* Ressources Section */}
-            <SidebarSection title="Ressources Materiel" open={ressourcesOpen} setOpen={setRessourcesOpen}>
-              <Item
-                title="Creation Ressource Materiel"
-                to="/gestionrm"
-                icon={<PersonOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-              <Item
-                title="Consultation Ressource Materiel"
-                to="/gestionrm"
-                icon={<PersonOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </SidebarSection>
+       {/* Ressources Section */}
+<Typography
+  variant="h6"
+  color={colors.grey[300]}
+  sx={{ m: "15px 0 5px 20px" }}
+>
+  Ressources Materielles
+  <IconButton onClick={() => setRessourcesOpen(!ressourcesOpen)}>
+    {ressourcesOpen ? "-" : "+"}
+  </IconButton>
+</Typography>
+{ressourcesOpen && (
+  <>
+    <Item
+      title="Creation Ressource Materiel"
+      to="/CreationRessourceMateriel"
+      icon={<BuildOutlinedIcon />} // Icône pour création
+      selected={selected}
+      setSelected={setSelected}
+    />
+    <Item
+      title="Consultation Ressource Materiel"
+      to="/ConsultationRessourceMateriel"
+      icon={<PageviewIcon />} 
+      selected={selected}
+      setSelected={setSelected}
+    />
+  </>
+)}
 
             {/* Ressources Humaines Section */}
             <SidebarSection title="Ressources Humaines" open={ressourcesHumOpen} setOpen={setRessourcesHumOpen}>
@@ -246,7 +262,35 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
             </SidebarSection>
-
+{/* job Section */}
+<Typography
+  variant="h6"
+  color={colors.grey[300]}
+  sx={{ m: "15px 0 5px 20px" }}
+>
+  JOB
+  <IconButton onClick={() => setProjetOpen(!projetOpen)}>
+    {projetOpen ? "-" : "+"}
+  </IconButton>
+</Typography>
+{projetOpen && (
+  <>
+    <Item
+      title="Création d'un job"
+      to="/CreationJob"
+      icon={<WorkIcon />} 
+      selected={selected}
+      setSelected={setSelected}
+    />
+    <Item
+      title="Consultation d'un job"
+      to="/ConsultationJob"
+      icon={<PageviewIcon />} 
+      selected={selected}
+      setSelected={setSelected}
+    />
+  </>
+)}
             {/* Administration Section */}
             <SidebarSection title="Administration" open={administrationOpen} setOpen={setAdministrationOpen}>
               <Item
@@ -333,6 +377,14 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
 
+
+<Item
+  title="Type Equipement"
+  to="/typeequipement"
+  icon={<DevicesIcon />}
+  selected={selected}
+  setSelected={setSelected}
+/>
 
 
             </SidebarSection>

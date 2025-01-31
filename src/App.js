@@ -33,7 +33,7 @@ import AfficheRelProjet from "./scenes/Parampetrage/RelationProjet/AfficheRelPro
 import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
 import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 import AfficheRessourceHumaine from "./scenes/RessourceHumaine/AfficheRessourceHumaine";
-
+import AfficheTypeEquipement from "./scenes/Parampetrage/typeequipement/AfficheTypeEquipement";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -97,6 +97,8 @@ function App() {
                   <Route path="/relprojet" element={<AfficheRelProjet />} />
                   <Route path="/grouperessource" element={<Affichegroupe />} />
                   <Route path="/gestionrh" element={<AfficheRessourceHumaine />} />
+                  <Route path="/typeequipement" element={<AfficheTypeEquipement />} />
+
 
 
                 </>
