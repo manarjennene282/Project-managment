@@ -232,7 +232,7 @@ const Sidebar = () => {
   <>
     <Item
       title="Creation Ressource Materiel"
-      to="/CreationRessourceMateriel"
+      to="/gestionrm"
       icon={<BuildOutlinedIcon />} // Icône pour création
       selected={selected}
       setSelected={setSelected}

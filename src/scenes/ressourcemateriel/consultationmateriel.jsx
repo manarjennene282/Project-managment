@@ -24,10 +24,19 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddRessourceMateriel from "./addressourcemateriel";
 import ModifeRessourceMateriel from "./creationmateriel";
 import RessourceMaterielService from "../../services/RessourceMaterielService";
+<<<<<<< HEAD
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 
 const ConsultationMateriel  = () => {
+=======
+import useRessourceMQuery from "../../hooks/Gestion/useRessourceMQuery";
+
+import { tokens } from "../../theme";
+import Header from "../../components/Header";
+
+const Consultationmateriel = () => {
+>>>>>>> d9a19f2d917ff21042b54cb32e7df433ed5a818f
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -156,7 +165,7 @@ const ConsultationMateriel  = () => {
       align: "center",
       headerAlign: "center",
     },
-    
+
     {
       field: "action",
       headerName: "Action",
@@ -449,4 +458,8 @@ const ConsultationMateriel  = () => {
   );
 };
 
+<<<<<<< HEAD
 export default ConsultationMateriel;
+=======
+export default Consultationmateriel;
+>>>>>>> d9a19f2d917ff21042b54cb32e7df433ed5a818f
