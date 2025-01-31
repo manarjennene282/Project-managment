@@ -85,8 +85,15 @@ Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => '
     Route::put('updaterh/{id}','RessourceHumaineController@update');
     Route::delete('deleterh/{id}','RessourceHumaineController@destroy');
 
+ });
 
-   
+ //Ressource Materiel 
+Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'ressourcemateriel'],function(){
+
+    Route::get('getrm','RessourceMaterielController@index');
+    Route::post('addrm','RessourceMaterielController@store');
+    Route::put('updaterm/{id}','RessourceMaterielController@update');
+    Route::delete('deleterm/{id}','RessourceMaterielController@destroy');
     
  });
 
