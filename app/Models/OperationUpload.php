@@ -12,6 +12,7 @@ class OperationUpload extends Model
         'annee',        
         'date',  
         'confirm'  ,
-        
+        'piecejointe'
+
     ];
 }

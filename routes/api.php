@@ -98,4 +98,13 @@ Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => '
     Route::delete('deleterm/{id}','RessourceMaterielController@destroy');
     
  });
+ // comptable 
+ Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'comptable'],function(){
+
+    Route::get('getcomptable','ComptableController@index');
+   
+
+ });
+
+
 
