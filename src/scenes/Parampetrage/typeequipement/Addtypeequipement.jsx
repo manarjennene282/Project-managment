@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -12,23 +8,22 @@ import {
   Snackbar,
   Alert,
 } from '@mui/material';
-import { tokens } from '../../../theme'; // Ajustez le chemin d'importation si nécessaire
-import Parametrageservice from '../../../services/ParametrageService'; // Ajustez le chemin d'importation si nécessaire
+import { tokens } from '../../../theme';
+import Parametrageservice from '../../../services/ParametrageService';
 
-function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
-  const colors = tokens((theme) => theme.palette.mode); // Utilisez votre thème
+function Addtypeequipement({ open, onClose, onAddTypeEquipement }) {
+  const colors = tokens((theme) => theme.palette.mode);
 
   // État pour gérer les valeurs du formulaire
   const [formData, setFormData] = useState({
-    id_natureStruct: "", // ID de la nature de structure
-    libelle: "", // Libellé de la nature de structure
+    id_typeequipement: "", 
+    libelle: "", 
   });
 
-  const [loading, setLoading] = useState(false); // État pour gérer le chargement
-  const [error, setError] = useState(""); // État pour gérer les erreurs
-  const [openSnackbar, setOpenSnackbar] = useState(false); // État pour la popup de confirmation
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  // Gestion des changements dans les champs du formulaire
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -37,24 +32,23 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
     }));
   };
 
-  // Gestion de la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      await Parametrageservice.addNatureStruct(formData);
-      onAddNatureStruct(formData); // Ajouter la nature de structure à la liste
+      await Parametrageservice.addtypeequipement(formData); // Appel du service pour ajouter un type équipement
+      onAddTypeEquipement(formData); // Ajouter le type équipement à la liste
       setFormData({
-        id_natureStruct: "",
+        id_typeequipement: "",
         libelle: "",
       });
       setOpenSnackbar(true); // Afficher la popup de confirmation
       onClose(); // Fermer le modal
     } catch (err) {
-      console.error("Erreur lors de l'ajout de la nature de structure :", err);
-      setError("Une erreur est survenue lors de l'ajout de la nature de structure.");
+      console.error("Erreur lors de l'ajout du type équipement :", err);
+      setError("Une erreur est survenue lors de l'ajout du type équipement.");
     } finally {
       setLoading(false);
     }
@@ -62,7 +56,6 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
 
   return (
     <>
-      {/* Modal pour ajouter une nature de structure */}
       <Modal open={open} onClose={onClose}>
         <Box
           sx={{
@@ -78,21 +71,19 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
           }}
         >
           <Typography variant="h6" mb={2}>
-            Ajouter une Nature de Structure
+            Ajouter un Type Equipement
           </Typography>
           <form onSubmit={handleSubmit}>
-            {/* Champ ID Nature de Structure */}
             <TextField
               fullWidth
-              label="ID Nature de Structure"
-              name="id_natureStruct"
-              value={formData.id_natureStruct}
+              label="ID Type Equipement"
+              name="id_typeequipement"
+              value={formData.id_typeequipement}
               onChange={handleChange}
               margin="normal"
               required
             />
 
-            {/* Champ Libellé */}
             <TextField
               fullWidth
               label="Libellé"
@@ -103,14 +94,12 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
               required
             />
 
-            {/* Gestion des erreurs */}
             {error && (
               <Typography color="error" mt={2}>
                 {error}
               </Typography>
             )}
 
-            {/* Boutons Annuler et Ajouter */}
             <Box mt={2} display="flex" justifyContent="space-between">
               <Button
                 onClick={onClose}
@@ -118,9 +107,7 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
                 sx={{
                   backgroundColor: colors.redAccent[500],
                   color: "white",
-                  "&:hover": {
-                    backgroundColor: colors.redAccent[600],
-                  },
+                  "&:hover": { backgroundColor: colors.redAccent[600] },
                 }}
                 disabled={loading}
               >
@@ -132,9 +119,7 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
                 sx={{
                   backgroundColor: colors.greenAccent[500],
                   color: "white",
-                  "&:hover": {
-                    backgroundColor: colors.greenAccent[600],
-                  },
+                  "&:hover": { backgroundColor: colors.greenAccent[600] },
                 }}
                 disabled={loading}
               >
@@ -145,28 +130,27 @@ function AddNatureStruuctureModal({ open, onClose, onAddNatureStruct }) {
         </Box>
       </Modal>
 
-      {/* Popup de confirmation (Snackbar) */}
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={3000} // Durée d'affichage (3 secondes)
-        onClose={() => setOpenSnackbar(false)} // Fermer la popup
-        anchorOrigin={{ vertical: "top", horizontal: "right" }} // Position en haut à droite
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
           severity="success"
           sx={{
             width: "100%",
-            backgroundColor: colors.greenAccent[500], // Couleur verte personnalisée
-            color: "white", // Texte blanc
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Ombre pour une meilleure visibilité
+            backgroundColor: colors.greenAccent[500],
+            color: "white",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          La nature de structure a été ajoutée avec succès !
+          Le type équipement a été ajouté avec succès !
         </Alert>
       </Snackbar>
     </>
   );
 }
 
-export default AddNatureStruuctureModal;
+export default Addtypeequipement;

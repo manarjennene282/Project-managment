@@ -18,6 +18,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import WorkIcon from '@mui/icons-material/Work';
 import PageviewIcon from '@mui/icons-material/Pageview';
 import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
+import DevicesIcon from '@mui/icons-material/Devices';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -376,6 +377,14 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
 
+
+<Item
+  title="Type Equipement"
+  to="/typeequipement"
+  icon={<DevicesIcon />}
+  selected={selected}
+  setSelected={setSelected}
+/>
 
 
             </SidebarSection>

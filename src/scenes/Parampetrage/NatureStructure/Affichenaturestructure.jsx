@@ -56,11 +56,11 @@ const AfficheNatureStruct = () => {
     try {
       console.log("Deleting NatureStruct with ID:", selectedNatureStructId);
       await Parametrageservice.deletenatutrstruc(selectedNatureStructId);
-      setNatureStructs((prevNatureStructs) =>
-        prevNatureStructs.filter(
-          (naturestruct) => naturestruct.id_natureStruct !== selectedNatureStructId
-        )
-      );
+  
+      // Recharge les données depuis l'API après suppression
+      const updatedData = await Parametrageservice.getNaturestruct();
+      setNatureStructs(updatedData.data || []);
+  
       setOpenDeleteDialog(false);
       setOpenSuccessSnackbar(true);
     } catch (err) {
@@ -69,6 +69,7 @@ const AfficheNatureStruct = () => {
       setOpenErrorSnackbar(true);
     }
   };
+  
 
   // Fonction pour ouvrir le modal d'édition
   const handleEdit = (naturestruct) => {
@@ -395,7 +396,7 @@ const AfficheNatureStruct = () => {
           <DataGrid
             rows={filteredNatureStructs}
             columns={columns}
-            getRowId={(row) => row.id} // Utilisez l'ID statique de la base de données
+            getRowId={(row) => row.id_natureStruct} // Utilisez l'ID statique de la base de données
             rowHeight={50}
             pageSize={10}
             rowsPerPageOptions={[5, 10, 20]}

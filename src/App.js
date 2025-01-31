@@ -35,6 +35,7 @@ import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 import AfficheRessourceHumaine from "./scenes/RessourceHumaine/AfficheRessourceHumaine";
 import CreationMateriel from "./scenes/ressourcemateriel/creationmateriel";
 import Creationjob from "./scenes/job/creationjob";
+import AfficheTypeEquipement from "./scenes/Parampetrage/typeequipement/AfficheTypeEquipement";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -100,6 +101,8 @@ function App() {
 
                   <Route path="/grouperessource" element={<Affichegroupe />} />
                   <Route path="/gestionrh" element={<AfficheRessourceHumaine />} />
+                  <Route path="/typeequipement" element={<AfficheTypeEquipement />} />
+
 
 
                 </>
