@@ -10,6 +10,8 @@ class RessourceHumaine extends Model
         'id_ressh',
         'cin',
         'matricule',
+        'contrat',
+        'ressource',
         'nom',
         'prenom',
         'alias',
