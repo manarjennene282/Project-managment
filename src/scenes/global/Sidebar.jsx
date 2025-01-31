@@ -215,14 +215,14 @@ const Sidebar = () => {
             <SidebarSection title="Ressources Materiel" open={ressourcesOpen} setOpen={setRessourcesOpen}>
               <Item
                 title="Creation Ressource Materiel"
-                to="/CreationRessourceMateriel"
+                to="/gestionrm"
                 icon={<PersonOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />
               <Item
                 title="Consultation Ressource Materiel"
-                to="/ConsultationRessourceMateriel"
+                to="/gestionrm"
                 icon={<PersonOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}

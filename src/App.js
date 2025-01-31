@@ -20,8 +20,8 @@ import SignUp from "./scenes/authentification/signup";
 import Login from "./scenes/authentification/login";
 import Projet from "./scenes/projet/afficheprojet";
 import AfficheTypeProjet from "./scenes/Parampetrage/TypeProjet/AfficheTypeProjet";
-import CreationMateriel from "./scenes/ressourcemateriel/creationmateriel";
-import Consultationmateriel from "./scenes/ressourcemateriel/consultationmateriel";
+import AfficheRessourceMateriel from "./scenes/ressourcemateriel/consultationmateriel";
+
 import Creationjob from "./scenes/job/creationjob";
 import Consultationjob from "./scenes/job/consultationjob";
 import AccessManagement from "./scenes/Administration/Gestiondroits"
@@ -85,8 +85,7 @@ function App() {
                   <Route path="/presence" element={<Presence />} />
                   <Route path="/projet" element={<Projet />} />
                   <Route path="/typeprojet" element={<AfficheTypeProjet />} />
-                  <Route path="/CreationRessourceMateriel" element={<CreationMateriel />} />
-                  <Route path="/ConsultationRessourceMateriel" element={<Consultationmateriel />} />
+                  <Route path="/gestionrm" element={<AfficheRessourceMateriel />} />
                   <Route path="/CreationJob" element={<Creationjob />} />
                   <Route path="/ConsultationJob" element={<Consultationjob />} />
                   <Route path="/Gestionacces" element={<AccessManagement />} />
@@ -96,7 +95,6 @@ function App() {
                   <Route path="/statut" element={<Affichestatut />} />
                   <Route path="/naturejob" element={<Affichenaturejob />} />
                   <Route path="/relprojet" element={<AfficheRelProjet />} />
-
                   <Route path="/grouperessource" element={<Affichegroupe />} />
                   <Route path="/gestionrh" element={<AfficheRessourceHumaine />} />
 
