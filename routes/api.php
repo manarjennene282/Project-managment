@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', 'API\UserController@AuthRouteAPI');
+// Route::middleware('auth:api')->get('/user', 'API\UserController@AuthRouteAPI');
 
 
 Route::post('register', 'API\AuthController@register')->middleware(['cors', 'api']);
@@ -93,7 +93,7 @@ Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => '
 Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'ressourcemateriel'],function(){
 
     Route::get('getrm','RessourceMaterielController@index');
-    Route::post('addrm','RessourceMaterielController@store');
+    Route::post('create','RessourceMaterielController@create');
     Route::put('updaterm/{id}','RessourceMaterielController@update');
     Route::delete('deleterm/{id}','RessourceMaterielController@destroy');
     

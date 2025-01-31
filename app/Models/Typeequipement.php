@@ -10,5 +10,10 @@ class Typeequipement extends Model
         'id_typeequipement',
         'libelle',
     ];
+
+    public function ressourcesmateriel()
+    {
+        return $this->hasMany(Typeequipement::class, 'id_typeequipement');
+    }
 }
 

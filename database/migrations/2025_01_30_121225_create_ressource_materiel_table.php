@@ -18,7 +18,7 @@ class CreateRessourceMaterielTable extends Migration
             $table->string('id_ressouM'); // Champ id_ressouM
             $table->string('liblle'); // Champ liblle
             $table->string('ID_Machine'); // Champ ID_Machine
-            $table->string('Type_equip'); // Champ Type_equip
+            $table->string('Type_equip') ->index(); // Champ Type_equip
             $table->date('Date_acquisition'); // Champ Date_acquisition
             $table->date('Date_mise_en_service'); // Champ Date_mise_en_service
             $table->string('Etat'); // Champ Etat

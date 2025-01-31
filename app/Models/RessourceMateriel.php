@@ -17,5 +17,8 @@ class RessourceMateriel extends Model
         'Notes'
     ];
 
-    
+    public function typeEquip() // Correction ici
+    {
+        return $this->belongsTo(Typeequipement::class, 'id_typeequipement','id');
+    }
 }
