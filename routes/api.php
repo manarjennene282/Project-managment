@@ -75,6 +75,8 @@ Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'p
     Route::apiResource('naturejob', 'NatureJobController');
     Route::apiResource('naturestruc', 'NatureStructureController');
     Route::apiResource('naturerelation', 'NatureRelationController');
+    Route::apiResource('typeequipement', 'TypeEquipementController');
+
 });
 
 //Ressource Humaine 
