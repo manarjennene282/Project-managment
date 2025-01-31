@@ -19,6 +19,8 @@ import WorkIcon from '@mui/icons-material/Work';
 import PageviewIcon from '@mui/icons-material/Pageview';
 import BuildOutlinedIcon from "@mui/icons-material/BuildOutlined";
 import DevicesIcon from '@mui/icons-material/Devices';
+import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -303,13 +305,13 @@ const Sidebar = () => {
             </SidebarSection>
             {/* Interface comptable  */}
             <SidebarSection title="Comptable" open={comptableOpen} setOpen={setComptableOpen}>
-              <Item
-                title="Upload Comptable R"
-                to="/Gestionacces"
-                icon={<PersonOutlinedIcon />}
-                selected={selected}
-                setSelected={setSelected}
-              />
+            <Item
+              title="Upload Comptable R"
+               to="/comptableupload"
+                icon={<CloudUploadOutlinedIcon />}
+  selected={selected}
+  setSelected={setSelected}
+/>
               <Item
                 title="Consultation Comptable R"
                 to="/Gestionacces"

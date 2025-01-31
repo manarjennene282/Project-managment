@@ -20,7 +20,7 @@ import SignUp from "./scenes/authentification/signup";
 import Login from "./scenes/authentification/login";
 import Projet from "./scenes/projet/afficheprojet";
 import AfficheTypeProjet from "./scenes/Parampetrage/TypeProjet/AfficheTypeProjet";
-import AfficheRessourceMateriel from "./scenes/ressourcemateriel/consultationmateriel";
+import AfficheRessourceMateriel from "./scenes/ressourcemateriel/Consultationmateriel";
 
 import Creationjob from "./scenes/job/creationjob";
 import Consultationjob from "./scenes/job/consultationjob";
@@ -34,6 +34,7 @@ import Affichegroupe from "./scenes/Parampetrage/groupRessource/affichegroup";
 import Affichenaturejob from "./scenes/Parampetrage/NatureJob/affichenaturejob";
 import AfficheRessourceHumaine from "./scenes/RessourceHumaine/AfficheRessourceHumaine";
 import AfficheTypeEquipement from "./scenes/Parampetrage/typeequipement/AfficheTypeEquipement";
+import AfficheComptable from "./scenes/Comptable/AfficheComptable";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -98,6 +99,8 @@ function App() {
                   <Route path="/grouperessource" element={<Affichegroupe />} />
                   <Route path="/gestionrh" element={<AfficheRessourceHumaine />} />
                   <Route path="/typeequipement" element={<AfficheTypeEquipement />} />
+                  <Route path="/comptableupload" element={<AfficheComptable />} />
+
 
 
 

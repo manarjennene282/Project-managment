@@ -24,11 +24,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddRessourceMateriel from "./addressourcemateriel";
 import ModifeRessourceMateriel from "./creationmateriel";
 import RessourceMaterielService from "../../services/RessourceMaterielService";
-
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 
-const consultationmateriel = () => {
+const ConsultationMateriel  = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -450,4 +449,4 @@ const consultationmateriel = () => {
   );
 };
 
-export default consultationmateriel;
+export default ConsultationMateriel;
