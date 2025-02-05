@@ -34,52 +34,27 @@ class RessourceMaterielController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(ResourceRequest $request)
     {
-        // Définir les règles de validation
-        $rules = [
-            'id_ressouM' => 'required|string',
-            'liblle' => 'required|string',
-            'ID_Machine' => 'required|string',
-            'Type_equip' => 'required|exists:typeequipements,id_typeequipement',
-            'Date_acquisition' => 'required|date',
-            'Date_mise_en_service' => 'required|date',
-            'Etat' => 'required|string', // Utilisez "string" pour l'état, pas "email"
-            'Notes' => 'required|string',
-        ];
-
-        // Appliquer la validation avec le Facade Validator
-        $validator = Validator::make($request->all(), $rules);
-
-        // Si la validation échoue, renvoyer une réponse avec les erreurs
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Les données envoyées ne sont pas valides.',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
         try {
-            // Si la validation réussit, procéder à la création de la ressource matérielle
-            $validatedData = $validator->validated(); // Récupère les données validées
-
-            $ressourceMateriel = RessourceMateriel::create($validatedData);
-
+            $validatedData = $request->all();
+    
+            $ressourcemateriels = RessourceMaterielRequest::create($validatedData);
+    
             return response()->json([
                 'success' => true,
-                'data' => $ressourceMateriel,
-                'message' => 'Ressource matériel ajoutée avec succès.',
+                'data' => $ressourcemateriels,
+                'message' => 'Ressource humaine ajoutée avec succès.',
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Une erreur est survenue lors de l\'ajout de la Ressource matériel.',
+                'message' => 'Une erreur est survenue lors de l\'ajout de la ressource humaine.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
-
+    
 
 
 

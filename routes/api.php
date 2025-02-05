@@ -102,9 +102,14 @@ Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => '
  Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'comptable'],function(){
 
     Route::get('getcomptable','ComptableController@index');
-   
+    Route::post('importfile','ComptableController@importFile');
+    Route::post('storedatacomptable','ComptableController@store');
+
+
 
  });
+
+
 
 
 

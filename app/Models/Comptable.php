@@ -21,10 +21,15 @@ class Comptable extends Model
        'mnt_acpt',
        'mnt_pret',
        'mnt_net',
-       'mnt01707',
-       'mnt_0.034',
+       'mnt_01707',
+       'mnt_0034',
        'mnt_130',
        'mnt_scr',
     ];
+
+    public function files()
+    {
+        return $this->hasMany(OperationUpload::class);
+    }
 
 }
