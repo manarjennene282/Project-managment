@@ -22,7 +22,7 @@ class OperationUploadTable extends Migration
             $table->date('dateop');
             $table->longText('file');
             $table->integer('user_id')->index();
-            $table->integer('id_mvt')->index();
+           // $table->integer('id_mvt')->index();
             $table->timestamps();
         });
     }

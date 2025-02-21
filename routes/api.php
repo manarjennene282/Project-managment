@@ -34,13 +34,15 @@ Route::group(['middleware' => ['cors', 'api','token'], 'namespace' => 'API'], fu
     Route::apiResource('role', 'RoleController');
 });
 
-Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'presence'],function(){
+Route::group(['middleware' => ['api','cors','token'],'namespace' => 'API','prefix' => 'presence'],function(){
 
     Route::post('addpresence','PresenceController@store');
     Route::get('getpresence','PresenceController@getPresences');
     Route::put('updatepresence','PresenceController@update');
     Route::post('calculheures','PresenceController@calculateAndSaveWorkHours');
     Route::post('calculabsence','PresenceController@calculateAbsenceHours');
+    Route::post('calculateWeeklyWorkHours','PresenceController@calculateWeeklyWorkHours');
+
     
  });
  Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'projet'],function(){
@@ -80,14 +82,13 @@ Route::group(['middleware' => ['api','cors'],'namespace' => 'API','prefix' => 'p
 });
 
 //Ressource Humaine 
-Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'ressourcehumaine'],function(){
+Route::group(['middleware' => ['api','cors'], 'namespace' => 'API', 'prefix' => 'ressourcehumaine'], function() {
+    Route::get('getrh', 'RessourceHumaineController@index');
+    Route::post('addrh', 'RessourceHumaineController@store'); // Ajoutez cette ligne
+    Route::put('updaterh/{id}', 'RessourceHumaineController@update');
+    Route::delete('deleterh/{id}', 'RessourceHumaineController@destroy');
+});
 
-    Route::get('getrh','RessourceHumaineController@index');
-    Route::post('addrh','RessourceHumaineController@store');
-    Route::put('updaterh/{id}','RessourceHumaineController@update');
-    Route::delete('deleterh/{id}','RessourceHumaineController@destroy');
-
- });
 
  //Ressource Materiel 
 Route::group(['middleware' => ['api','cors',],'namespace' => 'API','prefix' => 'ressourcemateriel'],function(){

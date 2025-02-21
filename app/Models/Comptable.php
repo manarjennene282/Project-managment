@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comptable extends Model
 {
-    protected $fillable = [
-       //mettre les attributes je ais faire avent la table operation 
-       'id_mvt',
+    protected $fillable = [ 
+       //'id_mvt',
        'id_op',
        'id_ressh',
        'jhtrav',
@@ -27,9 +26,11 @@ class Comptable extends Model
        'mnt_scr',
     ];
 
-    public function files()
+
+    public function operation()
     {
         return $this->hasMany(OperationUpload::class);
     }
+ 
 
 }

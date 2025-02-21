@@ -13,7 +13,7 @@ class OperationUpload extends Model
         'confirm',
         'dateop',
         'file',
-        'id_mvt'
+        //'id_mvt'
     ];
 
     public function comptable()

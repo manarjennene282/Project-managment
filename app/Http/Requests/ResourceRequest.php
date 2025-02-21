@@ -15,13 +15,37 @@ class ResourceRequest extends FormRequest
     {
         return [
             'id_ressh' => 'required|string',
-            'cin' => 'required|string',
-            'matricule' => 'required|string',
             'nom' => 'required|string',
             'prenom' => 'required|string',
-            'alias' => 'required|string',
-            'email' => 'required|email',
-            'gsm' => 'required|string',
+            'matricule' => 'required|string',
+            'email' => 'required|string',
+            'contrat' => 'required|string',
+            'ressource' => 'string',
+            'lieuxtravail' => 'string',
+
+            'cin' => 'required|string',
+            'gsm' => 'required|string|regex:/^\+?[0-9]{8,15}$/',
+
+            // Informations professionnelles
+            'bucollaborateur' => 'string',
+            'buaffectation' => 'string',
+            'activite' => 'string',
+            'commercial' => 'string',
+            'nouvellmission' => 'string',
+            'secteuractrivite' => 'string',
+            'fermeoptionnel' => 'string',
+            'localisation' => 'string',
+            'teletravail' => 'string',
+            'zoneA' => 'string',
+            'zoneB' => 'string',
+            'zoneC' => 'string',
+            'commentaire' => 'string',
+
+            // Dates et durées
+            'datedebut' => 'date',
+            'datefin' => 'date|after_or_equal:datedebut',
+            'duree' => 'integer|min:0',
+            //cléetrangere 
             'id_grp' => 'required|exists:groupe_ressources,id_grp',
         ];
     }

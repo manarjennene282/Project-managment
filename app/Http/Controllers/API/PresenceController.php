@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller; // Importation correcte
 
 use Illuminate\Support\Facades\Validator;
 
+use Carbon\Carbon;
 
 class PresenceController extends Controller
 {
@@ -58,7 +59,7 @@ class PresenceController extends Controller
 {
     $validator = Validator::make($request->all(), [
         'data' => 'required|array',
-        'data.*.date' => 'required',
+        'data.*.date' => 'required|date',
         'data.*.presence_matin' => 'required|boolean',
         'data.*.presence_apresmidi' => 'required|boolean',
     ]);
@@ -67,22 +68,40 @@ class PresenceController extends Controller
         return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    $validatedData = $validator->getData(); // This retrieves the validated data.
-
     $userId = auth()->id();
 
+    if (is_null($userId)) {
+        return response()->json(['error' => 'Utilisateur non authentifié'], 401);
+    }
+
+    $validatedData = $request->all(); // Corrigé pour éviter l'erreur
+
+    $dates = []; // Liste des dates pour recalculer les absences
+
     foreach ($validatedData['data'] as $presenceData) {
+        // Calcul des heures travaillées
+        $heuresTravaillees = ($presenceData['presence_matin'] ? 4 : 0) + ($presenceData['presence_apresmidi'] ? 4 : 0);
+
+        // Enregistrer ou mettre à jour les données de présence
         Presence::updateOrCreate(
             ['user_id' => $userId, 'date' => $presenceData['date']],
             [
                 'presence_matin' => $presenceData['presence_matin'],
-                'presence_apresmidi' => $presenceData['presence_apresmidi']
+                'presence_apresmidi' => $presenceData['presence_apresmidi'],
+                'heurestravaillees' => $heuresTravaillees
             ]
         );
+
+        $dates[] = $presenceData['date']; // Stocker les dates pour le recalcul des absences
     }
+
+    // Calculer les heures d'absence pour les dates enregistrées
+    $this->calculateAbsenceHours(new Request(['dates' => $dates]));
 
     return response()->json(['message' => 'Présences enregistrées avec succès'], 200);
 }
+
+    
     /**
      * Display the specified resource.
      *
@@ -166,40 +185,34 @@ class PresenceController extends Controller
     public function calculateAbsenceHours(Request $request)
     {
         try {
-            // Validation des données de la requête
             $validator = Validator::make($request->all(), [
                 'dates' => 'required|array',
-                'dates.*' => 'date', // Chaque élément doit être une date valide
+                'dates.*' => 'date',
             ]);
     
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
     
-            $userId = auth()->id(); // ID de l'utilisateur connecté
-            $selectedDates = $request->dates; // Dates sélectionnées
+            $userId = auth()->id();
+            $selectedDates = $request->dates;
     
-            // Récupérer les présences correspondant aux dates sélectionnées
             $presences = Presence::where('user_id', $userId)
                 ->whereIn('date', $selectedDates)
                 ->get();
     
-            // Calcul des heures d'absence
-            $totalHoursAbsent = 0;  // Initialiser le total des heures d'absence
-            $dailyHours = [];
+            $totalHoursAbsent = 0;
+            $dailyAbsences = [];
     
             foreach ($presences as $presence) {
-                // Récupérer les heures travaillées déjà enregistrées
                 $dailyHoursForDay = $presence->heurestravaillees;
+                $hoursAbsentForDay = 8 - $dailyHoursForDay; // Chaque jour = 8 heures max
     
-                // Calcul des heures d'absence (40 heures - heures travaillées)
-                $hoursAbsentForDay = 40 - $dailyHoursForDay;
                 $totalHoursAbsent += $hoursAbsentForDay;
     
-                // Mettre à jour la base de données avec les heures d'absence
                 $presence->update(['heuresabsence' => $hoursAbsentForDay]);
     
-                $dailyHours[] = [
+                $dailyAbsences[] = [
                     'date' => $presence->date,
                     'hours_absent' => $hoursAbsentForDay,
                 ];
@@ -208,7 +221,7 @@ class PresenceController extends Controller
             return response()->json([
                 'message' => 'Heures d\'absence calculées et enregistrées avec succès',
                 'total_hours_absent' => $totalHoursAbsent,
-                'daily_hours' => $dailyHours,
+                'daily_absences' => $dailyAbsences,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -218,7 +231,74 @@ class PresenceController extends Controller
         }
     }
     
+    public function calculateWeeklyWorkHours(Request $request)
+    {
+        try {
+            // Validation des dates optionnelles
+            $validator = Validator::make($request->all(), [
+                'start_date' => 'nullable|date',
+                'end_date' => 'nullable|date|after_or_equal:start_date',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+    
+            $userId = auth()->id();
+    
+            $startDate = isset($request->start_date) ? $request->start_date : date('Y-m-d', strtotime('-7 days'));
+            $endDate = isset($request->end_date) ? $request->end_date : date('Y-m-d');
 
+            // Récupérer les présences de l'utilisateur sur la période
+            $presences = Presence::where('user_id', $userId)
+                ->whereBetween('date', [$startDate, $endDate])
+                ->orderBy('date')
+                ->get(['date', 'heurestravaillees']); 
+    
+            if ($presences->isEmpty()) {
+                return response()->json([
+                    'message' => 'Aucune donnée trouvée pour cette période',
+                    'weekly_hours' => []
+                ], 200);
+            }
+    
+            // Regrouper les heures travaillées par semaine
+            $weeklyHours = [];
+    
+            foreach ($presences as $presence) {
+                $timestamp = strtotime($presence->date);
+                $weekYear = date('o', $timestamp); // 'o' pour éviter les erreurs de semaine à cheval
+                $weekNumber = date('W', $timestamp);
+                $weekKey = $weekYear . '-Semaine-' . $weekNumber;
+    
+                // Debug : Afficher les dates et les heures correspondantes
+                \Log::info("Date: {$presence->date}, Semaine: $weekKey, Heures: {$presence->heurestravaillees}");
+    
+                // Initialiser la semaine si elle n'existe pas encore
+                if (!isset($weeklyHours[$weekKey])) {
+                    $weeklyHours[$weekKey] = 0;
+                }
+    
+                // Ajouter les heures travaillées
+                $weeklyHours[$weekKey] += (float) $presence->heurestravaillees;
+            }
+    
+            return response()->json([
+                'message' => 'Heures de travail calculées par semaine',
+                'weekly_hours' => $weeklyHours
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors du calcul des heures de travail par semaine',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    
+
+        
+    
     
 
     /**

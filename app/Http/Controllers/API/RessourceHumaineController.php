@@ -54,19 +54,57 @@ class RessourceHumaineController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ResourceRequest $request)
+    public function store(Request $request)
     {
         try {
-            $validatedData = $request->all();
-    
-            $ressourceHumaine = RessourceHumaine::create($validatedData);
-    
+            // Validate the input data using Validator
+            $validator = Validator::make($request->all(), [
+                'nom' => 'string',
+                'matricule' => 'string',
+                'email' => 'string',
+                'contrat' => 'string',
+                'ressource' => 'nullable|string',
+                'lieuxtravail' => 'nullable|string',
+                'gsm' => 'string|regex:/^\+?[0-9]{8,15}$/',
+                'bucollaborateur' => 'nullable|string',
+                'buaffectation' => 'nullable|string',
+                'activite' => 'nullable|string',
+                'commercial' => 'nullable|string',
+                'nouvellmission' => 'nullable|string',
+                'secteuractrivite' => 'nullable|string',
+                'fermeoptionnel' => 'nullable|string',
+                'localisation' => 'nullable|string',
+                'teletravail' => 'nullable|string',
+                'zoneA' => 'nullable|string',
+                'zoneB' => 'nullable|string',
+                'zoneC' => 'nullable|string',
+                'commentaire' => 'nullable|string',
+                'datedebut' => 'date',
+                'datefin' => 'date|after_or_equal:datedebut',
+                'duree' => 'integer|min:0',
+                'id_grp' => 'exists:groupe_ressources,id_grp',
+            ]);
+        
+            // Check if validation failed
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation error',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+        
+            // Create a new 'RessourceHumaine' record
+            $ressourceHumaine = RessourceHumaine::create($request->all());
+        
+            // Return success response
             return response()->json([
                 'success' => true,
                 'data' => $ressourceHumaine,
                 'message' => 'Ressource humaine ajoutée avec succès.',
             ], 201);
         } catch (\Exception $e) {
+            // Return error response
             return response()->json([
                 'success' => false,
                 'message' => 'Une erreur est survenue lors de l\'ajout de la ressource humaine.',
@@ -74,6 +112,8 @@ class RessourceHumaineController extends Controller
             ], 500);
         }
     }
+    
+    
     
     
 

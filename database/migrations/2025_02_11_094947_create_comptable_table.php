@@ -15,7 +15,7 @@ class CreateComptableTable extends Migration
     {
         Schema::create('comptables', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('id_mvt');
+           // $table->string('id_mvt');
             $table->string('id_op');
             $table->string('id_ressh');  
             $table->float('jhtrav');    
@@ -35,6 +35,7 @@ class CreateComptableTable extends Migration
             $table->timestamps();      
         });
     }
+    
 
     /**
      * Reverse the migrations.
@@ -43,7 +44,7 @@ class CreateComptableTable extends Migration
      */
     public function down()
     {
+        
         Schema::dropIfExists('comptables');
-
     }
 }
